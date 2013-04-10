@@ -1,5 +1,6 @@
 Django==1.5.1
 argparse==1.2.1
+-e git://github.com/earle/django-bootstrap.git@97eb50b3f4932798e7fa8ad4b42f0534d521826d#egg=bootstrap-dev
 distribute==0.6.34
 dj-database-url==0.2.1
 gunicorn==0.17.2
