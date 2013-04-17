@@ -3,5 +3,9 @@ Pack Planner
 
 Development Instructions
 ------------------------
-To enable venv:
-source venv/bin/activate
+To set up and run in a virtual environment
+``` bash
+$ virtualenv venv --distribute
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+```
