@@ -35,7 +35,7 @@
       		.unselected-day.span1 {
       			border-left: 1px solid;
       			margin-left: 0px;
-      			width: 99px;
+      			width: 49px;
       			text-align: center;
       		}
       		.last-day {
@@ -44,7 +44,7 @@
       		.selected-day.span6 {
       			border-left: 1px solid;
       			margin-left: 0px;
-      			width: 598px;
+      			width: 898px;
       			text-align: center;
       		}
     	</style>
@@ -258,7 +258,37 @@
 
 			function dateSelectedFunc(date){
 				currentDate = date;
+				focusEventCalendar(currentDate);
 				console.log(currentDate);
+			}
+
+			function focusEventCalendar(currentDate) {
+				var day = currentDate.getDay();
+				var firstDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+				firstDate.setDate(firstDate.getDate()-day);
+				for (i=0; i < 7; i++) {
+					if (i==day) {
+						$("#header" + i).removeClass("unselected-day span1").addClass("selected-day span6");
+						$("#content" + i).removeClass("unselected-day span1").addClass("selected-day span6");
+						$("#header" + i).text($.datepicker.formatDate('DD, MM d', currentDate));
+						$("#content" + i).text("");
+					} else {
+						$("#header" + i).removeClass("selected-day span6").addClass("unselected-day span1");
+						$("#content" + i).removeClass("selected-day span6").addClass("unselected-day span1");
+						$("#header" + i).text($.datepicker.formatDate('D', firstDate));
+						$("#content" + i).text(firstDate.getDate());
+					}
+					firstDate.setDate(firstDate.getDate()+1);
+				}
+			}
+
+			function eventDaySelected(day) {
+				var currentDay = currentDate.getDay();
+				var diff = currentDay - day;
+				if (diff != 0) {
+					currentDate.setDate(currentDate.getDate() - diff);
+					dateSelectedFunc(currentDate);
+				}
 			}
 
 			function prevDayFunc(date){
@@ -350,22 +380,22 @@
 			</div>
 
 			<div class="row">
-				<div class="header unselected-day span1 first-day">Monday</div>
- 				<div class="header unselected-day span1">Tuesday</div>
- 				<div class="header unselected-day span1">Wednesday</div>
- 				<div class="header unselected-day span1">Thursday</div>
- 				<div class="header unselected-day span1">Friday</div>
- 				<div class="header selected-day span6">Saturday</div>
- 				<div class="header unselected-day span1 last-day">Sunday</div>
+ 				<div id="header0" class="header span1 unselected-day first-day" onClick="eventDaySelected(0);">Sunday</div>
+				<div id="header1" class="header span1 unselected-day" onClick="eventDaySelected(1);">Monday</div>
+ 				<div id="header2" class="header span1 unselected-day" onClick="eventDaySelected(2);">Tuesday</div>
+ 				<div id="header3" class="header span1 unselected-day" onClick="eventDaySelected(3);">Wednesday</div>
+ 				<div id="header4" class="header span1 unselected-day" onClick="eventDaySelected(4);">Thursday</div>
+ 				<div id="header5" class="header span1 unselected-day" onClick="eventDaySelected(5);">Friday</div>
+ 				<div id="header6" class="header span6 selected-day last-day" onClick="eventDaySelected(6);">Saturday</div>
  			</div>
  			<div class="row">
-				<div class="content unselected-day span1 first-day"></div>
- 				<div class="content unselected-day span1"></div>
- 				<div class="content unselected-day span1"></div>
- 				<div class="content unselected-day span1"></div>
- 				<div class="content unselected-day span1"></div>
- 				<div class="content selected-day span6"></div>
- 				<div class="content unselected-day span1 last-day"></div>
+ 				<div id="content0" class="content unselected-day span1 first-day" onClick="eventDaySelected(0);"></div>
+				<div id="content1" class="content unselected-day span1" onClick="eventDaySelected(1);"></div>
+ 				<div id="content2" class="content unselected-day span1" onClick="eventDaySelected(2);"></div>
+ 				<div id="content3" class="content unselected-day span1" onClick="eventDaySelected(3);"></div>
+ 				<div id="content4" class="content unselected-day span1" onClick="eventDaySelected(4);"></div>
+ 				<div id="content5" class="content unselected-day span1" onClick="eventDaySelected(5);"></div>
+ 				<div id="content6" class="content selected-day span6 last-day" onClick="eventDaySelected(6);"></div>
  			</div>
 	 	</div>
 
