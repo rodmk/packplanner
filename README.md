@@ -9,3 +9,8 @@ $ virtualenv venv --distribute
 $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
+
+Finally, to run a local devserver
+``` bash
+$ python manage.py runserver
+```
