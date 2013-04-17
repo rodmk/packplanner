@@ -6,7 +6,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'packplanner.views.home', name='home'),
+    url(r'^calendar/$', 'packplanner.views.calendar'),
     # url(r'^packplanner/', include('packplanner.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
