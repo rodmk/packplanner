@@ -3162,6 +3162,83 @@ button.close {
   -webkit-appearance: none;
 }
 
+.btn.flat {
+  border: none;
+  background: #34495e;
+  color: white;
+  font-size: 16.5px;
+  text-decoration: none;
+  text-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-transition: 0.25s;
+  -moz-transition: 0.25s;
+  -o-transition: 0.25s;
+  transition: 0.25s;
+  -webkit-backface-visibility: hidden; }
+  .btn.flat:hover, .btn.flat:focus {
+    background-color: #4e6d8d;
+    color: white;
+    -webkit-transition: 0.25s;
+    -moz-transition: 0.25s;
+    -o-transition: 0.25s;
+    transition: 0.25s;
+    -webkit-backface-visibility: hidden; }
+  .btn.flat:active, .btn.flat.active {
+    background-color: #2c3e50;
+    color: rgba(255, 255, 255, 0.75);
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none; }
+  .btn.flat.disabled, .btn.flat[disabled] {
+    background-color: #95a5a6;
+    color: white; }
+  .btn.flat.btn-large {
+    padding-bottom: 12px;
+    padding-top: 13px; }
+  .btn.flat.btn-primary {
+    background-color: #1abc9c; }
+    .btn.flat.btn-primary:hover, .btn.flat.btn-primary:focus {
+      background-color: #2fe2bf; }
+    .btn.flat.btn-primary:active, .btn.flat.btn-primary.active {
+      background-color: #16a085; }
+  .btn.flat.btn-info {
+    background-color: #3498db; }
+    .btn.flat.btn-info:hover, .btn.flat.btn-info:focus {
+      background-color: #5dade2; }
+    .btn.flat.btn-info:active, .btn.flat.btn-info.active {
+      background-color: #2383c4; }
+  .btn.flat.btn-danger {
+    background-color: #e74c3c; }
+    .btn.flat.btn-danger:hover, .btn.flat.btn-danger:focus {
+      background-color: #ec7063; }
+    .btn.flat.btn-danger:active, .btn.flat.btn-danger.active {
+      background-color: #dc2d1b; }
+  .btn.flat.btn-success {
+    background-color: #2ecc71; }
+    .btn.flat.btn-success:hover, .btn.flat.btn-success:focus {
+      background-color: #55d98d; }
+    .btn.flat.btn-success:active, .btn.flat.btn-success.active {
+      background-color: #27ad60; }
+  .btn.flat.btn-warning {
+    background-color: #f1c40f; }
+    .btn.flat.btn-warning:hover, .btn.flat.btn-warning:focus {
+      background-color: #f4d03f; }
+    .btn.flat.btn-warning:active, .btn.flat.btn-warning.active {
+      background-color: #cea70c; }
+  .btn-toolbar .btn.flat {
+    font-size: 18px;
+    padding: 10px 14px 9px; }
+    .btn-toolbar .btn.flat:first-child {
+      -webkit-border-radius: 6px 0 0 6px;
+      -moz-border-radius: 6px 0 0 6px;
+      border-radius: 6px 0 0 6px; }
+    .btn-toolbar .btn.flat:last-child {
+      -webkit-border-radius: 0 6px 6px 0;
+      -moz-border-radius: 0 6px 6px 0;
+      border-radius: 0 6px 6px 0; }
+
 .btn {
   display: inline-block;
   *display: inline;

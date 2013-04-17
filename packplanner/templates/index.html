@@ -43,22 +43,27 @@
       			color: white;
       			border-left: 1px solid;
       			margin-left: 0px;
-      			width: 49px;
+      			width: 45px;
+      			margin-left:2px;
+      			margin-right:2px;
       			text-align: center;
       			border-top: 1px solid;
       			border-bottom: 1px solid;
       			height: 550px;
-      			border-color: #AAAAAA;
+      			border-color: #1ABC9C;
       		}
       		.selected-day.span6 {
       			border-left: 1px solid;
       			margin-left: 0px;
-      			width: 898px;
+      			width: 894px;
+      			margin-left:2px;
+      			margin-right:2px;
       			text-align: center;
       			border-top: 1px solid;
       			border-bottom: 1px solid;
       			height: 550px;
-      			border-color: #AAAAAA;
+      			border-color: #E3E3E3;
+      			background-color: #E3E3E3;
       		}
       		.unselected-day {
       			cursor: pointer;
@@ -82,6 +87,7 @@
 			.unselected-day:hover {
 				/* fallback */
 				background-color: #16A085;
+				border-color: #16A085;
 				/*background: url(images/linear_bg_2.png);
 				background-repeat: repeat-x;
 
@@ -501,15 +507,15 @@
 
 				<div class="span8">
 					<div class="row" style="height:169px">
-						<div class="span8 pull-left">
+						<div class="span6 pull-left">
 							<div id="filterBtnGroup" class="btn-group row pull-left">
 			 					<!-- Fill in children group filter dynamically -->
 							</div>
 						</div>
 
-						<div class="span4 pull-right">
+						<div class="span2 pull-right">
 							<div class="row pull-right">
-								<a id="newEventButton" class="btn btn-success pull-right" data-toggle="modal" href="#newEventModal" ><i class="icon-plus"></i> New Event</a>
+								<a id="newEventButton" class="btn pull-right flat btn-primary" data-toggle="modal" href="#newEventModal" ><i class="icon-plus"></i> New Event</a>
 
 								<!-- newEventModal -->
 								<div id="newEventModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
