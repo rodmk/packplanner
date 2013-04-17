@@ -13,12 +13,17 @@
       }
     </style>
     <link href="{{STATIC_URL}}css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="{{STATIC_URL}}css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script src="{{STATIC_URL}}js/jquery-1.8.1.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
     {% block extrahead %}
     {% endblock %}
     <script type="text/javascript">
@@ -36,6 +41,10 @@
 
          Cool Bootstrap Button-customizatons: http://charliepark.org/bootstrap_buttons/;
          */
+
+         .modal, .modal.fade.in {
+             top: 60%; /* was 10% */
+         }
 
 		.btn-custom0 { background-color: hsl(60, 100%, 82%) !important; background-repeat: repeat-x; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fefecc", endColorstr="#fefea3"); background-image: -khtml-gradient(linear, left top, left bottom, from(#fefecc), to(#fefea3)); background-image: -moz-linear-gradient(top, #fefecc, #fefea3); background-image: -ms-linear-gradient(top, #fefecc, #fefea3); background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fefecc), color-stop(100%, #fefea3)); background-image: -webkit-linear-gradient(top, #fefecc, #fefea3); background-image: -o-linear-gradient(top, #fefecc, #fefea3); background-image: linear-gradient(#fefecc, #fefea3); border-color: #fefea3 #fefea3 hsl(60, 100%, 80%); color: #333 !important; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.13); -webkit-font-smoothing: antialiased; }
 
@@ -65,9 +74,7 @@
          </style>
      <!-- -->
 
-		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-		<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-		<link rel="stylesheet" href="/resources/demos/style.css" /></link>
+		
 	
 	<!-- Javascript Code -->
 		<script type="text/javascript">	
@@ -194,9 +201,10 @@
 		    });
 
 		    /*New Event button*/
-		    $("#newEventButton").click(function() {
-		    	newEventFunc();
-		    });
+		    //$("#newEventButton").click(function() {
+		    //	$('#newEventModal').modal('');
+		    //});
+			
 		});
 
 		/*
@@ -247,12 +255,85 @@
 			$("#eventModal").dialog({modal: true
 		    });
 		}
+
+		$(document).ready(function() { 
+			$('#startTime').datetimepicker({
+				pickDate: false,
+				pick12HourFormat: true,
+				pickSeconds: false,
+			});
+			$('#endTime').datetimepicker({
+				pickDate: false,
+				pick12HourFormat: true,
+				pickSeconds: false,
+			});
+			$('#eventDate').datetimepicker({
+				pickTime: false
+			});
+		});
+		
+		//javascript code for selecting drivers
+		var availDrivers = ["Me","Nick","Bob","Cheryl","Mindy","George","Ari","Alessandro","Alexandra","Alex"];
+
+		//used need event and ui for auto complete.
+		var selectcheck1 = function(event, ui){
+			$("#drivingTo").val(ui.item.value);
+			return false;
+		}
+		var selectcheck2 = function(event, ui){
+			$("#drivingFrom").val(ui.item.value);
+			return false;
+		}
+
+		function makeList(list){
+			var start = "<ul>"
+			var body = ""
+			var end = "</ul>"
+			for(x in list){
+				body = body + "<li>"+ list[x] +"</li>"
+			}
+			return start+body+end;
+		}
+
+		var htmlAvailDrivers = makeList(availDrivers);
+
+		// $(document).ready(function() { 
+		// 	$("#drivingFrom").autocomplete({
+		// 		source: availDrivers,
+		// 		disabled: false
+		// 	});
+
+		// 	$("#drivingTo").autocomplete({
+		// 		source: availDrivers,
+		// 		disabled: false
+		// 	});
+		// });
+		$(document).ready(function() {
+			$("#drivingTo").typeahead({source:availDrivers,items:4});
+			$("#drivingFrom").typeahead({source:availDrivers,items:4});
+		});
 		</script>
-		<!-- -->
+
+		
+		
 
  </head>
  <body>
-
+<div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">Pack Planner</a>
+    <ul class="nav">
+      <li class="active"><a href="#">Calendar</a></li>
+      <li><a href="#">Contacts</a></li>
+      <li><a href="#">Inbox</a></li>
+      <li><a href="#">Schedules</a></li>
+    </ul>
+   	<ul class="nav pull-right">
+      <li><a href="#">Settings</a></li>
+      <li><a href="#">Logout</a></li>
+    </ul>
+  </div>
+</div>
  <div class="container">
  	<!-- Above -->
  </div>
@@ -275,10 +356,77 @@
 
 			<div class="span4 pull-right">
 				<div class="row pull-right">
-			 		<a id="newEventButton" class="btn btn-success pull-right " href="#"><i class="icon-plus"></i> New Event</a>
-			 		<div id="eventModal"></div>
-			 	</div>
-			
+					<a id="newEventButton" class="btn btn-success pull-right" data-toggle="modal" href="#newEventModal" ><i class="icon-plus"></i> New Event</a>
+
+
+					<!-- newEventModal -->
+					<div id="newEventModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+							<h3 id="myModalLabel">New Event</h3>
+						</div>
+						<div class="modal-body">
+							<form>
+								<div class="row-fluid">
+									<div class="span12">    
+										<div class="row-fluid">   
+											<div class="span5 lightblue">
+												<label>Event Name</label>
+												<input type="text" class="span12" placeholder="Event Name">
+											</div><!--/span-->
+											<div id="eventDate" class="span5 offset1 lightblue input-append">
+												<label>Event Date</label>
+												<input data-format="MM-dd-yyyy" type="text" placeholder="11-28-2013" class="span12"></input>
+												<span class="add-on">
+													<i data-time-icon="icon-time" data-date-icon="icon-calendar">
+													</i>
+												</span>
+											</div><!--/span-->
+										</div><!--/row-->
+										<div class="row-fluid">
+											<div id= "startTime" class="span5 bgcolor input-append">
+												<label>Start Time</label>
+												<input id="startTimeInput"class="span12" placeholder="15:30:00" data-format="hh:mm:ss" type="text"></input>
+												<span class="add-on">
+													<i data-time-icon="icon-time" data-date-icon="icon-calendar">
+													</i>
+												</span>  
+											</div><!--/span-->
+											<div id= "endTime" class="span5 offset1 bgcolor input-append">
+												<label>End Time</label>
+												<input class="span12" placeholder="17:30:00" data-format="hh:mm:ss" type="text"></input>
+												<span class="add-on">
+													<i data-time-icon="icon-time" data-date-icon="icon-calendar">
+													</i>
+												</span>  
+											</div><!--/span-->
+										</div><!--/row-->
+										<div class="row-fluid" style="padding-bottom:100px">
+											<div class="span5 bgcolor input-append">
+												<label>Driving To (optional):</label>
+												<input id= "drivingTo" autocomplete="off" type="text" data-provide="typeahead"></input>
+												  
+											</div><!--/span-->
+											<div class="span5 offset1 bgcolor input-append">
+												<label>Driving From (optional):</label>
+												<input id= "drivingFrom" autocomplete="off" type="text" data-provide="typeahead"></input>
+												
+											</div><!--/span-->
+										</div><!--/row-->
+										<div class="row">
+										</div>               
+									</div>     
+								</div><!--/row-->
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+							<button class="btn btn-primary">Save changes</button>
+						</div>
+					</div><!--end modal -->
+
+
+				</div>
 			</div>
 		</div>
 
@@ -326,6 +474,7 @@
  		</table>
  	</div>
  </div>
+
 
  </body>
  </html>
