@@ -170,7 +170,7 @@
 			}
 
 			.tile {
-				background-color: gray;
+				background-color:#006363;
 				padding: 5px;
 				margin: 5px;
 			}
@@ -179,11 +179,13 @@
 				text-align: left;
 				font-weight: bold;
 				margin: 0px;
+				color: white;
 			}
 
 			.tile .eventTime {
 				text-align: left;
 				margin: 0px;
+				color: white;
 			}
 
         </style>
@@ -516,19 +518,24 @@
 
 			function renderEvent(event) {
 				tile = $("<div>", {
-					class: "tile",
+					class: "tile row",
 				})
 
-				date = $("<p>", {
-					class: "eventTime",
+				date = $("<span>", {
+					class: "eventTime span6",
 					text: event.startDate.toTimeString() + " - " + event.endDate.toTimeString(),
 				})
 
-				content = $("<p>", {
-					class: "dayEvents",
+				content = $("<span>", {
+					class: "dayEvents span6",
 					text: event.title,
 				})
 
+				editbtn = $('<a class="btn pull-right flat btn-primary " href="#newEventModal" ><i class="icon-pencil"></i></a>')
+				deletebtn = $('<a class="btn pull-right flat btn-primary " href="#newEventModal" ><i class="icon-remove"></i></a>')
+				
+				deletebtn.appendTo(tile);
+				editbtn.appendTo(tile);
 				date.appendTo(tile);
 				content.appendTo(tile);
 				return tile;
