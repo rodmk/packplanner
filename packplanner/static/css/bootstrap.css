@@ -21,6 +21,38 @@ section {
   display: block;
 }
 
+.color-1{
+  color:#009999;
+}
+.color-2{
+  color:#1D7373;
+}
+.color-3{
+  color:#006363;
+}
+.color-4{
+  color:#33CCCC;
+}
+.color-5{
+  color:#5CCCCC;
+}
+.background-color-1{
+  background-color:#009999;
+}
+.background-color-2{
+  background-color:#1D7373;
+}
+.background-color-3{
+  background-color:#006363;
+}
+.background-color-4{
+  background-color:#33CCCC;
+}
+.background-color-5{
+  background-color:#5CCCCC;
+}
+
+
 audio,
 canvas,
 video {
@@ -2257,6 +2289,18 @@ table th[class*="span"],
 
 .table-hover tbody tr.info:hover td {
   background-color: #c4e3f3;
+}
+
+.car-glyph{
+  display:inline-block;
+  width:26px;
+  height: 26px;
+  margin-top: 1px;
+  *margin-right: .3em;
+  line-height: 26px;
+  vertical-align: text-top;
+  background-image: url("../img/car.png");
+  background-repeat: no-repeat;
 }
 
 [class^="icon-"],
