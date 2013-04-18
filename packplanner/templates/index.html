@@ -169,6 +169,22 @@
 				margin: 0 0 .4em;
 			}
 
+			.tile {
+				background-color: gray;
+				padding: 5px;
+				margin: 5px;
+			}
+
+			.tile .dayEvents {
+				text-align: left;
+				font-weight: bold;
+				margin: 0px;
+			}
+
+			.tile .eventTime {
+				text-align: left;
+				margin: 0px;
+			}
 
         </style>
      	<!-- -->
@@ -397,6 +413,7 @@
 				console.log(currentDate);
 			}
 
+
 		    /*New Event button*/
 		    //$("#newEventButton").click(function() {
 		    //	$('#newEventModal').modal('');
@@ -493,8 +510,28 @@
 				$(".dayEvents").remove();
 				for (i=0; i<events.length; i++) {
 					var event = events[i];
-					content.append("<p class='dayEvents'>" + event.title + "</p>");
+					content.append(renderEvent(event));
 				}
+			}
+
+			function renderEvent(event) {
+				tile = $("<div>", {
+					class: "tile",
+				})
+
+				date = $("<p>", {
+					class: "eventTime",
+					text: event.startDate.toTimeString() + " - " + event.endDate.toTimeString(),
+				})
+
+				content = $("<p>", {
+					class: "dayEvents",
+					text: event.title,
+				})
+
+				date.appendTo(tile);
+				content.appendTo(tile);
+				return tile;
 			}
 
 			function getEvents(date) {
