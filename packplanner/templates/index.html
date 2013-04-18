@@ -516,6 +516,10 @@
 				}
 			}
 
+			function formatMinutes(n){
+			    return n > 9 ? "" + n: "0" + n;
+			}
+
 			function renderEvent(event) {
 				tile = $("<div>", {
 					class: "tile row",
@@ -523,7 +527,7 @@
 
 				date = $("<span>", {
 					class: "eventTime span6",
-					text: event.startDate.toTimeString() + " - " + event.endDate.toTimeString(),
+					text: event.startDate.getHours()+":"+formatMinutes(event.startDate.getMinutes()) + " - " + event.endDate.getHours()+":"+formatMinutes(event.endDate.getMinutes()),
 				})
 
 				content = $("<span>", {
