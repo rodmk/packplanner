@@ -63,6 +63,9 @@
       			border-color: #E3E3E3;
       			background-color: #E3E3E3;
       		}
+      		.selected-day.h4{
+      			background-color: #1ABC9C;
+      		}
       		.unselected-day {
       			cursor: pointer;
       		}
@@ -423,7 +426,7 @@
 				for (i=0; i < 7; i++) {
 					if (i==day) {
 						$("#header" + i).removeClass("unselected-day span1").addClass("selected-day span6");
-						$("#header" + i).html("<h4>" + $.datepicker.formatDate('DD, MM d', currentDate) + "</h4>");
+						$("#header" + i).html("<h4 style='color:white;background-color:#16A085;margin-top:0px;margin-bottom:10px;padding-top:10px;padding-bottom:10px;'>" + $.datepicker.formatDate('DD, MM d', currentDate) + "</h4>");
 					} else {
 						$("#header" + i).removeClass("selected-day span6").addClass("unselected-day span1");
 						$("#header" + i).html("<p>" + $.datepicker.formatDate('D', firstDate) + "</p><p>" + firstDate.getDate() + "</p>");
