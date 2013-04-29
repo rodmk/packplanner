@@ -1,0 +1,72 @@
+<!-- newEventModal -->
+<div id="newEventModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">New Event</h3>
+	</div>
+	<div class="modal-body">
+		<form id="newEventForm">
+			<div class="row-fluid">
+				<div class="span12">    
+					<div class="row-fluid">   
+						<div class="span5 lightblue">
+							<label>Event Name</label>
+							<input type="text" id="eventName" class="span12" placeholder="Event Name">
+						</div>
+						<div id="eventDate" class="span5 offset1 lightblue input-append">
+							<label>Event Date</label>
+							<input id="eventDateinput" data-format="MM-dd-yyyy" type="text" placeholder="11-28-2013" class="span12"></input>
+							<span class="add-on">
+								<i data-time-icon="icon-time" data-date-icon="icon-calendar">
+								</i>
+							</span>
+						</div>
+					</div>
+					
+					<div class="row-fluid">
+						<div id= "startTime" class="span5 bgcolor input-append">
+							<label>Start Time</label>
+							<input id="startTimeInput" class="span12" placeholder="3:30 PM" type="text"></input>
+							<span class="add-on">
+								<i data-time-icon="icon-time" data-date-icon="icon-calendar">
+								</i>
+							</span>  
+						</div>
+						<div id= "endTime" class="span5 offset1 bgcolor input-append">
+							<label>End Time</label>
+							<input id="endTimeInput" class="span12" placeholder="5:30 PM" type="text"></input>
+							<span class="add-on">
+								<i data-time-icon="icon-time" data-date-icon="icon-calendar">
+								</i>
+							</span>  
+						</div>
+					</div>
+					<div class="row-fluid">
+						<div id="locationDiv" class="span5 bgcolor">
+							<label >Location</label>
+							<input id="locationInput" class="pull-left span12" placeholder="location" type="text"></input>
+						</div>
+					</div>
+					<div class="row-fluid" style="padding-bottom:100px">
+						<div class="span5 bgcolor input-append">
+							<label>Driving To (optional):</label>
+							<input id= "drivingTo" autocomplete="off" type="text" data-provide="typeahead"></input>
+							  
+						</div>
+						<div class="span5 offset1 bgcolor input-append">
+							<label>Driving From (optional):</label>
+							<input id= "drivingFrom" autocomplete="off" type="text" data-provide="typeahead"></input>
+							
+						</div>
+					</div>
+					<div class="row">
+					</div>               
+				</div>     
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="flat btn" data-dismiss="modal" aria-hidden="true"style="background-color:#BDC3C7;">Close</button>
+		<button class="flat btn btn-primary" id="createEventButton">Save changes</button>
+	</div>
+</div><!--end modal -->

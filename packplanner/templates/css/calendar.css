@@ -1,0 +1,120 @@
+.first-day {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.last-day {
+  border-right: 1px solid;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-color: #AAAAAA;
+}
+.unselected-day.span1 {
+  color: white;
+  border-left: 1px solid;
+  margin-left: 0px;
+  width: 45px;
+  margin-left:2px;
+  margin-right:2px;
+  text-align: center;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  height: 550px;
+  border-color: #1ABC9C;
+}
+.selected-day.span6 {
+  border-left: 1px solid;
+  margin-left: 0px;
+  width: 894px;
+  margin-left:2px;
+  margin-right:2px;
+  text-align: center;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  height: 550px;
+  border-color: #E3E3E3;
+  background-color: #E3E3E3;
+}
+.selected-day.h4{
+  background-color: #1ABC9C;
+}
+.unselected-day {
+  cursor: pointer;
+}
+.selected-day {
+  background-color: #1ABC9C;
+}
+.unselected-day {
+  /* fallback */
+  background-color: #1ABC9C;
+  /*background: url(images/linear_bg_2.png);
+  background-repeat: repeat-x;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#DDDDDD), to(#EEEEEE));
+  background: -webkit-linear-gradient(top, #EEEEEE, #DDDDDD);
+  background: -moz-linear-gradient(top, #EEEEEE, #DDDDDD);
+  background: -ms-linear-gradient(top, #EEEEEE, #DDDDDD);
+  background: -o-linear-gradient(top, #EEEEEE, #DDDDDD);*/
+}
+.unselected-day:hover {
+  /* fallback */
+  background-color: #16A085;
+  border-color: #16A085;
+  /*background: url(images/linear_bg_2.png);
+  background-repeat: repeat-x;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#BBBBBB), to(#CCCCCC));
+  background: -webkit-linear-gradient(top, #CCCCCC, #BBBBBB);
+  background: -moz-linear-gradient(top, #CCCCCC, #BBBBBB);
+  background: -ms-linear-gradient(top, #CCCCCC, #BBBBBB);
+  background: -o-linear-gradient(top, #CCCCCC, #BBBBBB);*/
+}
+.spacer {
+  margin-top: 40px;
+}
+.modal, .modal.fade.in {
+  top: 10%; /* was 10% */
+}
+
+.navbar-inner {
+  background-color: #1ABC9C; /* background color will be black for all browsers */
+  background-image: none;
+  background-repeat: no-repeat;
+  filter: none;
+}
+
+.navbar-inner .active {
+  background-color: #16A085; /* background color will be black for all browsers */
+  background-image: none;
+  background-repeat: no-repeat;
+  filter: none;
+}
+
+.ui-datepicker {
+  font-size:10px !important; 
+  width: 25em;
+  padding: .2em .2em 0;
+  display: none;
+}
+.ui-datepicker table {
+  width: 100%;
+  font-size: .9em;
+  border-collapse: collapse;
+  margin: 0 0 .4em;
+}
+
+.tile {
+  background-color:#006363;
+  padding: 5px;
+  margin: 5px;
+}
+
+.tile .dayEvents {
+  text-align: left;
+  font-weight: bold;
+  margin: 0px;
+  color: white;
+}
+
+.tile .eventTime {
+  text-align: left;
+  margin: 0px;
+  color: white;
+}
