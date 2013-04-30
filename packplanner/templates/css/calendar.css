@@ -73,20 +73,6 @@
   top: 10%; /* was 10% */
 }
 
-.navbar-inner {
-  background-color: #1ABC9C; /* background color will be black for all browsers */
-  background-image: none;
-  background-repeat: no-repeat;
-  filter: none;
-}
-
-.navbar-inner .active {
-  background-color: #16A085; /* background color will be black for all browsers */
-  background-image: none;
-  background-repeat: no-repeat;
-  filter: none;
-}
-
 .ui-datepicker {
   font-size:10px !important; 
   width: 25em;

@@ -18,30 +18,26 @@
 	    {% block extrahead %}
 	    {% endblock %}
 
-	    <script type="text/javascript">
-	    $(function(){
-	    {% block jquery %}
-	    {% endblock %}
-	    });
-	    </script>
+	    <style>
+	    	{% include "css/navbar.css" %}
+	    </style>
 
-     	
  	</head>
  	<body>
  		{% block navbar %}
  		<div class="container-fluid">
 			<div class="navbar">
 			 	<div class="navbar-inner">
-			    	<a class="brand" href="#">Pack Planner</a>
+			    	<a class="brand" href="/home/">Pack Planner</a>
 			    	<ul class="nav">
-			      		<li class="active"><a href="#">Calendar</a></li>
-					    <li><a href="#">Contacts</a></li>
-					    <li><a href="#">Inbox</a></li>
-					    <li><a href="#">Schedules</a></li>
+			      		<li {% block navbar-calendar-active %}{% endblock %}><a href="/calendar/">Calendar</a></li>
+					    <li {% block navbar-contacts-active %}{% endblock %}><a href="/contacts/">Contacts</a></li>
+					    <li {% block navbar-inbox-active %}{% endblock %}><a href="/inbox/">Inbox</a></li>
+					    <li {% block navbar-schedules-active %}{% endblock %}><a href="/schedules/">Schedules</a></li>
 			    	</ul>
 			   		<ul class="nav pull-right">
-			      		<li><a href="#">Settings</a></li>
-			      		<li><a href="#">Logout</a></li>
+			      		<li {% block navbar-settings-active %}{% endblock %}><a href="/settings/">Settings</a></li>
+			      		<li><a href="/logout/">Logout</a></li>
 			    	</ul>
 			  	</div>
 			</div>

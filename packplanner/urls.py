@@ -7,8 +7,13 @@ from django.conf import settings
 
 urlpatterns = patterns('',
     # Examples:
+    url(r'^$', 'packplanner.views.index'),
+    url(r'^home/$', 'packplanner.views.index'),
     url(r'^calendar/$', 'packplanner.views.calendar'),
-    # url(r'^packplanner/', include('packplanner.foo.urls')),
+    url(r'^contacts/$', 'packplanner.views.contacts'),
+    url(r'^inbox/$', 'packplanner.views.inbox'),
+    url(r'^schedules/$', 'packplanner.views.schedules'),
+    url(r'^settings/$', 'packplanner.views.settings'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
