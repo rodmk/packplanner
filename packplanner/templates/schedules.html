@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 
+{% block title %}Schedules{% endblock %}
+
 {% block extrahead %}
 	<style>
 	</style>
 
-	<script type="text/javascript">	
+	<script type="text/javascript">
+		{% include "js/schedules.js" %}
 	</script>
 {% endblock %}
 
@@ -14,6 +17,15 @@ class="active"
 
 {% block content %}
 	<div class="container">
-		<p>Schedules</p>
+		<div class="row">
+			<div class="span12">
+				<p>Schedules</p>
+				<a href="/schedule/1/">View a Schedule</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span12" id="scheduleList">
+			</div>
+		</div>
  	</div>
 {% endblock %}
