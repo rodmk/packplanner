@@ -2,12 +2,18 @@
 
 {% block extrahead %}
 	<style>
+		{% include "css/contacts.css" %}
 	</style>
 
 	<script type="text/javascript">	
 
 	var ALPHABET_UPPER = ["A","B","C","D","E","F","G","H","I","J","K","L",
 						  "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+
+	var DEFAULT_ADDRESS = '<strong>Twitter, Inc.</strong><br>795 Folsom Ave, Suite 600<br>San Francisco, CA 94107<br>';
+	var DEFAULT_PHONE = '(123) 456-7890';
+	var DEFAULT_EMAIL = 'first.last@example.com'; 
+	var DEFAULT_PHOTO = '../static/img/placeholder_user.png'
 
 	var LIST_OF_CONTACTS =
 	[
@@ -63,24 +69,48 @@
     "Darrel Marceau"
     ]
 
-    
-
+    var contacts = getContacts(LIST_OF_CONTACTS);
 
 	$(document).ready(function() {
 
-		LIST_OF_CONTACTS.sort();
+		updateContacts(LIST_OF_CONTACTS);
+		console.log(contacts);
+
+	});
+
+	function Contact( fullName, address, phoneNumber, email, photo){
+		this.fullName = fullName;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.photo = photo;
+	}
+
+	function getContacts(contactList){
+
+		contactList.sort();
+
+		var contacts = new Array();
+	    for(c=0;c<=contactList.length-1;c++){
+	    	contacts[c] = new Contact( contactList[c], DEFAULT_ADDRESS, DEFAULT_PHONE, DEFAULT_EMAIL, DEFAULT_PHOTO );
+	    }
+	    return contacts;
+	}
+
+	function updateContacts(contactList){
+
+		contactList.sort();
 
 		for(i=0;i<=ALPHABET_UPPER.length-1;i++){
-			$('#contactHeaders').append('<li class="nav-header" >' + ALPHABET_UPPER[i] + '</li>');
+			$('#contactHeaders').append('<li id="letterHead" class="nav-header" >' + ALPHABET_UPPER[i] + '</li>');
 			
-			for(k=0;k<=LIST_OF_CONTACTS.length-1;k++){
-				if (LIST_OF_CONTACTS[k][0] == ALPHABET_UPPER[i]){
-					$('#contactHeaders').append('<li><a href="#">' + LIST_OF_CONTACTS[k] + '</a></li>');
+			for(k=0;k<=contactList.length-1;k++){
+				if (contactList[k][0] == ALPHABET_UPPER[i]){
+					$('#contactHeaders').append('<li><a href="#' + contactList[k] + "-info" + '">' + contactList[k] + '</a></li>');
 				}
 			}
 		}
-
-	});
+	}
 
 
 	</script>
@@ -112,9 +142,21 @@ class="active"
 
  	<div class="container">
 		<div class="row">
-			<div class="span12">
+			<div class="span6" id="left-contact-pane">
 				<ul id="contactHeaders" class="nav nav-list">
 				</ul>
+
+			</div>
+			<div class="span6" id="right-contact-pane">
+				<div class="contactView">
+					<div class="placeholder">
+						<img src="../static/img/placeholder_user.png" alt="" />
+					</div>
+					<div class="helperText" id="selectUserText">
+						<p>Select a Contact<p>
+					</div>
+
+				</div>
 
 			</div>
 		</div>
