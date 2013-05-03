@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+	
+	<div class="container">
+		<div class="row">
+			<div class="span12">
+
+				{% if form.errors %}
+					<p class="error">Sorry, that's not a valid username or password</p>
+				{% endif %}
+			</div>
+		</div>
+		
+		<form action="" method="post"> {% csrf_token %}
+			<div class="row">
+				<div class="span4">
+				</div>
+				<div class="span4">
+					<label for="username">Username:</label>
+					<input type="text" name="username" value="" id="username">
+				</div>
+				<div class="span4">
+				</div>
+			</div>
+			<div class="row">
+				<div class="span4">
+				</div>
+				<div class="span4">
+					<label for="password">Password:</label>
+					<input type="password" name="password" value="" id="password">
+				</div>
+				<div class="span4">
+				</div>
+			</div>
+			<div class="row">
+				<div class="span4">
+				</div>
+				<div class="span4">
+					<input class="btn btn-inverse" type="submit" value="Login" />
+					<input type="hidden" name="next" value="/calendar/" />
+				</div>
+				<div class="span4">
+				</div>
+			</div>
+		</form>
+	</div>
+
+{% endblock %}
