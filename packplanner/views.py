@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from pack.models import Schedule
 
 @login_required
 def index(request):
@@ -19,7 +20,8 @@ def inbox(request):
 
 @login_required
 def schedules(request):
-	return render(request, 'schedules.html', {})
+	schedules = Schedule.objects.all()
+	return render(request, 'schedules.html', {"schedules" : schedules})
 
 @login_required
 def settings(request):
@@ -35,8 +37,4 @@ def view_message(request, id):
 
 @login_required
 def view_schedule(request, id):
-	schedules = []
-	schedules.append({'id' : 1, 'name': "Soccer"})
-	schedules.append({'id' : 2, 'name': "Drama Rehearsals"})
-	schedules.append({'id' : 3, 'name': "Girl Scouts"})
-	return render(request, 'view-schedule.html', {'schedules' : schedules})
+	return render(request, 'view-schedule.html', {})
