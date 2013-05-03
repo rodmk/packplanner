@@ -19,7 +19,7 @@ var events = new Array();
 Filters
 */
 var booleanFilters = [];
-var childrenFilters = ["Me", "Nick", "Andy", "Barry", "Christine"];
+var childrenFilters = ["Mary", "Nick", "Andy", "Barry", "Christine"];
 var helpFilters = ["All"];
 
 /*
@@ -42,14 +42,15 @@ $(document).ready(function() {
 	displayEvents();
 
 	for(i=0;i<=helpFilters.length-1;i++){
-			$('#filterBtnGroup').append('<button id="allChildren" class="btn pull-left" >' + helpFilters[i] + '</button>');
+			$('#filterBtnGroup').append('<button id="allChildren" data-toggle="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
 	}
 
 	for(j=0;j<=childrenFilters.length-1;j++){
-			$('#filterBtnGroup').append('<button id="partialChildren" class=' + '"btn pull-left btn-custom' + j + 'd" >' + childrenFilters[j] + '</button>');
+			$('#filterBtnGroup').append('<button id="partialChildren" data-toggle="button" class=' + '"btn pull-left btn-custom' + j + 'd" >' + childrenFilters[j] + '</button>');
 			booleanFilters[j] = 0;
 	}
 
+	/*
 	$("#filterBtnGroup #partialChildren").each(function (value) {
     	$(this).bind( "click", function() {
 			$(this).toggleClass( CUSTOM_FILTER_PREFIX + value);
@@ -94,6 +95,7 @@ $(document).ready(function() {
 
 		});
     });
+*/
 
 
 	$("#datepicker").datepicker({
