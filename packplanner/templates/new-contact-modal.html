@@ -1,0 +1,99 @@
+<!-- newContactModal -->
+<div id="newContactModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">New Contact</h3>
+	</div>
+	<div class="modal-body">
+		<form id="newContactForm">
+			<div class="row-fluid">
+				<div class="span6">    
+					<div class="row-fluid">   
+						<div class="span4 lightblue">
+							<label>Name</label>
+						</div>
+						<div id="contactFirstName" class="span8 lightblue">
+							<input type="text" id="contactFirstName" class="span12" placeholder="First Name">
+						</div>
+					</div>
+					<div class="row-fluid"  style="margin-bottom: 14px;">   
+						<div id="contactLastName" class="span8 offset4 lightblue">
+							<input id="contactLastName" type="text" placeholder="Last Name" class="span12"></input>
+						</div>
+					</div>
+
+
+					<div class="row-fluid" style="margin-bottom: 14px;">   
+						<div class="span4 lightblue">
+							<label>Phone</label>
+						</div>
+						<div id="phoneNumber" class="span8 lightblue">
+							<input type="text" id="phoneNumberInput" class="span12" placeholder="XXX-XXX-XXXX">
+						</div>
+					</div>
+
+
+					<div class="row-fluid" style="margin-bottom: 14px;">   
+						<div class="span4 lightblue">
+							<label>Email</label>
+						</div>
+						<div id="emailAddress" class="span8 lightblue">
+							<input type="text" id="emailAddressInput" class="span12" placeholder="example@me.com">
+						</div>
+					</div>					
+
+					<div class="row">
+					</div>               
+				</div> 
+
+
+				<div class="span6">
+					<div class="row-fluid">
+						<div class="placeholder" style="text-align: center;">
+							<img src="../static/img/placeholder_user.png" alt="" style="height:200px;" />
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="row-fluid" style="margin-top: 14px;">
+				<div id= "address" class="span2 lightblue">
+					<label>Address</label>
+				</div>
+				<div id="addressStreet" class="span10 lightblue">
+					<input type="text" id="addressStreetInput" class="span12" placeholder="Street">
+				</div>
+			</div>
+
+			<div class="row-fluid">
+				<div id="addressCity" class="span5 offset2 lightblue">
+					<input type="text" id="addressCityInput" class="span12" placeholder="City">
+				</div>
+				<div id="addressState" class="span3 lightblue">
+					<input type="text" id="addressStateInput" class="span12" placeholder="State">
+				</div>
+				<div id="addressZip" class="span2 lightblue">
+					<input type="text" id="addressZipInput" class="span12" placeholder="Zip">
+				</div>
+			</div>
+
+			<div class="row-fluid">
+				<div class="fileupload fileupload-new" data-provides="fileupload">
+				<div class="fileupload-new thumbnail" style="width: 200px; height: 150px;"><img src="../static/img/placeholder_user.png" /></div>
+				<div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+				<div>
+				<span class="btn btn-file"><span class="fileupload-new">Select image</span><span class="fileupload-exists">Change</span><input type="file" /></span>
+				<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+				</div>
+				</div>
+			</div>
+
+
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="flat btn" data-dismiss="modal" aria-hidden="true"style="background-color:#BDC3C7;">Close</button>
+		<button class="flat btn btn-primary" id="createContactButton">Add Contact</button>
+	</div>
+</div><!--end modal -->
