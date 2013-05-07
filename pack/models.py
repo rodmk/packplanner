@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 class Family(models.Model):
 	last_name = models.CharField(max_length=40)
+	# address = models.CharField(max_length=200)
 
 	def __unicode__(self):
 		return u'%s Family' % (self.last_name,)
@@ -12,8 +13,8 @@ class FamilyMember(models.Model):
 	first_name = models.CharField(max_length=40)
 	last_name = models.CharField(max_length=40)
 	date_of_birth = models.DateField()
-	timestamp = models.DateTimeField(auto_now_add=True)
-	family = models.ForeignKey(Family, related_name="family")
+	timestamp = models.DateTimeField()
+	family = models.ForeignKey(Family, related_name="family_members")
 	is_adult = models.BooleanField()
 	is_driver = models.BooleanField()
 
@@ -23,7 +24,7 @@ class FamilyMember(models.Model):
 class Schedule(models.Model):
 	name = models.CharField(max_length=100)
 	description=models.TextField()
-	timestamp = models.DateTimeField(auto_now_add=True)
+	timestamp = models.DateTimeField()
 	creator = models.ForeignKey(User, related_name="creator")
 	subscribers = models.ManyToManyField(Family, related_name="schedules")
 
@@ -34,6 +35,7 @@ class FamilyScheduleDetails(models.Model):
 	schedule = models.ForeignKey(Schedule, related_name="users_schedule_details")
 	family = models.ForeignKey(Family, related_name="family_schedules_details")
 	attendees = models.ForeignKey(FamilyMember, related_name="attending_schedule_details")
+	# notes = models.TextField()
 
 	def __unicode__(self):
 		return u'Details for %s Schedule for the %s' % (self.schedule, self.family)
@@ -42,7 +44,7 @@ class Event(models.Model):
 	name = models.CharField(max_length=100)
 	description = models.TextField()
 	location = models.CharField(max_length=50)
-	timestamp = models.DateTimeField(auto_now_add=True)
+	timestamp = models.DateTimeField()
 	creator = models.ForeignKey(User, related_name="created_events")
 	startTime = models.DateTimeField()
 	endTime = models.DateTimeField()
