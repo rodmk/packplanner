@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from pack.models import Schedule
+from pack.models import *
 
 @login_required
 def index(request):
@@ -8,7 +8,12 @@ def index(request):
 
 @login_required
 def calendar(request):
-	return render(request, 'index.html', {})
+	family_member = request.user.user_account
+	if len(family_member.all()) == 0:
+		events_details = []
+	else:
+		events_details = FamilyEventDetails.objects.filter(family=family_member.all()[0].family)
+	return render(request, 'index.html', {"events_details" : events_details})
 
 @login_required
 def contacts(request):

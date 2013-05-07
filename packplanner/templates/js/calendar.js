@@ -10,7 +10,17 @@ function Event(id, title, location, startDate, endDate, driverTo, driverFrom, go
 }
 
 function compareEvents(event1, event2) {
-	return (event1.startDate > event2.startDate) ? 1 : ((event1.startDate > event2.startDate) ? -1 : 0);
+	if (event1.startDate > event2.startDate) {
+		return 1;
+	} else if (event1.startDate < event2.startDate) {
+		return -1;
+	} else if (event1.endDate > event2.endDate) {
+		return 1;
+	} else if (event1.endDate < event2.endDate) {
+		return -1
+	} else {
+		return 0;
+	}
 }
 
 var events = new Array();
@@ -22,12 +32,6 @@ var booleanFilters = [];
 var childrenFilters = ["Mary", "Nick", "Andy", "Barry", "Christine"];
 var helpFilters = ["All"];
 
-/*
-Constants
-*/
-var DEFAULT_ALL_CLASS = "btn-inverse";
-var DEFAULT_FILTER_CLASS = "btn pull-left btn-custom";
-var CUSTOM_FILTER_PREFIX = "btn-custom";
 
 $(document).ready(function() {
 
@@ -35,9 +39,54 @@ $(document).ready(function() {
 	dateSelectedFunc(currentDate);
 
 	events = new Array();
-	events[0] = new Event(0, "Soccer Game vs Mockingbird", "Oxmoor Fields", new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 14, 0, 0, 0), new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 16, 30, 0, 0), "Me", "Me", "Andy");
-	events[1] = new Event(1, "Drama Rehearsal", "Hyde Auditorium", new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 15, 0, 0, 0), new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 18, 0, 0, 0), "Nick", "Nick", "Barry");
-	events[2] = new Event(2, "Dinner and Movie", "Springhurst", new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 14, 30, 0, 0), new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 18, 0, 0, 0), "Nick", "Nick", "Nick");
+
+	{% for event_details in events_details %}
+
+	var startDate = new Date();
+	startDate.setFullYear({{event_details.event.startTime.year}});
+	startDate.setMonth({{event_details.event.startTime.month}});
+	startDate.setDate({{event_details.event.startTime.day}});
+	startDate.setHours({{event_details.event.startTime.hour}});
+	startDate.setMinutes({{event_details.event.startTime.minute}});
+	startDate.setHours(startDate.getHours()-5);
+
+	var endDate = new Date();
+	endDate.setFullYear({{event_details.event.endTime.year}});
+	endDate.setMonth({{event_details.event.endTime.month}});
+	endDate.setDate({{event_details.event.endTime.day}});
+	endDate.setHours({{event_details.event.endTime.hour}});
+	endDate.setMinutes({{event_details.event.endTime.minute}});
+	endDate.setHours(endDate.getHours()-5);
+
+	events[{{forloop.counter0}}] =  new Event({{event_details.event.id}}, 
+		"{{event_details.event.name}}", 
+		"{{event_details.event.location}}", 
+		startDate, 
+		endDate,
+		"{{event_details.driver_to}}", 
+		"{{event_details.driver_from}}",
+		"Andy");
+
+	{% endfor %}
+
+	// events[0] = new Event(0, 
+	// 	"Soccer Game vs Mockingbird", 
+	// 	"Oxmoor Fields", 
+	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 14, 0, 0, 0), 
+	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 16, 30, 0, 0), 
+	// 	"Me", "Me", "Andy");
+	// events[1] = new Event(1, 
+	// 	"Drama Rehearsal", 
+	// 	"Hyde Auditorium", 
+	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 15, 0, 0, 0), 
+	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 18, 0, 0, 0), 
+	// 	"Nick", "Nick", "Barry");
+	// events[2] = new Event(2, 
+	// 	"Dinner and Movie", 
+	// 	"Springhurst", 
+	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 14, 30, 0, 0), 
+	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 18, 0, 0, 0), 
+	// 	"Nick", "Nick", "Nick");
 	
 	displayEvents();
 
@@ -49,53 +98,6 @@ $(document).ready(function() {
 			$('#filterBtnGroup').append('<button id="partialChildren" data-toggle="button" class=' + '"btn pull-left btn-custom' + j + 'd" >' + childrenFilters[j] + '</button>');
 			booleanFilters[j] = 0;
 	}
-
-	/*
-	$("#filterBtnGroup #partialChildren").each(function (value) {
-    	$(this).bind( "click", function() {
-			$(this).toggleClass( CUSTOM_FILTER_PREFIX + value);
-			
-			if ($(this).attr('class') == DEFAULT_FILTER_CLASS + value + "d " + CUSTOM_FILTER_PREFIX + value){
-				booleanFilters[value] = 1;
-			}
-			else{
-				booleanFilters[value] = 0;
-				$("#filterBtnGroup #allChildren").each(function (value) {
-				if ($(this).attr('class') != "btn pull-left"){
-					$(this).toggleClass( DEFAULT_ALL_CLASS );
-				}
-				});
-			}
-		});
-	});
-
-	$("#filterBtnGroup #allChildren").each(function () {
-    	$(this).bind( "click", function() {
-			$(this).toggleClass( DEFAULT_ALL_CLASS );
-
-			if ($(this).attr('class') == "btn pull-left" + " " + DEFAULT_ALL_CLASS){
-				$("#filterBtnGroup #partialChildren").each(function (value) {
-
-					if ($(this).attr('class') != DEFAULT_FILTER_CLASS + value + "d " + CUSTOM_FILTER_PREFIX + value){
-						$(this).toggleClass( CUSTOM_FILTER_PREFIX + value);
-						booleanFilters[value] = 1;
-					}
-
-				});
-			}
-
-			else{
-				$("#filterBtnGroup #partialChildren").each(function (value) {
-				if ($(this).attr('class') == DEFAULT_FILTER_CLASS + value + "d " + CUSTOM_FILTER_PREFIX + value){
-					$(this).toggleClass( CUSTOM_FILTER_PREFIX + value);
-					booleanFilters[value] = 0;
-				}
-			});
-			}
-
-		});
-    });
-*/
 
 
 	$("#datepicker").datepicker({
@@ -334,7 +336,7 @@ function renderEvent(event) {
 	})
 
 	editbtn = $('<a class="btn pull-right flat btn-primary " style="margin-top:6px;margin-right:2px" data-toggle="modal" href="#editEventModal" onClick="editEventOpen(' + event.id + '); return true;"><i class="icon-pencil"></i></a>')
-	deletebtn = $('<a class="btn pull-right flat btn-primary " style="margin-top:6px;margin-left:2px" href="#newEventModal" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>')
+	deletebtn = $('<a class="btn pull-right flat btn-primary " style="margin-top:6px;margin-left:6px" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>')
 	reachoutbtn = $('<a class="btn pull-right flat btn-primary " style="margin-top:6px;margin-right:2px" data-toggle="modal" href="#reachOutModal"><i class="car-glyph"></i></a>')
 
 	reachoutbtn.appendTo(date);
@@ -361,6 +363,11 @@ function editEventOpen(event_id) {
 }
 
 function removeEvent(event_id) {
-	events.splice(event_id, 1);
+	for (var i = 0; i <= events.length-1; i++) {
+		if (events[i].id == event_id) {
+			events.splice(i, 1);
+			break;
+		}
+	}
 	displayEvents();
 }
