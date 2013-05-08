@@ -3248,19 +3248,34 @@ button.close {
     .btn.flat.btn-primary:hover, .btn.flat.btn-primary:focus {
       background-color: #2fe2bf; }
     .btn.flat.btn-primary:active, .btn.flat.btn-primary.active {
-      background-color: #16a085; }
+      background-color: #16a085; 
+/*      border-style:solid;
+      border-width:medium;
+      border-color:black;
+      padding: 2px 9px 2px 9px ;*/
+    }
   .btn.flat.btn-info {
     background-color: #3498db; }
     .btn.flat.btn-info:hover, .btn.flat.btn-info:focus {
       background-color: #5dade2; }
     .btn.flat.btn-info:active, .btn.flat.btn-info.active {
-      background-color: #2383c4; }
+      background-color: #2383c4;
+/*      border-style:solid;
+      border-width:medium;
+      border-color:black;
+      padding: 2px 9px 2px 9px ;*/
+    }
   .btn.flat.btn-danger {
     background-color: #e74c3c; }
     .btn.flat.btn-danger:hover, .btn.flat.btn-danger:focus {
       background-color: #ec7063; }
     .btn.flat.btn-danger:active, .btn.flat.btn-danger.active {
-      background-color: #dc2d1b; }
+      background-color: #dc2d1b;
+/*      border-style:solid;
+      border-width:medium;
+      border-color:black;
+      padding: 2px 9px 2px 9px ; */
+    }
   .btn.flat.btn-success {
     background-color: #2ecc71; }
     .btn.flat.btn-success:hover, .btn.flat.btn-success:focus {
