@@ -302,6 +302,8 @@ $(document).ready(function() {
 			}
 
 
+			console.log(childrengoingID);
+			console.log(adultsgoingID);
 			var eventLocation = $("#locationInput").val();
 			console.log("c "+childrengoingID);
 			console.log("a "+adultsgoingID);
@@ -606,19 +608,71 @@ function renderEvent(event) {
 		text: event.title,
 	})
 
+	var family_drivers = []
+	var drivermap = {}
+	{% for family_member in family.family_members.all%}
+	{% if family_member.is_driver %}
+		family_drivers.push("{{family_member.first_name}}");
+		drivermap["{{family_member.first_name}}"] = new Driver("{{family_member.first_name}}","{{family_member.last_name}}", {{family_member.id}})
+	{% endif%}
+	{% endfor %}
+	{% for child in family.children.all%}
+	{% if child.is_driver %}
+		family_drivers.push("{{child.first_name}}");
+		drivermap["{{child.first_name}}"] = new Driver("{{child.first_name}}","{{child.last_name}}", {{child.id}})
+	{% endif%}
+	{% endfor %}
+	var driverTo = event.driverTo;
+	var driverFrom = event.driverFrom;
+	if(driverTo == ""){
+		driverTo = "None";
+	}
+	if(driverFrom ==""){
+		driverFrom = "None";
+	}
+
 	editbtn = $('<a class="btn pull-right flat btn-primary edit-event" data-toggle="modal" href="#editEventModal" onClick="editEventOpen(' + event.id + '); return true;"><i class="icon-pencil"></i></a>');
 	deletebtn = $('<a class="btn pull-right flat btn-primary delete-event" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>');
 	reachoutbtn = $('<a class="btn pull-right flat btn-primary reach-out" data-toggle="modal" href="#reachOutModal"><i class="car-glyph"></i></a>');
-	drivetobtn = $('<a href="#" id="pop" class="btn btn-large flat pull-right" data-toggle="popover" data-content="And here is content" data-original-title="A Title">button</a>');
-	drivefrombtn = $('<a class="btn pull-right flat btn-primary driver-from">From</a>');
-	
-	drivefrombtn.appendTo(date);
-	reachoutbtn.appendTo(date);
-	drivetobtn.appendTo(date);
+	drivetobtn = $('<div class="btn-group pull-right"><a href="#" class="drivingTo btn btn-primary flat pull-right dropdown-toggle" data-toggle="dropdown">To: '+driverTo+'<span class="caret"></span></a>');
+	var tempulto= $('<ul class="dropdown-menu">');
+	var tempulfrom= $('<ul class="dropdown-menu">');
+	var label = $('<h4 class="pull-right" style="margin-top:14px;margin-right:5px;">Drivers: </h4>');
+	drivefrombtn = $('<div class="btn-group pull-right"><a href="#" id="drivingFrom" class="drivingFrom btn btn-primary flat pull-right dropdown-toggle" data-toggle="dropdown">From: '+driverFrom+'<span class="caret"></span></a>');
+	var temp = "";
+	for(var i = 0; i < family_drivers.length;i++){
+		temp = '<li><a>'+family_drivers[i]+'</a></li>';
+		tempulto.append(temp);
+		tempulfrom.append(temp);
+	}
+	temp = '<li><a href="#reachOutModal" data-toggle="modal">Reach Out</li></a>';
+	tempulto.append(temp);
+	tempulfrom.append(temp);
+	temp = '</ul>';
+	tempulto.append(temp);
+	tempulfrom.append(temp);
+	drivefrombtn.append(tempulfrom);
+	drivetobtn.append(tempulto);
+	drivefrombtn.appendTo(content);
+	reachoutbtn.appendTo(content);
+	drivetobtn.appendTo(content);
+	label.appendTo(content);
 	deletebtn.appendTo(tile);
 	editbtn.appendTo(tile);
-	date.appendTo(tile);
 	content.appendTo(tile);
+
+	date.appendTo(tile);
+	
+	console.log("driver to "+driverTo+"driver from "+driverFrom);
+	if(driverTo == "None"){
+		$(".drivingTo").removeClass('btn-primary').addClass('btn-danger');
+	}
+
+	if(driverFrom == "None"){
+		$(".drivingFrom").removeClass('btn-primary').addClass('btn-danger');
+	}
+
+	handleMissingDrivers();
 	return tile;
 }
 
@@ -651,8 +705,26 @@ function displayEvents() {
 	$(".tile").detach();
 	$(".dayEvents").remove();
 	for (i=0; i<currentDateEvents.length; i++) {
-		var event = currentDateEvents[i];
-		content.append(renderEvent(event));
+		var e = currentDateEvents[i];
+		console.log(event);
+		content.append(renderEvent(e));
 	}
 }
 
+function handleMissingDrivers(){
+	var allDrivingTo = $(".drivingTo");
+	var allDrivingFrom = $(".drivingFrom");
+	for(var i = 0; i < allDrivingTo.length;i++){
+		button = $(".drivingTo")[i];
+		if(button.text =="None"){
+			button.removeClass('btn-primary').addClass('btn-danger');
+		}
+
+	}
+	for(var j=0; j< allDrivingFrom.length;j++){
+		button = $(".drivingFrom")[i];
+		if(button.text =="None"){
+			button.removeClass('btn-primary').addClass('btn-danger');
+		}
+	}
+}
