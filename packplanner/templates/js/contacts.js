@@ -2,89 +2,17 @@
     var ALPHABET_UPPER = ["A","B","C","D","E","F","G","H","I","J","K","L",
 						  "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
-	var DEFAULT_ADDRESS = 'Twitter, Inc.\n795 Folsom Ave, Suite 600\nSan Francisco, CA 94107';
-	var DEFAULT_PHONE = '(123) 456-7890';
-	var DEFAULT_EMAIL = 'first.last@example.com'; 
 	var DEFAULT_PHOTO = '../static/img/placeholder_user.png';
-    var DEFAULT_CHILDREN = ["Mary", "Susie", "Bobby"];
-	var DEFAULT_ID = 0;
 
-	var ALL_CONTACTS =
-	[
-    "Lawanda Devens",
-    "Norberto Kautz",
-    "Leland Rape",
-    "Gwendolyn Forehand",
-    "Stewart Flury",
-    "Lennie Brownlee",
-    "Rocco Teixeira",
-    "Lesley Doerr",
-    "Felipe Wernick",
-    "Carletta Mcquay",
-    "Dorethea Thiessen",
-    "Odessa Bulger",
-    "Esta Yochum",
-    "Azzie Howard",
-    "Simone Sterba",
-    "Estrella Ishee",
-    "Ivana Nau",
-    "Callie Pierri",
-    "Fay Coyle",
-    "Kyra Heyen",
-    "Silva Lafond",
-    "Shaquana Leffler",
-    "Hildred Helfer",
-    "Hettie Timbers",
-    "Irvin Pesina",
-    "Katina Strosnider",
-    "Tarah Choate",
-    "Lauren Luiz",
-    "Karl Lenox",
-    "Filomena Wirtz",
-    "Maurita Fergerson",
-    "Ellsworth Larock",
-    "Lesa Strock",
-    "Shirley Palazzo",
-    "Oliver Domenico",
-    "Linwood Gordy",
-    "Kandy Oh",
-    "Wally Gowdy",
-    "Alesia Chavers",
-    "Maritza Rakow",
-    "Antionette Ladouceur",
-    "Damien Mcadory",
-    "Josette Soliman",
-    "Mitsue Olivera",
-    "Loren Vidal",
-    "Neil Meece",
-    "Jamaal Hendershott",
-    "Brittny Dudas",
-    "Nell Arbogast",
-    "Darrel Marceau"
-    ];
 
-    var contacts = getContactsFromList(ALL_CONTACTS);
-
-    function Contact( fullName, address, phoneNumber, email, photo, children, ID){
-        this.fullName = fullName;
+    function Contact( ID, photo, familyName, parents, children, address, phoneNumber){
+        this.familyName = familyName;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.email = email;
         this.photo = photo;
-        this.children = children;
         this.ID = ID;
-
-    }
-
-    function getContactsFromList(contactList){
-
-        contactList.sort();
-
-        var contacts = new Array();
-        for(c=0;c<=contactList.length-1;c++){
-            contacts[c] = new Contact( contactList[c], DEFAULT_ADDRESS, DEFAULT_PHONE, DEFAULT_EMAIL, DEFAULT_PHOTO, DEFAULT_CHILDREN, c );
-        }
-        return contacts;
+        this.parents = parents;
+        this.children = children;
     }
 
 	$(document).ready(function() {
@@ -92,11 +20,45 @@
         $('#contactOptions').hide();
         $("#addressContact").val('');
 
-		updateContacts(ALL_CONTACTS);
+        myContacts = new Array();
+        myFamilyNames = new Array();
+
+        {% for contact in contacts %}
+
+        var parentsList = new Array();
+        var childrenList = new Array();
+        var contactID = {{forloop.counter0}};
+
+        {% for adult in contact.family_members.all %}
+        parentsList.push("{{adult.first_name}}");
+        {% endfor %}
+
+        {% for child in contact.children.all %}
+        childrenList.push("{{child.first_name}}");
+        {% endfor %}
+
+        myContacts[{{forloop.counter0}}] =  
+            new Contact(contactID,
+                        DEFAULT_PHOTO,
+                        "{{contact}}",
+                        parentsList,
+                        childrenList,
+                        "{{contact.familyAddress}}", 
+                        "{{contact.familyPhone}}" 
+                        );
+        myFamilyNames[{{forloop.counter0}}] = "{{contact}}";   
+
+        window.ALL_MY_CONTACTS = myContacts;
+        window.ALL_FAMILY_NAMES = myFamilyNames;
+
+        {% endfor %}
+
+
+		updateContacts(ALL_FAMILY_NAMES);
 
 		$('#contactSearch').typeahead( { 
 			source: function (query, process) {
-				process( ALL_CONTACTS );
+				process( ALL_FAMILY_NAMES );
 			},
 			menu: '',
 			sorter: function(items) {
@@ -130,9 +92,9 @@
 
 				if (contactList[k][0] == ALPHABET_UPPER[i]){
 
-                    for(c=0;c<=contacts.length-1;c++){
-                        if (contacts[c].fullName == contactList[k]){
-                            newContent = newContent + '<li onclick="return changeRightPanel(' + contacts[c].ID + ')"><a href="#">' + contactList[k] + '</a></li>';
+                    for(c=0;c<=ALL_MY_CONTACTS.length-1;c++){
+                        if (ALL_MY_CONTACTS[c].familyName == contactList[k]){
+                            newContent = newContent + '<li onclick="return changeRightPanel(' + ALL_MY_CONTACTS[c].ID + ')"><a href="#">' + contactList[k] + '</a></li>';
                             break;
                         }
                     }
@@ -148,11 +110,12 @@
 
         $('#contactSelectText').hide();
 
-        document.getElementById("fullNameContact").innerHTML = contacts[IDnum].fullName;
-        document.getElementById("childrenContact").innerHTML = contacts[IDnum].children;
-        $("#addressContact").val(contacts[IDnum].address);
-        document.getElementById("phoneContact").innerHTML = contacts[IDnum].phoneNumber;
-        document.getElementById("emailContact").innerHTML = contacts[IDnum].email;
+        document.getElementById("familyContact").innerHTML = window.ALL_MY_CONTACTS[IDnum].familyName;
+        document.getElementById("parentsContact").innerHTML = window.ALL_MY_CONTACTS[IDnum].parents;
+        document.getElementById("childrenContact").innerHTML = window.ALL_MY_CONTACTS[IDnum].children;
+
+        $("#addressContact").val(window.ALL_MY_CONTACTS[IDnum].address);
+        document.getElementById("phoneContact").innerHTML = window.ALL_MY_CONTACTS[IDnum].phoneNumber;
 
         $('#contactOptions').show();
 
