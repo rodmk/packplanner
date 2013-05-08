@@ -126,11 +126,28 @@
   }
 },
 {
+  "pk": 15, 
+  "model": "contenttypes.contenttype", 
+  "fields": {
+    "model": "child", 
+    "name": "child", 
+    "app_label": "pack"
+  }
+},
+{
   "pk": "05dnx09kmz5iawu73541tqw7xp5vvkjf", 
   "model": "sessions.session", 
   "fields": {
     "expire_date": "2013-05-17T02:05:47.716Z", 
     "session_data": "ZjhkMGM0MGUxMmYyNzYzZWY0MzZjNzllYjg2NTI1MDI0ZmMxYTMzMTqAAn1xAShVDV9hdXRoX3VzZXJfaWRxAksHVRJfYXV0aF91c2VyX2JhY2tlbmRxA1UpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBHUu"
+  }
+},
+{
+  "pk": "3ae405425e652ca0dd8332d60e2bc7c5", 
+  "model": "sessions.session", 
+  "fields": {
+    "expire_date": "2013-05-21T23:49:38.731Z", 
+    "session_data": "MDlhODQzMDJhZmM5OGRjMmVjNGU5M2RlODRhY2ExOTM0YTYxMDlhODqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAnUu\n"
   }
 },
 {
@@ -150,6 +167,14 @@
   }
 },
 {
+  "pk": "9nsqcvpgsc8o7q2ynumw91tll7mj4ttr", 
+  "model": "sessions.session", 
+  "fields": {
+    "expire_date": "2013-05-22T05:01:46.515Z", 
+    "session_data": "YjRiOTNmN2IxOGNjZTFkYjFiNmJmN2IyNDdlMTg1NDM3Njc3YjJjYjqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQRLCnUu"
+  }
+},
+{
   "pk": "c1qf3s78cnwr9dz1g8eezly872d2fcmu", 
   "model": "sessions.session", 
   "fields": {
@@ -158,11 +183,11 @@
   }
 },
 {
-  "pk": "es6a51dxfhjugbes2hzjof77rl8rplsj", 
+  "pk": "dnko7h0jezoy2bjiui3npnacu0l3ql4m", 
   "model": "sessions.session", 
   "fields": {
-    "expire_date": "2013-05-16T22:12:45.870Z", 
-    "session_data": "NTYwYTJjM2IyODVhOTQ4NzQyYTVkMzQxNmZkZTVkZGE1MzM5YmM5NjqAAn1xAVgKAAAAdGVzdGNvb2tpZVgGAAAAd29ya2VkcQJzLg=="
+    "expire_date": "2013-05-22T05:32:18.078Z", 
+    "session_data": "MDlhODQzMDJhZmM5OGRjMmVjNGU5M2RlODRhY2ExOTM0YTYxMDlhODqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQRLAnUu"
   }
 },
 {
@@ -190,6 +215,14 @@
   }
 },
 {
+  "pk": "ouxut5ze2an3yasmdf0s9nbtuxikeb8h", 
+  "model": "sessions.session", 
+  "fields": {
+    "expire_date": "2013-05-22T02:19:38.559Z", 
+    "session_data": "MDlhODQzMDJhZmM5OGRjMmVjNGU5M2RlODRhY2ExOTM0YTYxMDlhODqAAn1xAShVEl9hdXRoX3VzZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEDVQ1fYXV0aF91c2VyX2lkcQRLAnUu"
+  }
+},
+{
   "pk": "rvqokcrd76w8tuwese91yd7qdi20q403", 
   "model": "sessions.session", 
   "fields": {
@@ -209,42 +242,102 @@
   "pk": 1, 
   "model": "pack.family", 
   "fields": {
-    "last_name": "Thompson"
+    "phone_number": null, 
+    "address_city": "", 
+    "last_name": "Thompson", 
+    "contacts": [
+      1001
+    ], 
+    "address_zip_code": null, 
+    "address_state": "", 
+    "address_line_2": "", 
+    "address_line_1": ""
   }
 },
 {
   "pk": 2, 
   "model": "pack.family", 
   "fields": {
-    "last_name": "Munoz"
+    "phone_number": null, 
+    "address_city": "", 
+    "last_name": "Munoz", 
+    "contacts": [], 
+    "address_zip_code": null, 
+    "address_state": "", 
+    "address_line_2": "", 
+    "address_line_1": ""
   }
 },
 {
   "pk": 3, 
   "model": "pack.family", 
   "fields": {
-    "last_name": "Moran"
+    "phone_number": null, 
+    "address_city": "", 
+    "last_name": "Moran", 
+    "contacts": [], 
+    "address_zip_code": null, 
+    "address_state": "", 
+    "address_line_2": "", 
+    "address_line_1": ""
   }
 },
 {
   "pk": 4, 
   "model": "pack.family", 
   "fields": {
-    "last_name": "Vogel"
+    "phone_number": null, 
+    "address_city": "", 
+    "last_name": "Vogel", 
+    "contacts": [], 
+    "address_zip_code": null, 
+    "address_state": "", 
+    "address_line_2": "", 
+    "address_line_1": ""
   }
 },
 {
   "pk": 5, 
   "model": "pack.family", 
   "fields": {
-    "last_name": "Smith"
+    "phone_number": null, 
+    "address_city": "", 
+    "last_name": "Smith", 
+    "contacts": [], 
+    "address_zip_code": null, 
+    "address_state": "", 
+    "address_line_2": "", 
+    "address_line_1": ""
   }
 },
 {
   "pk": 1000, 
   "model": "pack.family", 
   "fields": {
-    "last_name": "Doe"
+    "phone_number": null, 
+    "address_city": "", 
+    "last_name": "Doe", 
+    "contacts": [], 
+    "address_zip_code": null, 
+    "address_state": "", 
+    "address_line_2": "", 
+    "address_line_1": ""
+  }
+},
+{
+  "pk": 1001, 
+  "model": "pack.family", 
+  "fields": {
+    "phone_number": 0, 
+    "address_city": "Boston", 
+    "last_name": "Blank", 
+    "contacts": [
+      1
+    ], 
+    "address_zip_code": 2215, 
+    "address_state": "MA", 
+    "address_line_2": "2", 
+    "address_line_1": "528 Beacon St"
   }
 },
 {
@@ -626,6 +719,33 @@
   }
 },
 {
+  "pk": 43, 
+  "model": "auth.permission", 
+  "fields": {
+    "codename": "add_child", 
+    "name": "Can add child", 
+    "content_type": 15
+  }
+},
+{
+  "pk": 44, 
+  "model": "auth.permission", 
+  "fields": {
+    "codename": "change_child", 
+    "name": "Can change child", 
+    "content_type": 15
+  }
+},
+{
+  "pk": 45, 
+  "model": "auth.permission", 
+  "fields": {
+    "codename": "delete_child", 
+    "name": "Can delete child", 
+    "content_type": 15
+  }
+},
+{
   "pk": 1, 
   "model": "auth.user", 
   "fields": {
@@ -635,7 +755,7 @@
     "is_active": true, 
     "is_superuser": true, 
     "is_staff": true, 
-    "last_login": "2013-05-03T16:22:31.454Z", 
+    "last_login": "2013-05-08T03:56:18.282Z", 
     "groups": [], 
     "user_permissions": [], 
     "password": "pbkdf2_sha256$10000$VKj5eHLQBox7$OsOZORmqd5NSQIb4ajaevBCfdv+nbqCwgrRcaUtyg1g=", 
@@ -653,7 +773,7 @@
     "is_active": true, 
     "is_superuser": false, 
     "is_staff": false, 
-    "last_login": "2013-05-03T16:36:58.395Z", 
+    "last_login": "2013-05-08T05:32:18.031Z", 
     "groups": [], 
     "user_permissions": [], 
     "password": "pbkdf2_sha256$10000$xWdORTxJfPNG$QjDKvTtTbTikNeSJqP9rfnMkEd1IsAyihoND200IsUs=", 
@@ -743,7 +863,7 @@
     "is_active": true, 
     "is_superuser": true, 
     "is_staff": true, 
-    "last_login": "2013-05-06T17:35:15.323Z", 
+    "last_login": "2013-05-08T05:01:46.463Z", 
     "groups": [], 
     "user_permissions": [], 
     "password": "pbkdf2_sha256$10000$tZ4FOQvcCa6l$xrIkuaqNtUnoGUl2F0NRQBXisebZClC1/msdARjSjs8=", 
@@ -755,69 +875,97 @@
   "pk": 1, 
   "model": "pack.familymember", 
   "fields": {
-    "first_name": "Mary", 
-    "last_name": "Smith", 
-    "family": 5, 
-    "timestamp": "2013-05-03T01:27:42.441Z", 
+    "first_name": "Preston", 
+    "last_name": "Thompson", 
+    "family": 1, 
+    "timestamp": "2013-05-08T06:28:06Z", 
     "is_driver": true, 
     "is_adult": true, 
-    "date_of_birth": "1967-08-05", 
-    "user": 2
+    "date_of_birth": "2013-05-08", 
+    "user": 1
   }
 },
 {
   "pk": 2, 
   "model": "pack.familymember", 
   "fields": {
-    "first_name": "Nick", 
+    "first_name": "Mary", 
     "last_name": "Smith", 
     "family": 5, 
-    "timestamp": "2013-05-03T02:02:28.639Z", 
+    "timestamp": "2013-05-08T06:28:37Z", 
     "is_driver": true, 
     "is_adult": true, 
-    "date_of_birth": "1967-12-19", 
-    "user": 3
+    "date_of_birth": "2013-05-08", 
+    "user": 2
   }
 },
 {
   "pk": 3, 
   "model": "pack.familymember", 
   "fields": {
-    "first_name": "Andy", 
+    "first_name": "Nick", 
     "last_name": "Smith", 
     "family": 5, 
-    "timestamp": "2013-05-03T02:04:35.046Z", 
-    "is_driver": false, 
-    "is_adult": false, 
-    "date_of_birth": "1998-09-24", 
-    "user": 9
+    "timestamp": "2013-05-08T06:28:56Z", 
+    "is_driver": true, 
+    "is_adult": true, 
+    "date_of_birth": "2013-05-08", 
+    "user": 3
   }
 },
 {
   "pk": 4, 
   "model": "pack.familymember", 
   "fields": {
-    "first_name": "Barry", 
-    "last_name": "Smith", 
-    "family": 5, 
-    "timestamp": "2013-05-03T02:05:19.489Z", 
-    "is_driver": false, 
-    "is_adult": false, 
-    "date_of_birth": "1996-07-24", 
-    "user": 9
+    "first_name": "Andrew", 
+    "last_name": "Moran", 
+    "family": 3, 
+    "timestamp": "2013-05-08T06:29:19Z", 
+    "is_driver": true, 
+    "is_adult": true, 
+    "date_of_birth": "2013-05-08", 
+    "user": 7
   }
 },
 {
   "pk": 5, 
   "model": "pack.familymember", 
   "fields": {
-    "first_name": "Christine", 
-    "last_name": "Smith", 
-    "family": 5, 
-    "timestamp": "2013-05-03T02:06:12.352Z", 
-    "is_driver": false, 
-    "is_adult": false, 
-    "date_of_birth": "1994-01-01", 
+    "first_name": "Ari", 
+    "last_name": "Vogel", 
+    "family": 4, 
+    "timestamp": "2013-05-08T06:29:35Z", 
+    "is_driver": true, 
+    "is_adult": true, 
+    "date_of_birth": "2013-05-08", 
+    "user": 8
+  }
+},
+{
+  "pk": 6, 
+  "model": "pack.familymember", 
+  "fields": {
+    "first_name": "Rodrigo", 
+    "last_name": "Munoz", 
+    "family": 2, 
+    "timestamp": "2013-05-08T06:29:58Z", 
+    "is_driver": true, 
+    "is_adult": true, 
+    "date_of_birth": "2013-05-08", 
+    "user": 10
+  }
+},
+{
+  "pk": 7, 
+  "model": "pack.familymember", 
+  "fields": {
+    "first_name": "Blank", 
+    "last_name": "Man", 
+    "family": 1001, 
+    "timestamp": "2013-05-08T06:30:48Z", 
+    "is_driver": true, 
+    "is_adult": true, 
+    "date_of_birth": "2013-05-08", 
     "user": 9
   }
 },
@@ -825,12 +973,9 @@
   "pk": 2, 
   "model": "pack.schedule", 
   "fields": {
-    "timestamp": "2013-05-03T02:10:29.488Z", 
+    "timestamp": "2013-05-03T02:10:29Z", 
     "creator": 9, 
     "name": "blank", 
-    "subscribers": [
-      1
-    ], 
     "description": "blank"
   }
 },
@@ -868,7 +1013,7 @@
   "fields": {
     "name": "Dinner and Movie", 
     "creator": 3, 
-    "timestamp": "2013-05-03T02:24:46.069Z", 
+    "timestamp": "2013-05-03T02:24:46Z", 
     "schedule": 2, 
     "location": "Springhurst", 
     "startTime": "2013-05-12T00:00:00Z", 
@@ -880,9 +1025,8 @@
   "pk": 1, 
   "model": "pack.familyeventdetails", 
   "fields": {
-    "attendees": [
-      3
-    ], 
+    "child_attendees": [], 
+    "attendees": [], 
     "driverFrom": 2, 
     "family": 5, 
     "notes": "These are notes for the Smith family for Andy's Game against Mockingbird", 
@@ -894,9 +1038,8 @@
   "pk": 2, 
   "model": "pack.familyeventdetails", 
   "fields": {
-    "attendees": [
-      4
-    ], 
+    "child_attendees": [], 
+    "attendees": [], 
     "driverFrom": 3, 
     "family": 5, 
     "notes": "notexutfiyfiyfiyfiyfiyf", 
@@ -908,10 +1051,8 @@
   "pk": 3, 
   "model": "pack.familyeventdetails", 
   "fields": {
-    "attendees": [
-      1, 
-      2
-    ], 
+    "child_attendees": [], 
+    "attendees": [], 
     "driverFrom": 3, 
     "family": 5, 
     "notes": "date night", 
@@ -1502,6 +1643,214 @@
     "change_message": "Changed password, first_name, last_name, is_staff and is_superuser.", 
     "user": 1, 
     "content_type": 3
+  }
+},
+{
+  "pk": 46, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 3, 
+    "action_time": "2013-05-08T05:02:40.996Z", 
+    "object_repr": "Andy Smith", 
+    "object_id": "3", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 8
+  }
+},
+{
+  "pk": 47, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 3, 
+    "action_time": "2013-05-08T05:02:41.059Z", 
+    "object_repr": "Nick Smith", 
+    "object_id": "2", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 8
+  }
+},
+{
+  "pk": 48, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 3, 
+    "action_time": "2013-05-08T05:02:41.120Z", 
+    "object_repr": "Mary Smith", 
+    "object_id": "1", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 8
+  }
+},
+{
+  "pk": 49, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 3, 
+    "action_time": "2013-05-08T05:02:55.792Z", 
+    "object_repr": "Christine Smith", 
+    "object_id": "5", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 8
+  }
+},
+{
+  "pk": 50, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 3, 
+    "action_time": "2013-05-08T05:02:55.828Z", 
+    "object_repr": "Barry Smith", 
+    "object_id": "4", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 8
+  }
+},
+{
+  "pk": 51, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 2, 
+    "action_time": "2013-05-08T05:05:01.230Z", 
+    "object_repr": "blank", 
+    "object_id": "2", 
+    "change_message": "No fields changed.", 
+    "user": 1, 
+    "content_type": 9
+  }
+},
+{
+  "pk": 52, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 2, 
+    "action_time": "2013-05-08T05:22:59.571Z", 
+    "object_repr": "Dinner and Movie", 
+    "object_id": "7", 
+    "change_message": "No fields changed.", 
+    "user": 1, 
+    "content_type": 11
+  }
+},
+{
+  "pk": 53, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 2, 
+    "action_time": "2013-05-08T05:25:44.772Z", 
+    "object_repr": "Dinner and Movie", 
+    "object_id": "7", 
+    "change_message": "No fields changed.", 
+    "user": 1, 
+    "content_type": 11
+  }
+},
+{
+  "pk": 54, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 1, 
+    "action_time": "2013-05-08T05:28:12.346Z", 
+    "object_repr": "Preston Thompson", 
+    "object_id": "1", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 8
+  }
+},
+{
+  "pk": 55, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 1, 
+    "action_time": "2013-05-08T05:28:43.043Z", 
+    "object_repr": "Mary Smith", 
+    "object_id": "2", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 8
+  }
+},
+{
+  "pk": 56, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 1, 
+    "action_time": "2013-05-08T05:29:05.832Z", 
+    "object_repr": "Nick Smith", 
+    "object_id": "3", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 8
+  }
+},
+{
+  "pk": 57, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 1, 
+    "action_time": "2013-05-08T05:29:24.725Z", 
+    "object_repr": "Andrew Moran", 
+    "object_id": "4", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 8
+  }
+},
+{
+  "pk": 58, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 1, 
+    "action_time": "2013-05-08T05:29:43.485Z", 
+    "object_repr": "Ari Vogel", 
+    "object_id": "5", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 8
+  }
+},
+{
+  "pk": 59, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 1, 
+    "action_time": "2013-05-08T05:30:03.230Z", 
+    "object_repr": "Rodrigo Munoz", 
+    "object_id": "6", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 8
+  }
+},
+{
+  "pk": 60, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 1, 
+    "action_time": "2013-05-08T05:31:45.809Z", 
+    "object_repr": "Blank Family", 
+    "object_id": "1001", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 7
+  }
+},
+{
+  "pk": 61, 
+  "model": "admin.logentry", 
+  "fields": {
+    "action_flag": 1, 
+    "action_time": "2013-05-08T05:31:51.768Z", 
+    "object_repr": "Blank Man", 
+    "object_id": "7", 
+    "change_message": "", 
+    "user": 1, 
+    "content_type": 8
   }
 }
 ]

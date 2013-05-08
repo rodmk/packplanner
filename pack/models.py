@@ -3,13 +3,24 @@ from django.contrib.auth.models import User
 
 class Family(models.Model):
 	last_name = models.CharField(max_length=40)
-	# address = models.CharField(max_length=200)
+	address_line_1 = models.CharField(max_length=200)
+	address_line_2 = models.CharField(max_length=200)
+	address_city = models.CharField(max_length=100)
+	address_state = models.CharField(max_length=50)
+	address_zip_code = models.IntegerField(null=True)
+	phone_number = models.IntegerField(null=True)
+	contacts = models.ManyToManyField("self")
 
 	def __unicode__(self):
 		return u'%s Family' % (self.last_name,)
 
+class Child(models.Model):
+	family = models.ForeignKey(Family, related_name="children")
+	first_name = models.CharField(max_length=40)
+	is_driver = models.BooleanField()
+
 class FamilyMember(models.Model):
-	user = models.ForeignKey(User, related_name="user_account", null=True)
+	user = models.OneToOneField(User, related_name="user_account", null=True)
 	first_name = models.CharField(max_length=40)
 	last_name = models.CharField(max_length=40)
 	date_of_birth = models.DateField()
@@ -26,7 +37,6 @@ class Schedule(models.Model):
 	description=models.TextField()
 	timestamp = models.DateTimeField()
 	creator = models.ForeignKey(User, related_name="creator")
-	subscribers = models.ManyToManyField(Family, related_name="schedules")
 
 	def __unicode__(self):
 		return u'%s' % (self.name,)
@@ -34,8 +44,9 @@ class Schedule(models.Model):
 class FamilyScheduleDetails(models.Model):
 	schedule = models.ForeignKey(Schedule, related_name="users_schedule_details")
 	family = models.ForeignKey(Family, related_name="family_schedules_details")
-	attendees = models.ForeignKey(FamilyMember, related_name="attending_schedule_details")
-	# notes = models.TextField()
+	attendees = models.ManyToManyField(FamilyMember, related_name="attending_schedule_details")
+	child_attendees = models.ManyToManyField(Child, related_name="attending_schedule_details")
+	notes = models.TextField()
 
 	def __unicode__(self):
 		return u'Details for %s Schedule for the %s' % (self.schedule, self.family)
@@ -58,6 +69,7 @@ class FamilyEventDetails(models.Model):
 	family = models.ForeignKey(Family, related_name="family_events_details")
 	notes = models.CharField(max_length=1000)
 	attendees = models.ManyToManyField(FamilyMember, related_name="attending_events_details")
+	child_attendees = models.ManyToManyField(Child, related_name="attending_event_details")
 	driverTo = models.ForeignKey(User, related_name="driving_responsibilites_to")
 	driverFrom = models.ForeignKey(User, related_name="driving_responsibilites_from")
 
