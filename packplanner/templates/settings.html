@@ -1,10 +1,77 @@
 {% extends "base.html" %}
 
 {% block extrahead %}
-	<style>
+	<style type="text/css">
 	</style>
 
 	<script type="text/javascript">	
+		$(document).ready(function() {
+			// initialize state for form
+			$(".familyMemberFormField").each(function(i, field) {
+				$(field).attr("readonly", true);
+			})
+
+			$("#submit_pform").hide();
+			$("#cancel_pinfo_btn").hide();
+
+			$(".familyFormField").each(function(i, field) {
+				$(field).attr("readonly", true);
+			})
+
+			$("#submit_fform").hide();
+			$("#cancel_finfo_btn").hide();
+
+			// save/restore state functionality
+			// source: http://stackoverflow.com/questions/10640355/how-to-discard-form-changes
+		    $('form').find(':input').each(function(i, elem) {
+		        var input = $(elem);
+		        input.data('initialState', input.val());
+		    });
+
+			function restore() {
+			    $('form').find(':input').each(function(i, elem) {
+			         var input = $(elem);
+			         input.val(input.data('initialState'));
+			    });
+			}
+
+			// form button functions
+			$("#edit_pinfo_btn").click(function() {
+				$(".familyMemberFormField").each(function(i, field) {
+					$(field).attr("readonly", false);
+				})
+				$("#submit_pform").show("fast");
+				$("#cancel_pinfo_btn").show("fast");
+			});
+
+			$("#cancel_pinfo_btn").click(function(event) {
+				event.preventDefault();
+				$(".familyMemberFormField").each(function(i, field) {
+					$(field).attr("readonly", true);
+				})
+				$("#submit_pform").hide("fast");
+				$("#cancel_pinfo_btn").hide("fast");
+				restore();
+			});
+
+			$("#edit_finfo_btn").click(function() {
+				$(".familyFormField").each(function(i, field) {
+					$(field).attr("readonly", false);
+				})
+				$("#submit_fform").show("fast");
+				$("#cancel_finfo_btn").show("fast");
+			});
+
+			$("#cancel_finfo_btn").click(function(event) {
+				event.preventDefault();
+				$(".familyFormField").each(function(i, field) {
+					$(field).attr("readonly", true);
+				})
+				$("#submit_fform").hide("fast");
+				$("#cancel_finfo_btn").hide("fast");
+				restore();
+			});
+		})
 	</script>
 {% endblock %}
 
@@ -14,21 +81,41 @@ class="active"
 
 {% block content %} 
 	<div class="container">
-		<p>Settings {{ user }}</p>
+		<div class="row-fluid">
+			<h4>Personal Information</h4>
+			<!-- TODO(rodmk): right-align with button inline with header -->
+			<button class="btn" id="edit_pinfo_btn">Edit</button> 
+		<div>
 		<form method="post" action=""> {% csrf_token %} 
-			<table>
-				{{ pform }}
-			</table>
+			{% for field in pform %}
+			<div class="row-fluid">
+				<div class="input-prepend">
+					<span class="add-on" style="width: 100px;">{{ field.label_tag }}</span>
+					{{ field }}
+				</div>
+			</div>
+			{% endfor %}
 			<input type="hidden" name="form-type" value="personal-form"/>
-			<input type="submit" value="Submit Form"/>
+			<input class="btn btn-success" type="submit" id="submit_pform" value="Save"/>
+			<button class="btn" id="cancel_pinfo_btn">Cancel</button>
 		</form>
 
+		<div class="row-fluid">
+			<h4>Family Information</h4>
+			<button class="btn" id="edit_finfo_btn">Edit</button>
+		<div>
 		<form method="post" action=""> {% csrf_token %} 
-			<table>
-				{{ fform }}
-			</table>
+			{% for field in fform %}
+			<div class="row-fluid">
+				<div class="input-prepend">
+					<span class="add-on" style="width: 100px;">{{ field.label_tag }}</span>
+					{{ field }}
+				</div>
+			</div>
+			{% endfor %}
 			<input type="hidden" name="form-type" value="family-form"/>
-			<input type="submit" value="Submit Form"/>
+			<input class="btn btn-success" type="submit" id="submit_fform" value="Save"/>
+			<button class="btn" id="cancel_finfo_btn">Cancel</button>
 		</form>
  	</div>
 {% endblock %}
