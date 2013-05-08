@@ -1,11 +1,11 @@
 
     $(document).ready(function() {
 
-        updateFriends(ALL_CONTACTS);
+        updateFriends(ALL_FAMILY_NAMES);
 
         $('#friendSearch').typeahead( { 
             source: function (query, process) {
-                process( ALL_CONTACTS );
+                process( ALL_FAMILY_NAMES );
             },
             menu: '',
             sorter: function(items) {
