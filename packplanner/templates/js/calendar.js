@@ -7,6 +7,29 @@ function Event(id, title, location, startDate, endDate, driverTo, driverFrom, go
 	this.driverTo = driverTo;
 	this.driverFrom = driverFrom;
 	this.going = going;
+
+}
+
+function Family(id, last_name,address_line1, address_line2,address_city,address_state, address_zip_code, phone_number, contacts){
+	this.id = id;
+	this.last_name = last_name;
+	this.address_line1 = address_line1;
+	this.address_line2 = address_line2;
+	this.address_city = address_city;
+	this.address_zip_code = address_zip_code;
+	this.phone_number = phone_number;
+	this.contacts = contacts;
+}
+
+function Contact(last_name, id, first_name){
+	this.last_name = last_name;
+	this.id = id;
+}
+
+function Driver(first_name,last_name,id){
+	this.id = id;
+	this.first_name = first_name;
+	this.last_name = last_name;
 }
 
 function compareEvents(event1, event2) {
@@ -23,9 +46,13 @@ function compareEvents(event1, event2) {
 	}
 }
 
-var events = new Array();
 var allEvents = new Array();
 var currentDate = new Date();
+var family;
+var contacts = [];
+var drivingContacts=[];
+var driverToID = -1;
+var driverFromID = -1;
 
 /*
 Filters
@@ -46,7 +73,19 @@ $(document).ready(function() {
 
 	dateSelectedFunc(currentDate);
 
-	events = new Array();
+	var contactlist= [];
+	{% for contact in family.contacts.all %}
+		contacts.push(new Contact('{{contact.last_name}}',{{contact.id}}));
+		//var tempFamilyMembers = [];
+		{% for family_mem in contact.family_members.all%}
+			//tempFamilyMembers.push({{family_mem}});
+			{% if family_mem.is_driver %}
+				drivingContacts.push(new Driver("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}}));
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+	console.log(drivingContacts);
+	family = new Family({{family.id}},"{{family.last_name}}","{{family.address_line1}}","{{family.address_line2}}", "{{family.address_city}}","{{family.address_state}}","{{family.address_zip_code}}","{{family.phone_number}}",contactlist);
 
 	{% for event_details in events_details %}
 
@@ -81,37 +120,29 @@ $(document).ready(function() {
 	endDate.setMinutes({{event_details.event.endTime.minute}});
 	endDate.setHours(endDate.getHours()-5);
 
-	events[{{forloop.counter0}}] =  new Event({{event_details.event.id}}, 
-		"{{event_details.event.name}}", 
-		"{{event_details.event.location}}", 
-		startDate, 
-		endDate,
-		"{{event_details.driver_to}}", 
-		"{{event_details.driver_from}}",
-		"{{event_details.attendees}}");
 
 	{% endfor %}
 
 
-	function displayEvents() {
-		// events.sort(compareEvents);
-		var currentDateHash = currentDate.getDate().toString()+ currentDate.getFullYear().toString()+(currentDate.getMonth()+1).toString();
-		//console.log("currentDateHash"+currentDateHash);
-		if(!allEvents.hasOwnProperty(currentDateHash)){
-			allEvents[currentDateHash] = [];
-			console.log("no events existed today, adding empty array");
-		}
-		var currentDateEvents = allEvents[currentDateHash];
-		//console.log("currentDateEvents"+currentDateEvents);
-		currentDateEvents.sort(compareEvents);
-		var content = $(".selected-day");
-		$(".tile").detach();
-		$(".dayEvents").remove();
-		for (i=0; i<currentDateEvents.length; i++) {
-			var event = currentDateEvents[i];
-			content.append(renderEvent(event));
-		}
-	}
+	// function displayEvents() {
+	// 	// events.sort(compareEvents);
+	// 	var currentDateHash = hash(currentDate);
+	// 	//console.log("currentDateHash"+currentDateHash);
+	// 	if(!allEvents.hasOwnProperty(currentDateHash)){
+	// 		allEvents[currentDateHash] = [];
+	// 		console.log("no events existed today, adding empty array");
+	// 	}
+	// 	var currentDateEvents = allEvents[currentDateHash];
+	// 	//console.log("currentDateEvents"+currentDateEvents);
+	// 	currentDateEvents.sort(compareEvents);
+	// 	var content = $(".selected-day");
+	// 	$(".tile").detach();
+	// 	$(".dayEvents").remove();
+	// 	for (i=0; i<currentDateEvents.length; i++) {
+	// 		var event = currentDateEvents[i];
+	// 		content.append(renderEvent(event));
+	// 	}
+	// }
 
 	function buildDict(){
 		var eventDict = new Array();
@@ -120,7 +151,7 @@ $(document).ready(function() {
 
 		var startDate = new Date();
 		startDate.setFullYear({{event_details.event.startTime.year}});
-		startDate.setMonth({{event_details.event.startTime.month}});
+		startDate.setMonth({{event_details.event.startTime.month}}-1);
 		startDate.setDate({{event_details.event.startTime.day}});
 		startDate.setHours({{event_details.event.startTime.hour}});
 		startDate.setMinutes({{event_details.event.startTime.minute}});
@@ -128,13 +159,12 @@ $(document).ready(function() {
 
 		var endDate = new Date();
 		endDate.setFullYear({{event_details.event.endTime.year}});
-		endDate.setMonth({{event_details.event.endTime.month}});
+		endDate.setMonth({{event_details.event.endTime.month}}-1);
 		endDate.setDate({{event_details.event.endTime.day}});
 		endDate.setHours({{event_details.event.endTime.hour}});
 		endDate.setMinutes({{event_details.event.endTime.minute}});
 		endDate.setHours(endDate.getHours()-5);
-		tempHash = "{{event_details.event.startTime.day}}"+"{{event_details.event.startTime.year}}"+"{{event_details.event.startTime.month}}";
-		//console.log("tempHash"+tempHash);
+		tempHash = hash(startDate);
 		var e = new Event({{event_details.event.id}}, 
 			"{{event_details.event.name}}", 
 			"{{event_details.event.location}}", 
@@ -144,36 +174,14 @@ $(document).ready(function() {
 			"{{event_details.driver_from}}",
 			"{{event_details.attendees}}");
 		if(!(tempHash in eventDict)){
-			//console.log("added new key to dict");
 			eventDict[tempHash] = [e];
 		}
 		else{
-			//console.log("added to existing key");
 			eventDict[tempHash].push(e);
 		}
 		{% endfor %}
 		return eventDict;
 	}
-
-	// events[0] = new Event(0, 
-	// 	"Soccer Game vs Mockingbird", 
-	// 	"Oxmoor Fields", 
-	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 14, 0, 0, 0), 
-	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 16, 30, 0, 0), 
-	// 	"Me", "Me", "Andy");
-	// events[1] = new Event(1, 
-	// 	"Drama Rehearsal", 
-	// 	"Hyde Auditorium", 
-	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 15, 0, 0, 0), 
-	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 18, 0, 0, 0), 
-	// 	"Nick", "Nick", "Barry");
-	// events[2] = new Event(2, 
-	// 	"Dinner and Movie", 
-	// 	"Springhurst", 
-	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 14, 30, 0, 0), 
-	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 18, 0, 0, 0), 
-	// 	"Nick", "Nick", "Nick");
-
 	
 	
 	displayEvents();
@@ -261,15 +269,25 @@ $(document).ready(function() {
 
     /*creates the new event*/
     $("#createEventButton").click(function(){
-    	var id = events.length;
+    	var id = 0;
     	var title = $("#eventName").val();
-    	var startTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 16, 30, 0, 0)
-    	var endTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 17, 30, 0, 0)
-    	var eventdate = $("#eventDate").val();
-    	var driverTo = $("#driverTo").val();
-    	var driverFrom = $("#driverFrom").val();
+    	var eventDate = $("#eventDate").data('datetimepicker').getDate();
+    	var startTime = $("#startTime").data('datetimepicker').getDate();
+    	var endTime = $("#endTime").data('datetimepicker').getDate();
+    	var startDate = eventDate;
+    	var endDate = eventDate;
+    	startDate.setHours(startTime.getHours());
+    	startDate.setMinutes(startTime.getMinutes());
+    	if(endTime < startTime){
+    		endDate.setDate(eventDate.getDate()+1);
+    	}
+    	endDate.setHours(endTime.getHours())
+    	endDate.setMinutes(endTime.getHours())
+    	var going = $("#familyAttending").val();
+ 
+
     	var eventLocation = $("#locationInput").val();
-    	var e = new Event(id, title, eventLocation, startTime, endTime, driverTo, driverFrom, "Andy");
+    	var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, going);
 		$.ajax("/calendar/", {
 			type: "POST",
 			data: {event: e, csrfmiddlewaretoken: '{{ csrf_token }}' },
@@ -296,13 +314,13 @@ $(document).ready(function() {
 		pickDate: false,
 		pick12HourFormat: true,
 		pickSeconds: false,
-		format : "h:mm PP",
+		format : "hh:mm PP",
 	});
 	$('#endTime').datetimepicker({
 		pickDate: false,
 		pick12HourFormat: true,
 		pickSeconds: false,
-		format : "h:mm PP",
+		format : "hh:mm PP",
 	});
 	$('#eventDate').datetimepicker({
 		pickTime: false
@@ -312,38 +330,95 @@ $(document).ready(function() {
 		pickDate: false,
 		pick12HourFormat: true,
 		pickSeconds: false,
-		format : "h:mm PP",
+		format : "hh:mm PP",
 	});
 	$('#editEndTime').datetimepicker({
 		pickDate: false,
 		pick12HourFormat: true,
 		pickSeconds: false,
-		format : "h:mm PP",
+		format : "hh:mm PP",
 	});
 	$('#editEventDate').datetimepicker({
 		pickTime: false
 	});
+	{% for family_member in family.family_members.all%}
+	$("#familyAttendingInput").append("<option id='{{family_member.id}}'>{{family_member.first_name}}</option>");
+	{% endfor %}
 
-	$("#drivingTo").typeahead({source:availDrivers,items:4});
-	$("#drivingFrom").typeahead({source:availDrivers,items:4});
+	$("#drivingToInput").typeahead({
+		source: function(query, process){
+			tempdrivers=[];
+			map={};
+			$.each(drivingContacts,function(i,driver) {
+				map[Driver.first_name+" "+Driver.last_name] = driver;
+				tempdrivers.push(driver.first_name+" "+driver.last_name); 
+			});
 
-	function removeEvent(event_id) {
-		for (var i = 0; i <= events.length-1; i++) {
-			if (events[i].id == event_id) {
-				events.splice(i, 1);
-				break;
+			process(tempdrivers)
+		},
+		updater: function(item){
+			driverToID = map[Driver.first_name+" "+Driver.last_name].id;
+			return item;
+		},
+		items:4
+	});
+	$("#drivingFromInput").typeahead({
+		source: function(query, process){
+			tempdrivers=[];
+			map={};
+			$.each(drivingContacts,function(i,driver) {
+				map[Driver.first_name+" "+Driver.last_name] = driver;
+				tempdrivers.push(driver.first_name+" "+driver.last_name); 
+			});
+
+			process(tempdrivers)
+		},
+		updater: function(item){
+			driverFromID = map[Driver.first_name+" "+Driver.last_name].id;
+			return item;
+		},
+		items:4
+	});
+});
+
+function getEventById(event_id){
+	for(key in allEvents){
+		for(var i =0; i<allEvents[key].length;i++){
+			if(allEvents[key][i].id == event_id){
+				return allEvents[key][i];
 			}
 		}
-		displayEvents();
 	}
+	return null;
+}
 
-
-	function addEvent(event) {
-		events[events.length] = event;
-		displayEvents();
+function removeEvent(event_id) {
+	for(key in allEvents){
+		for(var i =0; i<allEvents[key].length;i++){
+			if(allEvents[key][i].id == event_id){
+				allEvents[key].pop(i);
+			}
+		}
 	}
+	displayEvents();
+}
 
-});
+function addEvent(event) {
+	var hashedDate = hash(event.startDate);
+	if(!allEvents.hasOwnProperty(hashedDate)){
+		allEvents[hashedDate] = [event];
+	}
+	else
+	{
+		allEvents[hashedDate].push(event);
+	}
+	displayEvents();
+}
+
+function hash(date){
+	console.log("hashing " + date.getDate().toString()+date.getFullYear().toString()+(date.getMonth()+1).toString());
+	return date.getDate().toString()+date.getFullYear().toString()+(date.getMonth()+1).toString();
+}
 
 function addSuccessfulEvent(event, json) {
 	event.id=json;
@@ -353,9 +428,7 @@ function addSuccessfulEvent(event, json) {
 function dateSelectedFunc(date){
 	currentDate = date;
 	focusEventCalendar(currentDate);
-	events = getEvents(currentDate);
-	displayEventsPostLoad();
-	//console.log(currentDate);
+	displayEvents();
 }
 
 function eventDaySelected(day) {
@@ -475,31 +548,29 @@ function renderEvent(event) {
 }
 
 function getEvents(date) {
-	return events;
+	return allEvents[hash(date)];
 }
 
 function editEventOpen(event_id) {
-	$("#editEventName").val(events[event_id].title);
+	var e = getEventById(event_id);
+	$("#editEventName").val(e.title);
 	//alert(events[event_id].startDate);
 	//$("#editEventDate").setDate(events[event_id].startDate);
 	//$("#editStartTime").setDate(events[event_id].startDate);
 	//$("#editEndTime").setDate(events[event_id].endDate);
-	$("#editLocationInput").val(events[event_id].location);
-	$("#editDrivingTo").val(events[event_id].driverTo);
-	$("#editDrivingFrom").val(events[event_id].driverFrom);
+	$("#editLocationInput").val(e.location);
+	$("#editDrivingTo").val(e.driverTo);
+	$("#editDrivingFrom").val(e.driverFrom);
 }
 
-function displayEventsPostLoad() {
-	// events.sort(compareEvents);
-	//console.log("current date "+currentDate.getMonth());
-	var currentDateHash = currentDate.getDate().toString()+ currentDate.getFullYear().toString()+(currentDate.getMonth()+1).toString();
-	//console.log("currentDateHash err"+currentDateHash);
+function displayEvents() {
+
+	var currentDateHash = hash(currentDate);
+	
 	if(!allEvents.hasOwnProperty(currentDateHash)){
 		allEvents[currentDateHash] = [];
-		//console.log("no events existed today, adding empty array");
 	}
 	var currentDateEvents = allEvents[currentDateHash];
-	//console.log("currentDateEvents"+currentDateEvents);
 	currentDateEvents.sort(compareEvents);
 	var content = $(".selected-day");
 	$(".tile").detach();
@@ -509,3 +580,4 @@ function displayEventsPostLoad() {
 		content.append(renderEvent(event));
 	}
 }
+
