@@ -40,12 +40,13 @@ $(document).ready(function() {
     window.ALL_MY_CONTACTS = new Array();
     window.ALL_DISPLAY_NAMES = new Array();
 
+    window.myFamily = new Family({{family.id}}, "{{family}}");
+
+    window.ALL_MY_CONTACTS = new Array();
+    window.ALL_DISPLAY_NAMES = new Array();
+
     {% for contact in contacts %}
-        window.myFamily = new Family({{family.id}}, "{{family}}");
-
-        window.ALL_MY_CONTACTS = new Array();
-        window.ALL_DISPLAY_NAMES = new Array();
-
+        
         var contactID = {{forloop.counter0}};
 
         window.ALL_DATABASE_NAMES = ALL_DISPLAY_NAMES;
@@ -67,7 +68,7 @@ $(document).ready(function() {
 
 
     updateContacts(ALL_DISPLAY_NAMES);
-    
+
     window.selectedContact = ALL_MY_CONTACTS[0];
 
 
