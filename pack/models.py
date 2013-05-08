@@ -108,6 +108,11 @@ class FamilyEventDetails(models.Model):
 	def __unicode__(self):
 		return u'Details for %s Event for the %s' % (self.event, self.family)
 
+# class FamilyMemberForm(ModelForm):
+# 	class Meta:
+# 		model = FamilyMember
+# 		exclude = ("user", "timestamp", "family")
+
 class Message(models.Model):
 	sender = models.ForeignKey(Family, related_name="sent_messages")
 	receiver = models.ForeignKey(Family, related_name="received_messages")

@@ -11,16 +11,35 @@ def index(request):
 
 @login_required
 def calendar(request):
+	family_member = get_family_member(request.user)
 	if request.method == 'POST':
-		event = request.POST['event[title]']
-		print event
+		name = request.POST['event[title]']
+		location = request.POST['event[location]']
+		start_time = request.POST['event[startDate']
+		end_time = request.POST['event[endDate']
+		driver_from_id = request.POST['event[driverFrom]']
+		driver_to_id = request.POST['event[driverTo]']
+		creator = request.user
+		going = request.POST['event[going]']
+		# schedule_id = request.POST['schedule_id']
+		# Schedule schedule = Schedule.objects.get(id=schedule_id)
+		# Event event = new Event(name, "", location, datetime.now(), creator, start_time, end_time, schedule)
+		# event.save()
+		# FamilyEventDetails events_details = new FamilyEventDetails(event=event, family=family_member.family, notes="")
+		# events_details.save()
+		# if driver_to:
+		# 	events_details.driverTo = driver_to
+		# 	events_details.save()
+		# if driver_from:
+		# 	events_details.driverFrom = driver_from
+		# 	events_details.save()
+		# for child in children_going:
+		# 	events_details.child_attendees.add(child)
+		# for adult in adults_going:
+		# 	events_details.attendees.add(adult)
 		id = 0
 		return HttpResponse(simplejson.dumps(id))
-	family_member = get_family_member(request.user)
-	if family_member == None:
-		events_details = []
-	else:
-		events_details = FamilyEventDetails.objects.filter(family=family_member.family)
+	events_details = FamilyEventDetails.objects.filter(family=family_member.family)
 	return render(request, 'index.html', {"events_details" : events_details})
 
 @login_required
