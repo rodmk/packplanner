@@ -3,7 +3,7 @@ Need default/customization/theme configured
 
 Cool Bootstrap Button-customizatons: http://charliepark.org/bootstrap_buttons/;
 */
-.btn-custom0d {
+.btn-custom0 {
     
 	background-color: hsl(60, 65%, 82%) !important;
     background-repeat: repeat-x;
@@ -21,7 +21,7 @@ Cool Bootstrap Button-customizatons: http://charliepark.org/bootstrap_buttons/;
     -webkit-font-smoothing: antialiased;
 }
 
-.btn-custom1d {
+.btn-custom1 {
     background-color: hsl(120, 65%, 82%) !important;
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#d4f6d4", endColorstr="#b3eeb3");
@@ -38,7 +38,7 @@ Cool Bootstrap Button-customizatons: http://charliepark.org/bootstrap_buttons/;
     -webkit-font-smoothing: antialiased;
 }
 
-.btn-custom2d {
+.btn-custom2 {
     background-color: hsl(180, 65%, 82%) !important;
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#d4f6f6", endColorstr="#b3eeee");
@@ -56,7 +56,7 @@ Cool Bootstrap Button-customizatons: http://charliepark.org/bootstrap_buttons/;
 }
 
 
-.btn-custom3d {
+.btn-custom3 {
     background-color: hsl(240, 65%, 82%) !important;
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#d4d4f6", endColorstr="#b3b3ee");
@@ -74,7 +74,7 @@ Cool Bootstrap Button-customizatons: http://charliepark.org/bootstrap_buttons/;
 }
 
 
-.btn-custom4d {
+.btn-custom4 {
     background-color: hsl(360, 65%, 82%) !important;
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f6d4d4", endColorstr="#eeb3b3");
@@ -91,7 +91,7 @@ Cool Bootstrap Button-customizatons: http://charliepark.org/bootstrap_buttons/;
     -webkit-font-smoothing: antialiased;
 }
 
-.btn-custom0 {
+.btn-custom0d {
     background-color: hsl(60, 100%, 66%) !important;
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#feff7a", endColorstr="#feff51");
@@ -108,7 +108,7 @@ Cool Bootstrap Button-customizatons: http://charliepark.org/bootstrap_buttons/;
     -webkit-font-smoothing: antialiased;
 }
 
-.btn-custom1 {
+.btn-custom1d {
     background-color: hsl(120, 100%, 66%) !important;
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#7aff7a", endColorstr="#51ff51");
@@ -125,7 +125,7 @@ Cool Bootstrap Button-customizatons: http://charliepark.org/bootstrap_buttons/;
     -webkit-font-smoothing: antialiased;
 }
 
-.btn-custom2 {
+.btn-custom2d {
     background-color: hsl(180, 100%, 66%) !important;
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#7afeff", endColorstr="#51feff");
@@ -142,7 +142,7 @@ Cool Bootstrap Button-customizatons: http://charliepark.org/bootstrap_buttons/;
     -webkit-font-smoothing: antialiased;
 }
 
-.btn-custom3 {
+.btn-custom3d {
     background-color: hsl(241, 100%, 66%) !important;
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#7c7aff", endColorstr="#5451ff");
@@ -159,7 +159,7 @@ Cool Bootstrap Button-customizatons: http://charliepark.org/bootstrap_buttons/;
     -webkit-font-smoothing: antialiased;
 }
 
-.btn-custom4 {
+.btn-custom4d {
     background-color: hsl(0, 100%, 66%) !important;
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff7a7a", endColorstr="#ff5151");

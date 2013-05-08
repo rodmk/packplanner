@@ -3,11 +3,11 @@
 }
 
 #right-contact-pane {
-	height: 750px;
+	height: 600px !important;
 }
 
 #left-contact-pane {
-	height: 750px !important;
+	height: 600px !important;
     overflow: auto;
 }
 
