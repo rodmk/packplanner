@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 from django.contrib.auth.models import User
 
 class Family(models.Model):
@@ -31,13 +32,18 @@ class FamilyMember(models.Model):
 	first_name = models.CharField(max_length=40)
 	last_name = models.CharField(max_length=40)
 	date_of_birth = models.DateField()
-	timestamp = models.DateTimeField()
+	timestamp = models.DateTimeField() # TODO: nuke this field sometime
 	family = models.ForeignKey(Family, related_name="family_members")
 	is_adult = models.BooleanField()
 	is_driver = models.BooleanField()
 
 	def __unicode__(self):
 		return u'%s %s' % (self.first_name, self.last_name)
+
+class FamilyMemberForm(ModelForm):
+	class Meta:
+		model = FamilyMember
+		exclude = ("user", "timestamp", "family")
 
 class Schedule(models.Model):
 	name = models.CharField(max_length=100)

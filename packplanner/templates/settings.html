@@ -12,8 +12,14 @@
 class="active"
 {% endblock %}
 
-{% block content %}
+{% block content %} 
 	<div class="container">
-		<p>Settings</p>
+		<p>Settings {{ user }}</p>
+		<form method="post" action=""> {% csrf_token %} 
+		<table>
+		{{ form }}
+		</table>
+		<input type="submit" value="Submit Form"/>
+		</form>
  	</div>
 {% endblock %}
