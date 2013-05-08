@@ -42,6 +42,7 @@
         contactList.sort();
 
         var divObject = $("#contactFriendHeaders");
+        divObject.empty();
 
         var newLetter;
 
