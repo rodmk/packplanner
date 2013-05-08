@@ -18,6 +18,7 @@ class="active"
 {% block content %}
 	{% include "find-friends-modal.html" %}
 	{% include "message-contact-modal.html" %}
+	{% include "delete-contact-modal.html" %}
 
  	<div class="container">
 		<div class="row">
@@ -74,7 +75,7 @@ class="active"
 							
 							<a id="editContact" class="btn flat btn-primary pull-left" data-toggle="modal" href="#messageContactModal" ><i class="icon-envelope"  style="margin-right: 10px; margin-bottom: 3px; vertical-align: middle;"></i>Message</a>
 
-							<a id="deleteContact" class="btn flat btn-danger pull-right" data-toggle="modal" href="#" >Delete<i class="icon-remove" style="margin-left: 5px; margin-bottom: 3px; vertical-align: middle;"></i></a>
+							<a id="deleteContact" class="btn flat btn-danger pull-right" data-toggle="modal" href="#deleteContactModal" >Delete<i class="icon-remove" style="margin-left: 5px; margin-bottom: 3px; vertical-align: middle;"></i></a>
 
                         </div>
 

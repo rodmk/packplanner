@@ -16,10 +16,19 @@ class="active"
 	<div class="container">
 		<p>Settings {{ user }}</p>
 		<form method="post" action=""> {% csrf_token %} 
-		<table>
-		{{ form }}
-		</table>
-		<input type="submit" value="Submit Form"/>
+			<table>
+				{{ pform }}
+			</table>
+			<input type="hidden" name="form-type" value="personal-form"/>
+			<input type="submit" value="Submit Form"/>
+		</form>
+
+		<form method="post" action=""> {% csrf_token %} 
+			<table>
+				{{ fform }}
+			</table>
+			<input type="hidden" name="form-type" value="family-form"/>
+			<input type="submit" value="Submit Form"/>
 		</form>
  	</div>
 {% endblock %}
