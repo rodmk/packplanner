@@ -123,3 +123,10 @@ class Message(models.Model):
 
 	def __unicode__(self):
 		return u'"%s" from %s to %s' % (self.subject, self.sender, self.receiver)
+
+class ContactRequest(models.Model):
+	family = models.ForeignKey(Family, related_name="pending_requests")
+	requested_contact = models.ForeignKey(Family, related_name="contact_requests")
+
+	def __unicode__(self):
+		return u'%s requesting %s' % (self.family, self.requested_contact)
