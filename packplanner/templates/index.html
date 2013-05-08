@@ -21,18 +21,14 @@ class="active"
 	{% include "reach-out-modal.html" %}
 	
 
-		<div class="container">
+	<div class="container">
 		<!-- Middle -->
-			<div class="row">
-				<div class="span4">
-					<div id="datepicker"></div>
-				</div>
-
-			<div class="span8">
-				<div class="row" style="height:169px">
+		<div class="row">
+			<div class="span12">
+				<div class="row">
 					<div class="span6 pull-left">
 						<div id="filterBtnGroup" class="btn-group row pull-left" data-toggle="buttons-radio">
-		 					<!-- Fill in children group filter dynamically -->
+							<!-- Fill in children group filter dynamically -->
 						</div>
 					</div>
 
@@ -41,37 +37,41 @@ class="active"
 							<a id="newEventButton" class="btn pull-right flat btn-primary" data-toggle="modal" href="#newEventModal" ><i class="icon-plus"></i> New Event</a>
 						</div>
 					</div>
-				</div>
-				<div class="row">
-				 	<div class ="span2 pull-left">
-				 		<div class="btn-group row pull-left">
-				 			
+				<!-- </div> -->
+				<!-- <div class="row"> -->
+					<div class ="span2 pull-left">
+						<div class="btn-group row pull-left">
+
 
 						</div>
 					</div>
 
 					<div class="span2 pull-right">
-				 		<div class="btn-group row pull-right">
+						<div class="btn-group row pull-right">
 
-				 			<a id="previousWeekButton" class="btn btn-primary flat " href="#"><i class="icon-chevron-left"></i> Prev Week</a>
-				 			<a id="previousDayButton" class="btn btn-primary flat" href="#"><i class="icon-chevron-left"></i> Prev Day</a>
-				 			<a id="nextDayButton" class="btn btn-primary flat" href="#">Next Day <i class="icon-chevron-right"></i></a>
-				 			<a id="nextWeekButton" class="btn btn-primary flat " href="#">Next Week <i class="icon-chevron-right"></i></a>
+							<a id="previousWeekButton" class="btn btn-primary flat " href="#"><i class="icon-chevron-left"></i> Prev Week</a>
+							<a id="previousDayButton" class="btn btn-primary flat" href="#"><i class="icon-chevron-left"></i> Prev Day</a>
+							<a id="nextDayButton" class="btn btn-primary flat" href="#">Next Day <i class="icon-chevron-right"></i></a>
+							<a id="nextWeekButton" class="btn btn-primary flat " href="#">Next Week <i class="icon-chevron-right"></i></a>
 
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
 		<div class="row spacer">
-				<div id="header0" class="span1 unselected-day first-day" onClick="eventDaySelected(0);">Sunday</div>
+			<div id="header0" class="span1 unselected-day first-day" onClick="eventDaySelected(0);">Sunday</div>
 			<div id="header1" class="span1 unselected-day" onClick="eventDaySelected(1);">Monday</div>
-				<div id="header2" class="span1 unselected-day" onClick="eventDaySelected(2);">Tuesday</div>
-				<div id="header3" class="span1 unselected-day" onClick="eventDaySelected(3);">Wednesday</div>
-				<div id="header4" class="span1 unselected-day" onClick="eventDaySelected(4);">Thursday</div>
-				<div id="header5" class="span1 unselected-day" onClick="eventDaySelected(5);">Friday</div>
-				<div id="header6" class="span6 selected-day last-day" onClick="eventDaySelected(6);">Saturday</div>
-			</div>
- 	</div>
+			<div id="header2" class="span1 unselected-day" onClick="eventDaySelected(2);">Tuesday</div>
+			<div id="header3" class="span1 unselected-day" onClick="eventDaySelected(3);">Wednesday</div>
+			<div id="header4" class="span1 unselected-day" onClick="eventDaySelected(4);">Thursday</div>
+			<div id="header5" class="span1 unselected-day" onClick="eventDaySelected(5);">Friday</div>
+			<div id="header6" class="span6 selected-day last-day" onClick="eventDaySelected(6);">Saturday</div>
+		</div>
+	</div>
+	<div class="container minical">
+		<div class="span4 minicalspan">
+			<div id="datepicker"></div>
+		</div>
+	</div>
 {% endblock %}

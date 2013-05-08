@@ -104,3 +104,38 @@
   margin: 0px;
   color: white;
 }
+
+.edit-event{
+  margin-top:6px;
+  margin-right:2px;
+}
+.delete-event{
+  margin-top:6px;
+  margin-left:6px;
+}
+.reach-out{
+  text-align: middle;
+  margin-top:6px;
+  margin-right:2px;
+}
+.driver-to{
+  text-align:middle;
+  margin-top:9px;
+  margin-right:4px;
+  padding-left:22px;
+  padding-right:22px;
+}
+.driver-from{
+  text-align: middle;
+  margin-top:9px;
+  margin-right:4px;
+  margin-left:2px;
+}
+.minical{
+  width: 198.6px;
+  margin: 0px 0px 0px 0px;
+}
+
+.minicalspan{
+  margin-left: 0px;
+}

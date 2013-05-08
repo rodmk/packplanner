@@ -326,7 +326,7 @@ function renderEvent(event) {
 	})
 
 	date = $("<span>", {
-		class: "eventTime span5",
+		class: "eventTime span6",
 		text: event.startDate.getHours()+":"+formatMinutes(event.startDate.getMinutes()) + " - " + event.endDate.getHours()+":"+formatMinutes(event.endDate.getMinutes()),
 	})
 
@@ -335,11 +335,15 @@ function renderEvent(event) {
 		text: event.title,
 	})
 
-	editbtn = $('<a class="btn pull-right flat btn-primary " style="margin-top:6px;margin-right:2px" data-toggle="modal" href="#editEventModal" onClick="editEventOpen(' + event.id + '); return true;"><i class="icon-pencil"></i></a>')
-	deletebtn = $('<a class="btn pull-right flat btn-primary " style="margin-top:6px;margin-left:6px" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>')
-	reachoutbtn = $('<a class="btn pull-right flat btn-primary " style="margin-top:6px;margin-right:2px" data-toggle="modal" href="#reachOutModal"><i class="car-glyph"></i></a>')
-
+	editbtn = $('<a class="btn pull-right flat btn-primary edit-event" data-toggle="modal" href="#editEventModal" onClick="editEventOpen(' + event.id + '); return true;"><i class="icon-pencil"></i></a>')
+	deletebtn = $('<a class="btn pull-right flat btn-primary delete-event" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>')
+	reachoutbtn = $('<a class="btn pull-right flat btn-primary reach-out" data-toggle="modal" href="#reachOutModal"><i class="car-glyph"></i></a>')
+	drivetobtn = $('<a class="btn pull-right flat btn-primary driver-to">To</a>')
+	drivefrombtn = $('<a class="btn pull-right flat btn-primary driver-from">From</a>')
+	
+	drivefrombtn.appendTo(date);
 	reachoutbtn.appendTo(date);
+	drivetobtn.appendTo(date);
 	deletebtn.appendTo(tile);
 	editbtn.appendTo(tile);
 	date.appendTo(tile);
