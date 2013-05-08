@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, Http404
 from pack.models import *
 from django.shortcuts import *
 from django.utils import simplejson
+import datetime
 
 @login_required
 def index(request):
@@ -13,33 +14,45 @@ def index(request):
 def calendar(request):
 	family_member = get_family_member(request.user)
 	if request.method == 'POST':
+		print request.POST
 		name = request.POST['event[title]']
 		location = request.POST['event[location]']
 		start_time = request.POST['event[startDate]']
+		# start_time = datetime.datetime.fromtimestamp(start_time)
+		print start_time
 		end_time = request.POST['event[endDate]']
+		print end_time
 		driver_from_id = request.POST['event[driverFrom]']
 		driver_to_id = request.POST['event[driverTo]']
 		creator = request.user
-		# children_going = request.POST['event[going]']
-		# adults_going = request.POST['event[going]']
-		# schedule_id = request.POST['schedule_id']
-		# Schedule schedule = Schedule.objects.get(id=schedule_id)
+		# children_going = request.POST['event[childrengoingID]']
+		# print childrengoingID
+		# adults_going = request.POST['event[adultsdoingID]']
+		# print adults_going
+
+		# Schedule schedule = Schedule.objects.all()[0]
 		# Event event = new Event(name, "", location, datetime.now(), creator, start_time, end_time, schedule)
 		# event.save()
 		# FamilyEventDetails events_details = new FamilyEventDetails(event=event, family=family_member.family, notes="")
 		# events_details.save()
-		# if driver_to:
-		#   events_details.driverTo = driver_to
-		#   events_details.save()
-		# if driver_from:
-		#   events_details.driverFrom = driver_from
-		#   events_details.save()
-		# for child in children_going:
-		#   events_details.child_attendees.add(child)
-		# for adult in adults_going:
-		#   events_details.attendees.add(adult)
-		id = 0
+
+		# if not driver_to_id == -1 :
+		#   	events_details.driverTo = User.objects.get(id=driver_to_id)
+		#   	events_details.save()
+
+		# if not driver_from_id == -1:
+		#   	events_details.driverFrom = driver_from
+		#   	events_details.save()
+
+		# for child_id in children_going:
+		# 	child = Child.objects.get(id=child_id)
+		#   	events_details.child_attendees.add(child)
+
+		# for adult_id in adults_going:
+		# 	adult = Adult.objects.get(adult_id)
+		#   	events_details.attendees.add(adult)
 		# id = events_details.id
+		id=0
 		return HttpResponse(simplejson.dumps(id))
 	events_details = FamilyEventDetails.objects.filter(family=family_member.family)
 	return render(request, 'index.html', {"events_details" : events_details, "family" : family_member.family})

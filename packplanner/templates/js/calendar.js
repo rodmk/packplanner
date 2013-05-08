@@ -293,22 +293,22 @@ $(document).ready(function() {
 			var childrengoingID = [];
 			{% for family_member in family.family_members.all %}
 			{% for i in going %}
-			if('{{family_member.first_name}}'==going[{{forloop.counter0}}]){
-				adultsgoingID.push({{family_member.id}})
+			if ('{{family_member.first_name }}' == {{i}} ) {
+				adultsgoingID.push({{family_member.id}});
 			}
 			{% endfor %}
 			{% endfor %}
 			{% for child in family.children.all %}
 			{% for i in going %}
 			if('{{child.first_name}}'==going[{{forloop.counter0}}]){
-				childrengoingID.push({{child.id}})
+				childrengoingID.push({{child.id}});
 			}
 			{% endfor %}
 			{% endfor %}
 
 			var eventLocation = $("#locationInput").val();
-			console.log("c"+childrengoingID);
-			console.log("a"+adultsgoingID);
+			console.log("c "+childrengoingID);
+			console.log("a "+adultsgoingID);
 			var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, childrengoingID, adultsgoingID);
 			$.ajax("/calendar/", {
 				type: "POST",
