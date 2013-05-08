@@ -13,11 +13,18 @@ class Family(models.Model):
 
 	def __unicode__(self):
 		return u'%s Family' % (self.last_name,)
+		
+#	def familyAddress(self):
+#		return u'%s\n%s\n%s, %s %d' % (address_line_1, address_line_2, address_city, address_state, address_zip_code)
+#
 
 class Child(models.Model):
 	family = models.ForeignKey(Family, related_name="children")
 	first_name = models.CharField(max_length=40)
 	is_driver = models.BooleanField()
+
+	def __unicode__(self):
+		return u'%s %s' % (self.first_name, self.family.last_name)
 
 class FamilyMember(models.Model):
 	user = models.OneToOneField(User, related_name="user_account", null=True)
@@ -75,3 +82,14 @@ class FamilyEventDetails(models.Model):
 
 	def __unicode__(self):
 		return u'Details for %s Event for the %s' % (self.event, self.family)
+
+class Message(models.Model):
+	sender = models.ForeignKey(Family, related_name="sent_messages")
+	receiver = models.ForeignKey(Family, related_name="received_messages")
+	in_inbox = models.BooleanField()
+	message = models.TextField()
+	subject = models.CharField(max_length=200)
+	time_sent = models.DateTimeField()
+
+	def __unicode__(self):
+		return u'"%s" from %s to %s' % (self.subject, self.sender, self.receiver)
