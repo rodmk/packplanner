@@ -32,29 +32,39 @@ def calendar(request):
 			creator=creator, startTime=start_time, endTime=end_time, schedule=schedule)
 		event.save()
 
-		if not driver_to_id == -1:
+		event_details = FamilyEventDetails(event=event, family=family_member.family, notes=" ")
+		event_details.save()
+
+		try:
 			driverTo = User.objects.get(id=driver_to_id)
-		else :
-			driverTo = User.objects.get(id=7)
+			event_details.driverTo = driverTo
+			event_details.save()
+		except Exception, e:
+			pass
 
-		if not driver_from_id == -1:
+		try:
 			driverFrom = User.objects.get(id=driver_from_id)
-		else :
-			driverFrom = User.objects.get(id=7)
-
-		events_details = FamilyEventDetails(event=event, family=family_member.family, 
-			notes=" ", driverTo=driverTo, driverFrom=driverFrom)
-		events_details.save()
+			event_details.driverFrom = driverFrom
+			event_details.save()
+		except Exception, e:
+			pass
 
 		for child_id in children_going:
-			child = Child.objects.get(id=child_id)
-		  	events_details.child_attendees.add(child)
+			try:
+				child = Child.objects.get(id=child_id)
+			  	event_details.child_attendees.add(child)
+			except Exception, e:
+				pass
 
 		for adult_id in adults_going:
-			adult = FamilyMember.objects.get(id=adult_id)
-		  	events_details.attendees.add(adult)
+		  	try:
+				adult = FamilyMember.objects.get(id=adult_id)
+		  		event_details.attendees.add(adult)
+			except Exception, e:
+				pass
 		  	
-		id = events_details.id
+		  	
+		id = event_details.id
 
 		return HttpResponse(simplejson.dumps(id))
 
@@ -133,50 +143,70 @@ def get_family_member(user):
 
 @login_required
 def edit_event(request, id):
+	if request.method == 'POST':
+		name = request.POST['event[title]']
+		location = request.POST['event[location]']
+		start_time = request.POST['start_time']
+		start_time = datetime.datetime.fromtimestamp(float(start_time)/1000.0, tz.gettz('America/New_York'))
+		end_time = request.POST['end_time']
+		end_time = datetime.datetime.fromtimestamp(float(end_time)/1000.0, tz.gettz('America/New_York'))
+		driver_from_id = request.POST['event[driverFrom]']
+		driver_to_id = request.POST['event[driverTo]']
+		creator = request.user
+		children_going = request.POST.getlist('event[childrengoingID][]')
+		adults_going = request.POST.getlist('event[adultsgoingID][]')
+
+		event_details = FamilyEventDetails.objects.get(id=id)
+		event = event_details.event
+		event.name=name
+		event.description=description
+		event.location=location
+		event.start_time=start_time
+		event.end_time=end_time
+		event.save()
+
+		try:
+			driverTo = User.objects.get(id=driver_to_id)
+			event_details.driverTo = driverTo
+			event_details.save()
+		except Exception, e:
+			pass
+
+		try:
+			driverFrom = User.objects.get(id=driver_from_id)
+			event_details.driverFrom = driverFrom
+			event_details.save()
+		except Exception, e:
+			pass
+
+		for child_id in children_going:
+			try:
+				child = Child.objects.get(id=child_id)
+			  	event_details.child_attendees.add(child)
+			except Exception, e:
+				pass
+
+		for adult_id in adults_going:
+		  	try:
+				adult = FamilyMember.objects.get(id=adult_id)
+		  		event_details.attendees.add(adult)
+			except Exception, e:
+				pass
+		  	
+		id = event_details.id
+
+		return HttpResponse(simplejson.dumps(id))
+
+@login_required
+def remove_event(request, id):
 	family_member = get_family_member(request.user)
 	if request.method == 'POST':
 		print request.POST
-		event = Event.objects.get(id=id)
-
-		if event.creator == request.user:
-			name = request.POST['event[title]']
-			location = request.POST['event[location]']
-			start_time = request.POST['event[startDate]']
-			# start_time = datetime.datetime.fromtimestamp(start_time)
-			print start_time
-			end_time = request.POST['event[endDate]']
-			print end_time
-
-		if event in family_member.family.family_events_details:
-			driver_from_id = request.POST['event[driverFrom]']
-			# driver_to_id = request.POST['event[driverTo]']
-			# creator = request.user
-			# children_going = request.POST['event[childrengoingID]']
-			# print childrengoingID
-			# adults_going = request.POST['event[adultsdoingID]']
-			# print adults_going
-
-		# Schedule schedule = Schedule.objects.all()[0]
-		# Event event = new Event(name, "", location, datetime.now(), creator, start_time, end_time, schedule)
-		# event.save()
-		# FamilyEventDetails events_details = new FamilyEventDetails(event=event, family=family_member.family, notes="")
-		# events_details.save()
-
-		# if not driver_to_id == -1 :
-		#   	events_details.driverTo = User.objects.get(id=driver_to_id)
-		#   	events_details.save()
-
-		# if not driver_from_id == -1:
-		#   	events_details.driverFrom = driver_from
-		#   	events_details.save()
-
-		# for child_id in children_going:
-		# 	child = Child.objects.get(id=child_id)
-		#   	events_details.child_attendees.add(child)
-
-		# for adult_id in adults_going:
-		# 	adult = Adult.objects.get(adult_id)
-		#   	events_details.attendees.add(adult)
-		# id = events_details.id
-		id=0
-		return HttpResponse(simplejson.dumps(id))
+		event_details = FamilyEventDetails.objects.get(id=id)
+		if family_member.family == event_details.family:
+			event_details.delete()
+			return HttpResponse(simplejson.dumps(1))
+		else:
+			return HttpResponse(simplejson.dumps(-1))
+	else:
+		return HttpResponseRedirect("/home/")

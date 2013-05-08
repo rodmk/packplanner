@@ -85,54 +85,20 @@ $(document).ready(function() {
 	var contactlist= [];
 	{% for contact in family.contacts.all %}
 	contacts.push(new Contact('{{contact.last_name}}',{{contact.id}}));
-		//var tempFamilyMembers = [];
 		{% for family_mem in contact.family_members.all%}
-			//tempFamilyMembers.push({{family_mem}});
 			{% if family_mem.is_driver %}
-			drivingContacts.push(new Driver("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}}));
+				drivingContacts.push(new Driver("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}}));
 			{% endif %}
-			{% endfor %}
-			{% endfor %}
-			console.log(drivingContacts);
-			family = new Family({{family.id}},"{{family.last_name}}","{{family.address_line1}}","{{family.address_line2}}", "{{family.address_city}}","{{family.address_state}}","{{family.address_zip_code}}","{{family.phone_number}}",contactlist);
-
-			{% for event_details in events_details %}
-
-	// var startHour = {{event_details.event.startTime.hour}}
-	// var startDay = {{event_details.event.startTime.day}}
-	// var startMonth = {{event_details.event.startTime.month}}
-	// var startYear = {{event_details.event.startTime.year}}
-	// if(startHour-5<0){
-	// 	startDay = startDay-1;
-	// 	if(startDay<1){
-	// 		startMonth = startMonth-1;
-	// 		if(startMonth<1){
-	// 			startYear = startYear -1;
-	// 			startMonth=11
-	// 		}
-	// 	}
-	// }
-
-	var startDate = new Date();
-	startDate.setFullYear({{event_details.event.startTime.year}});
-	startDate.setMonth({{event_details.event.startTime.month}});
-	startDate.setDate({{event_details.event.startTime.day}});
-	startDate.setHours({{event_details.event.startTime.hour}});
-	startDate.setMinutes({{event_details.event.startTime.minute}});
-	startDate.setHours(startDate.getHours()-5);
-
-	var endDate = new Date();
-	endDate.setFullYear({{event_details.event.endTime.year}});
-	endDate.setMonth({{event_details.event.endTime.month}});
-	endDate.setDate({{event_details.event.endTime.day}});
-	endDate.setHours({{event_details.event.endTime.hour}});
-	endDate.setMinutes({{event_details.event.endTime.minute}});
-	endDate.setHours(endDate.getHours()-5);
-
-
+		{% endfor %}
 	{% endfor %}
-
-
+	console.log(drivingContacts);
+	family = new Family({{family.id}},"{{family.last_name}}","{{family.address_line1}}","{{family.address_line2}}", "{{family.address_city}}","{{family.address_state}}","{{family.address_zip_code}}","{{family.phone_number}}",contactlist);
+	{% for family_mem in family.family_members.all %}
+		{% if family_mem.is_driver %}
+			drivingContacts.push(new Driver("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}}));
+		{% endif %}
+	{% endfor %}
+	
 	// function displayEvents() {
 	// 	// events.sort(compareEvents);
 	// 	var currentDateHash = hash(currentDate);
@@ -174,7 +140,7 @@ $(document).ready(function() {
 		endDate.setMinutes({{event_details.event.endTime.minute}});
 		endDate.setHours(endDate.getHours()-5);
 		tempHash = hash(startDate);
-		var e = new Event({{event_details.event.id}}, 
+		var e = new Event({{event_details.id}}, 
 			"{{event_details.event.name}}", 
 			"{{event_details.event.location}}", 
 			startDate, 
@@ -400,6 +366,14 @@ $('#editEndTime').datetimepicker({
 $('#editEventDate').datetimepicker({
 	pickTime: false
 });
+
+// $('#startTime').datetimepicker.data('datetimepicker').setDate(currentDate);
+// $('#endTime').datetimepicker.data('datetimepicker').setDate(currentDate);
+// $('#eventDate').datetimepicker.data('datetimepicker').setDate(currentDate);
+// $('#editStartTime').datetimepicker.data('datetimepicker').setDate(currentDate);
+// $('#editEndTime').datetimepicker.data('datetimepicker').setDate(currentDate);
+// $('#editEventDate').datetimepicker.data('datetimepicker').setDate(currentDate);
+
 {% for family_member in family.family_members.all %}
 $("#familyAttendingInput").append("<option id='a{{family_member.id}}'>{{family_member.first_name}}</option>");
 $("#editFamilyAttendingInput").append("<option id='a{{family_member.id}}'>{{family_member.first_name}}</option>");
@@ -493,7 +467,16 @@ function removeEvent(event_id) {
 	for(key in allEvents){
 		for(var i =0; i<allEvents[key].length;i++){
 			if(allEvents[key][i].id == event_id){
-				allEvents[key].pop(i);
+				var ev = allEvents[key].pop(i);
+				$.ajax("/removeEvent/" + event_id + "/", {
+					type: "POST",
+					data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+						success: function(response) {
+							if (response == -1) {
+								allEvents[key].push(i);
+							}
+					}
+				});
 			}
 		}
 	}
@@ -698,9 +681,9 @@ function editEventOpen(event_id) {
 	var e = getEventById(event_id);
 	$("#editEventName").val(e.title);
 	//alert(events[event_id].startDate);
-	//$("#editEventDate").setDate(events[event_id].startDate);
-	//$("#editStartTime").setDate(events[event_id].startDate);
-	//$("#editEndTime").setDate(events[event_id].endDate);
+	$("#editEventDateinput").setDate(e.startDate);
+	$("#editStartTimeInput").setDate(e.startDate);
+	$("#editEndTimeInput").setDate(e.endDate);
 	$("#editLocationInput").val(e.location);
 	$("#editDrivingTo").val(e.driverTo);
 	$("#editDrivingFrom").val(e.driverFrom);
