@@ -59,7 +59,7 @@ var driverFromID = -1;
 Filters
 */
 var booleanFilters = [];
-var childrenFilters = ["Mary", "Nick", "Andy", "Barry", "Christine"];
+var childrenFilters = [];
 var helpFilters = ["All"];
 
 
@@ -67,6 +67,14 @@ $(document).ready(function() {
 	$("#pop").popover();
 	
 	//console.log(currentDate);
+
+	childrenFilters = [];
+	{% for family_mem in family.family_members.all %}
+		childrenFilters.push("{{family_mem.first_name}}");
+	{% endfor %}
+	{% for child in family.children.all %}
+		childrenFilters.push("{{child.first_name}}");
+	{% endfor %}
 	
 
 	allEvents = buildDict();
@@ -721,15 +729,15 @@ function handleMissingDrivers(){
 	var allDrivingTo = $(".drivingTo");
 	var allDrivingFrom = $(".drivingFrom");
 	for(var i = 0; i < allDrivingTo.length;i++){
-		button = $(".drivingTo")[i];
-		if(button.text =="None"){
+		button = allDrivingTo[i];
+		if(button.text =="To: None"){
 			button.removeClass('btn-primary').addClass('btn-danger');
 		}
 
 	}
 	for(var j=0; j< allDrivingFrom.length;j++){
-		button = $(".drivingFrom")[i];
-		if(button.text =="None"){
+		button = allDrivingFrom[j];
+		if(button.text =="From: None"){
 			button.removeClass('btn-primary').addClass('btn-danger');
 		}
 	}

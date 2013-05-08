@@ -5,12 +5,12 @@ from django.contrib.auth.models import User
 class Family(models.Model):
 	last_name = models.CharField(max_length=40)
 	address_line_1 = models.CharField(max_length=200)
-	address_line_2 = models.CharField(max_length=200)
+	address_line_2 = models.CharField(max_length=200, null=True)
 	address_city = models.CharField(max_length=100)
 	address_state = models.CharField(max_length=50)
 	address_zip_code = models.IntegerField(null=True)
-	phone_number = models.IntegerField(null=True)
-	contacts = models.ManyToManyField("self")
+	phone_number = models.FloatField(null=True)
+	contacts = models.ManyToManyField("self", blank=True)
 
 	def __unicode__(self):
 		return u'%s Family' % (self.last_name)
@@ -96,7 +96,7 @@ class FamilyMemberForm(ModelForm):
 
 class Schedule(models.Model):
 	name = models.CharField(max_length=100)
-	description=models.TextField()
+	description=models.TextField(null=True)
 	timestamp = models.DateTimeField()
 	creator = models.ForeignKey(User, related_name="creator")
 
@@ -115,13 +115,13 @@ class FamilyScheduleDetails(models.Model):
 
 class Event(models.Model):
 	name = models.CharField(max_length=100)
-	description = models.TextField()
+	description = models.TextField(null=True)
 	location = models.CharField(max_length=50)
-	timestamp = models.DateTimeField()
+	timestamp = models.DateTimeField(blank=True, null=True)
 	creator = models.ForeignKey(User, related_name="created_events")
 	startTime = models.DateTimeField()
 	endTime = models.DateTimeField()
-	schedule = models.ForeignKey(Schedule, related_name="events")
+	schedule = models.ForeignKey(Schedule, related_name="events", null=True, blank=True)
 
 	def __unicode__(self):
 		return u'%s' % (self.name,)
