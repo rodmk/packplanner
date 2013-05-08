@@ -679,11 +679,11 @@ function renderEvent(event) {
 	
 	console.log("driver to "+driverTo+"driver from "+driverFrom);
 	if(driverTo == "None"){
-		$(".drivingTo").removeClass('btn-primary').addClass('btn-danger');
+		//$(".drivingTo").removeClass('btn-primary').addClass('btn-danger');
 	}
 
 	if(driverFrom == "None"){
-		$(".drivingFrom").removeClass('btn-primary').addClass('btn-danger');
+		//$(".drivingFrom").removeClass('btn-primary').addClass('btn-danger');
 	}
 
 	handleMissingDrivers();
@@ -722,23 +722,17 @@ function displayEvents() {
 		var e = currentDateEvents[i];
 		console.log(event);
 		content.append(renderEvent(e));
+		handleMissingDrivers();
 	}
 }
 
 function handleMissingDrivers(){
 	var allDrivingTo = $(".drivingTo");
 	var allDrivingFrom = $(".drivingFrom");
-	for(var i = 0; i < allDrivingTo.length;i++){
-		button = allDrivingTo[i];
-		if(button.text =="To: None"){
-			button.removeClass('btn-primary').addClass('btn-danger');
-		}
-
-	}
-	for(var j=0; j< allDrivingFrom.length;j++){
-		button = allDrivingFrom[j];
-		if(button.text =="From: None"){
-			button.removeClass('btn-primary').addClass('btn-danger');
-		}
-	}
+	$(allDrivingTo).each(function(i){
+		$(this).removeClass("btn-primary").addClass("btn-danger");
+	})
+	$(allDrivingFrom).each(function(i){
+		$(this).removeClass("btn-primary").addClass("btn-danger");
+	})
 }
