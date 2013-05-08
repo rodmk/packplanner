@@ -609,7 +609,7 @@ function renderEvent(event) {
 	editbtn = $('<a class="btn pull-right flat btn-primary edit-event" data-toggle="modal" href="#editEventModal" onClick="editEventOpen(' + event.id + '); return true;"><i class="icon-pencil"></i></a>');
 	deletebtn = $('<a class="btn pull-right flat btn-primary delete-event" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>');
 	reachoutbtn = $('<a class="btn pull-right flat btn-primary reach-out" data-toggle="modal" href="#reachOutModal"><i class="car-glyph"></i></a>');
-	drivetobtn = $('<a href="#" id="pop" class="popover-b btn btn-large" data-toggle="popover" data-content="And here is content" data-original-title="A Title">button</a>');
+	drivetobtn = $('<a href="#" id="pop" class="btn btn-large flat pull-right" data-toggle="popover" data-content="And here is content" data-original-title="A Title">button</a>');
 	drivefrombtn = $('<a class="btn pull-right flat btn-primary driver-from">From</a>');
 	
 	drivefrombtn.appendTo(date);
