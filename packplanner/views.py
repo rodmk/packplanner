@@ -75,7 +75,7 @@ def contacts(request):
 	# 		contact_request.save()
 	contacts = family_member.family.contacts.all()
 	contact_requests = family_member.family.contact_requests.all()
-	return render(request, 'contacts.html', {"contacts" : contacts, "contact_requests" : contact_requests})
+	return render(request, 'contacts.html', {"contacts" : contacts, "contact_requests" : contact_requests}, "family" : family_member.family})
 
 @login_required
 def inbox(request):
