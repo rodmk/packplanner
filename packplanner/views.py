@@ -15,8 +15,8 @@ def calendar(request):
 	if request.method == 'POST':
 		name = request.POST['event[title]']
 		location = request.POST['event[location]']
-		start_time = request.POST['event[startDate']
-		end_time = request.POST['event[endDate']
+		start_time = request.POST['event[startDate]']
+		end_time = request.POST['event[endDate]']
 		driver_from_id = request.POST['event[driverFrom]']
 		driver_to_id = request.POST['event[driverTo]']
 		creator = request.user

@@ -273,8 +273,11 @@ $(document).ready(function() {
 		$.ajax("/calendar/", {
 			type: "POST",
 			data: {event: e, csrfmiddlewaretoken: '{{ csrf_token }}' },
+			success: function(response) {
+				addSuccessfulEvent(e, response)
+			}
 		});
-    	addEvent(e);
+    	
     	$('#newEventModal').modal('hide');
     	$(':input','#newEventForm')
     	  .not(':button, :submit, :reset, :hidden')
@@ -341,6 +344,11 @@ $(document).ready(function() {
 	}
 
 });
+
+function addSuccessfulEvent(event, json) {
+	event.id=json;
+	addEvent(event);
+}
 
 function dateSelectedFunc(date){
 	currentDate = date;
