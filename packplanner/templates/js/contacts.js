@@ -5,7 +5,8 @@
 	var DEFAULT_PHOTO = '../static/img/placeholder_user.png';
 
 
-    function Contact( ID, photo, familyName, parents, children, address, phoneNumber){
+    function Contact( ID, photo, displayName, familyName, parents, children, address, phoneNumber){
+        this.displayName = displayName;
         this.familyName = familyName;
         this.address = address;
         this.phoneNumber = phoneNumber;
@@ -20,8 +21,8 @@
         $('#contactOptions').hide();
         $("#addressContact").val('');
 
-        myContacts = new Array();
-        myFamilyNames = new Array();
+        window.ALL_MY_CONTACTS = new Array();
+        window.ALL_DISPLAY_NAMES = new Array();
 
         {% for contact in contacts %}
 
@@ -29,36 +30,28 @@
         var childrenList = new Array();
         var contactID = {{forloop.counter0}};
 
-        {% for adult in contact.family_members.all %}
-        parentsList.push("{{adult.first_name}}");
-        {% endfor %}
-
-        {% for child in contact.children.all %}
-        childrenList.push("{{child.first_name}}");
-        {% endfor %}
-
-        myContacts[{{forloop.counter0}}] =  
+        ALL_MY_CONTACTS[{{forloop.counter0}}] =  
             new Contact(contactID,
                         DEFAULT_PHOTO,
-                        "{{contact}}",
-                        parentsList,
-                        childrenList,
+                        "{{contact.displayFamilyNames}}",
+                        "{{contact.last_name}}",
+                        "{{contact.parentList}}",
+                        "{{contact.childrenList}}",
                         "{{contact.familyAddress}}", 
                         "{{contact.familyPhone}}" 
                         );
-        myFamilyNames[{{forloop.counter0}}] = "{{contact}}";   
+        ALL_DISPLAY_NAMES[{{forloop.counter0}}] = "{{contact.displayFamilyNames}}"; 
 
-        window.ALL_MY_CONTACTS = myContacts;
-        window.ALL_FAMILY_NAMES = myFamilyNames;
+        window.ALL_DATABASE_NAMES = ALL_DISPLAY_NAMES;
 
         {% endfor %}
 
 
-		updateContacts(ALL_FAMILY_NAMES);
+		updateContacts(ALL_DISPLAY_NAMES);
 
 		$('#contactSearch').typeahead( { 
 			source: function (query, process) {
-				process( ALL_FAMILY_NAMES );
+				process( ALL_DISPLAY_NAMES );
 			},
 			menu: '',
 			sorter: function(items) {
@@ -93,8 +86,9 @@
 				if (contactList[k][0] == ALPHABET_UPPER[i]){
 
                     for(c=0;c<=ALL_MY_CONTACTS.length-1;c++){
-                        if (ALL_MY_CONTACTS[c].familyName == contactList[k]){
-                            newContent = newContent + '<li onclick="return changeRightPanel(' + ALL_MY_CONTACTS[c].ID + ')"><a href="#">' + contactList[k] + '</a></li>';
+                        var famName = contactList[k].split(',')[0];
+                        if (ALL_MY_CONTACTS[c].familyName == famName){
+                            newContent = newContent + '<li onclick="return changeRightPanel(' + ALL_MY_CONTACTS[c].ID + ')"><a href="#">' + ALL_MY_CONTACTS[c].displayName + '</a></li>';
                             break;
                         }
                     }
