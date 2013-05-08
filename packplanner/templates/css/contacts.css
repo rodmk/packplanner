@@ -32,7 +32,7 @@
     color: #000000; 
 }
 
-.uneditableTextArea {
+textarea[disabled]{
 	cursor: not-allowed;
     background-color: #FFFFFF;
     color: #000000; 
