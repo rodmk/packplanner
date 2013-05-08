@@ -78,3 +78,14 @@ class FamilyEventDetails(models.Model):
 
 	def __unicode__(self):
 		return u'Details for %s Event for the %s' % (self.event, self.family)
+
+class Message(models.Model):
+	sender = models.ForeignKey(Family, related_name="sent_messages")
+	receiver = models.ForeignKey(Family, related_name="received_messages")
+	in_inbox = models.BooleanField()
+	message = models.TextField()
+	subject = models.CharField(max_length=200)
+	time_sent = models.DateTimeField()
+
+	def __unicode__(self):
+		return u'"%s" from %s to %s' % (self.subject, self.sender, self.receiver)
