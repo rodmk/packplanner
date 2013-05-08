@@ -215,7 +215,7 @@ $(document).ready(function() {
 		}
 
 		
-		 
+
 		$("#datepicker").datepicker({
 			onSelect: function(dateText, inst) { 
 	      var dateAsString = dateText; //the first parameter of this function
@@ -276,8 +276,11 @@ $(document).ready(function() {
 			var id = 0;
 			var title = $("#eventName").val();
 			var eventDate = $("#eventDate").data('datetimepicker').getDate();
+			console.log("eventDate " + eventDate);
 			var startTime = $("#startTime").data('datetimepicker').getDate();
+			console.log("startTime " + startTime);
 			var endTime = $("#endTime").data('datetimepicker').getDate();
+			console.log("endTime " + endTime);
 			var startDate = eventDate;
 			var endDate = eventDate;
 			startDate.setHours(startTime.getHours());
@@ -286,7 +289,7 @@ $(document).ready(function() {
 				endDate.setDate(eventDate.getDate()+1);
 			}
 			endDate.setHours(endTime.getHours())
-			endDate.setMinutes(endTime.getHours())
+			endDate.setMinutes(endTime.getMinutes())
 
 			var going = $("#familyAttendingInput option:selected");
 			var adultsgoingID = [];
@@ -304,16 +307,18 @@ $(document).ready(function() {
 
 
 			var eventLocation = $("#locationInput").val();
-			console.log("c "+childrengoingID);
-			console.log("a "+adultsgoingID);
 			var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, childrengoingID, adultsgoingID);
+			
 			$.ajax("/calendar/", {
 				type: "POST",
-				data: {event: e, csrfmiddlewaretoken: '{{ csrf_token }}' },
-				success: function(response) {
-					addSuccessfulEvent(e, response)
-				}
-			});
+				data: {event: e,
+					start_time : e.startDate.getTime(),
+					end_time : e.endDate.getTime(),
+					csrfmiddlewaretoken: '{{ csrf_token }}' },
+					success: function(response) {
+						addSuccessfulEvent(e, response)
+					}
+				});
 
 			$('#newEventModal').modal('hide');
 			$(':input','#newEventForm')
@@ -398,13 +403,13 @@ $("#drivingToInput").typeahead({
 		tempdrivers = [];
 		map = {};
 		$.each(drivingContacts,function(i,driver) {
-			map[Driver.first_name+" "+Driver.last_name] = driver;
+			map[driver.first_name+" "+driver.last_name] = driver;
 			tempdrivers.push(driver.first_name+" "+driver.last_name); 
 		});
 		process(tempdrivers)
 	},
 	updater: function(item){
-		driverToID = map[Driver.first_name+" "+Driver.last_name].id;
+		driverToID = map[item].id;
 		return item;
 	},
 	items:4
@@ -415,13 +420,13 @@ $("#editDrivingToInput").typeahead({
 		map = {};
 		tempdrivers = [];
 		$.each(drivingContacts,function(i,driver) {
-			map[Driver.first_name+" "+Driver.last_name] = driver;
+			map[driver.first_name+" "+driver.last_name] = driver;
 			tempdrivers.push(driver.first_name+" "+driver.last_name); 
 		});
 		process(tempdrivers)
 	},
 	updater: function(item){
-		editDriverToID = map[Driver.first_name+" "+Driver.last_name].id;
+		editDriverToID = map[item].id;
 		return item;
 	},
 	items:4
@@ -433,13 +438,13 @@ $("#drivingFromInput").typeahead({
 		map = {};
 		tempdrivers = [];
 		$.each(drivingContacts,function(i,driver) {
-			map[Driver.first_name+" "+Driver.last_name] = driver;
+			map[driver.first_name+" "+driver.last_name] = driver;
 			tempdrivers.push(driver.first_name+" "+driver.last_name); 
 		});
 		process(tempdrivers)
 	},
 	updater: function(item){
-		driverFromID = map[Driver.first_name+" "+Driver.last_name].id;
+		driverFromID = map[item].id;
 		return item;
 	},
 	items:4
@@ -450,13 +455,13 @@ $("#editDrivingFromInput").typeahead({
 		map = {};
 		tempdrivers = [];
 		$.each(drivingContacts,function(i,driver) {
-			map[Driver.first_name+" "+Driver.last_name] = driver;
+			map[driver.first_name+" "+driver.last_name] = driver;
 			tempdrivers.push(driver.first_name+" "+driver.last_name); 
 		});
 		process(tempdrivers)
 	},
 	updater: function(item){
-		editdriverFromID = map[Driver.first_name+" "+Driver.last_name].id;
+		editdriverFromID = map[item].id;
 		return item;
 	},
 	items:4

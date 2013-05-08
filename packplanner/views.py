@@ -5,6 +5,7 @@ from pack.models import *
 from django.shortcuts import *
 from django.utils import simplejson
 import datetime
+from dateutil import tz
 
 @login_required
 def index(request):
@@ -14,46 +15,49 @@ def index(request):
 def calendar(request):
 	family_member = get_family_member(request.user)
 	if request.method == 'POST':
-		print request.POST
 		name = request.POST['event[title]']
 		location = request.POST['event[location]']
-		start_time = request.POST['event[startDate]']
-		# start_time = datetime.datetime.fromtimestamp(start_time)
-		print start_time
-		end_time = request.POST['event[endDate]']
-		print end_time
+		start_time = request.POST['start_time']
+		start_time = datetime.datetime.fromtimestamp(float(start_time)/1000.0, tz.gettz('America/New_York'))
+		end_time = request.POST['end_time']
+		end_time = datetime.datetime.fromtimestamp(float(end_time)/1000.0, tz.gettz('America/New_York'))
 		driver_from_id = request.POST['event[driverFrom]']
 		driver_to_id = request.POST['event[driverTo]']
 		creator = request.user
-		# children_going = request.POST['event[childrengoingID]']
-		# print childrengoingID
-		# adults_going = request.POST['event[adultsdoingID]']
-		# print adults_going
+		children_going = request.POST.getlist('event[childrengoingID][]')
+		adults_going = request.POST.getlist('event[adultsgoingID][]')
 
-		# Schedule schedule = Schedule.objects.all()[0]
-		# Event event = new Event(name, "", location, datetime.now(), creator, start_time, end_time, schedule)
-		# event.save()
-		# FamilyEventDetails events_details = new FamilyEventDetails(event=event, family=family_member.family, notes="")
-		# events_details.save()
+		schedule = Schedule.objects.all()[0]
+		event = Event(name=name, description=" ", location=location, timestamp=datetime.datetime.now(tz.gettz('America/New_York')), 
+			creator=creator, startTime=start_time, endTime=end_time, schedule=schedule)
+		event.save()
 
-		# if not driver_to_id == -1 :
-		#   	events_details.driverTo = User.objects.get(id=driver_to_id)
-		#   	events_details.save()
+		if not driver_to_id == -1:
+			driverTo = User.objects.get(id=driver_to_id)
+		else :
+			driverTo = User.objects.get(id=7)
 
-		# if not driver_from_id == -1:
-		#   	events_details.driverFrom = driver_from
-		#   	events_details.save()
+		if not driver_from_id == -1:
+			driverFrom = User.objects.get(id=driver_from_id)
+		else :
+			driverFrom = User.objects.get(id=7)
 
-		# for child_id in children_going:
-		# 	child = Child.objects.get(id=child_id)
-		#   	events_details.child_attendees.add(child)
+		events_details = FamilyEventDetails(event=event, family=family_member.family, 
+			notes=" ", driverTo=driverTo, driverFrom=driverFrom)
+		events_details.save()
 
-		# for adult_id in adults_going:
-		# 	adult = Adult.objects.get(adult_id)
-		#   	events_details.attendees.add(adult)
-		# id = events_details.id
-		id=0
+		for child_id in children_going:
+			child = Child.objects.get(id=child_id)
+		  	events_details.child_attendees.add(child)
+
+		for adult_id in adults_going:
+			adult = FamilyMember.objects.get(id=adult_id)
+		  	events_details.attendees.add(adult)
+		  	
+		id = events_details.id
+
 		return HttpResponse(simplejson.dumps(id))
+
 	events_details = FamilyEventDetails.objects.filter(family=family_member.family)
 	return render(request, 'index.html', {"events_details" : events_details, "family" : family_member.family})
 
@@ -144,13 +148,13 @@ def edit_event(request, id):
 			print end_time
 
 		if event in family_member.family.family_events_details:
-		driver_from_id = request.POST['event[driverFrom]']
-		driver_to_id = request.POST['event[driverTo]']
-		creator = request.user
-		# children_going = request.POST['event[childrengoingID]']
-		# print childrengoingID
-		# adults_going = request.POST['event[adultsdoingID]']
-		# print adults_going
+			driver_from_id = request.POST['event[driverFrom]']
+			# driver_to_id = request.POST['event[driverTo]']
+			# creator = request.user
+			# children_going = request.POST['event[childrengoingID]']
+			# print childrengoingID
+			# adults_going = request.POST['event[adultsdoingID]']
+			# print adults_going
 
 		# Schedule schedule = Schedule.objects.all()[0]
 		# Event event = new Event(name, "", location, datetime.now(), creator, start_time, end_time, schedule)
