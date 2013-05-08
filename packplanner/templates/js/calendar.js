@@ -28,6 +28,7 @@ var events = new Array();
 /*
 Filters
 */
+var booleanFilters = [];
 var childrenFilters = ["Mary", "Nick", "Andy", "Barry", "Christine"];
 var helpFilters = ["All"];
 
@@ -90,12 +91,14 @@ $(document).ready(function() {
 	displayEvents();
 
 	for(i=0;i<=helpFilters.length-1;i++){
-			$('#filterBtnGroup').append('<button id="allChildren" type="button" data-toggle="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
+			$('#filterBtnGroup').append('<button id="allChildren" data-toggle="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
 	}
 
 	for(j=0;j<=childrenFilters.length-1;j++){
-			$('#filterBtnGroup').append('<button id="partialChildren" type="button" data-toggle="button" class=' + '"btn pull-left btn-custom' + j + '" >' + childrenFilters[j] + '</button>');
+			$('#filterBtnGroup').append('<button id="partialChildren" data-toggle="button" class=' + '"btn pull-left btn-custom' + j + 'd" >' + childrenFilters[j] + '</button>');
+			booleanFilters[j] = 0;
 	}
+
 
 	$("#datepicker").datepicker({
 	    onSelect: function(dateText, inst) { 
@@ -212,6 +215,19 @@ $(document).ready(function() {
 	$("#drivingFrom").typeahead({source:availDrivers,items:4});
 });
 
+
+/*
+Returns list of selected names
+*/
+function getSelectedFilters(){
+	var selectedFilters = [];
+	for( k=0; k<=booleanFilters.length-1; k++){
+		if (booleanFilters[k] == true){
+			selectedFilters.push(childrenFilters[k]);
+		} 
+	}
+	return selectedFilters;
+}
 
 function dateSelectedFunc(date){
 	currentDate = date;

@@ -1,3 +1,10 @@
+.week-buttons-row{
+  position: relative;
+  left:-30px;
+  width: 1200px;
+  padding-top: 40px;
+}
+
 .first-day {
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -67,7 +74,7 @@
   background: -o-linear-gradient(top, #CCCCCC, #BBBBBB);*/
 }
 .spacer {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 .modal, .modal.fade.in {
   top: 10%; /* was 10% */
@@ -132,10 +139,41 @@
   margin-left:2px;
 }
 .minical{
-  width: 198.6px;
   margin: 0px 0px 0px 0px;
 }
 
 .minicalspan{
   margin-left: 0px;
+  width:255px;
+}
+
+@-ms-viewport {
+  width: device-width;
+}
+
+@media (max-width: 1455px){
+  .minicalspan{
+    display: none;
+    visibility: hidden;
+  }
+}
+@media (min-width: 1720px){
+  .minicalspan{
+    position:relative;
+    top:-552px;
+    left:-295px;
+    margin-right: 10px;
+  }
+}
+@media(min-width: 1456px) and (max-width: 1719px){
+  .body-container{
+    position: absolute;
+    left:300px;
+  }
+  .minicalspan{
+    position:relative;
+    top:-552px;
+    left:-300px;
+    margin-right: 15px;
+  }
 }
