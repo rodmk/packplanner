@@ -81,7 +81,7 @@ $(document).ready(function() {
         sorter: function(items) {
 
             updateContacts( items );
-            return items.sort()
+            return items.sort();
         }
 
     } );
