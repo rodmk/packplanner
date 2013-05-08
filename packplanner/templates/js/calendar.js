@@ -24,6 +24,8 @@ function compareEvents(event1, event2) {
 }
 
 var events = new Array();
+var allEvents = new Array();
+var currentDate = new Date();
 
 /*
 Filters
@@ -35,7 +37,13 @@ var helpFilters = ["All"];
 
 $(document).ready(function() {
 
-	var currentDate = new Date();
+	
+	//console.log(currentDate);
+	
+
+	allEvents = buildDict();
+	//console.log("all events"+allEvents);
+
 	dateSelectedFunc(currentDate);
 
 	events = new Array();
@@ -65,9 +73,72 @@ $(document).ready(function() {
 		endDate,
 		"{{event_details.driver_to}}", 
 		"{{event_details.driver_from}}",
-		"Andy");
+		"{{event_details.attendees}}");
 
 	{% endfor %}
+
+
+	function displayEvents() {
+		// events.sort(compareEvents);
+		var currentDateHash = currentDate.getDate().toString()+ currentDate.getFullYear().toString()+(currentDate.getMonth()+1).toString();
+		//console.log("currentDateHash"+currentDateHash);
+		if(!allEvents.hasOwnProperty(currentDateHash)){
+			allEvents[currentDateHash] = [];
+			console.log("no events existed today, adding empty array");
+		}
+		var currentDateEvents = allEvents[currentDateHash];
+		//console.log("currentDateEvents"+currentDateEvents);
+		currentDateEvents.sort(compareEvents);
+		var content = $(".selected-day");
+		$(".tile").detach();
+		$(".dayEvents").remove();
+		for (i=0; i<currentDateEvents.length; i++) {
+			var event = currentDateEvents[i];
+			content.append(renderEvent(event));
+		}
+	}
+
+	function buildDict(){
+		var eventDict = new Array();
+		var tempHash = ""
+		{% for event_details in events_details %}
+
+		var startDate = new Date();
+		startDate.setFullYear({{event_details.event.startTime.year}});
+		startDate.setMonth({{event_details.event.startTime.month}});
+		startDate.setDate({{event_details.event.startTime.day}});
+		startDate.setHours({{event_details.event.startTime.hour}});
+		startDate.setMinutes({{event_details.event.startTime.minute}});
+		startDate.setHours(startDate.getHours()-5);
+
+		var endDate = new Date();
+		endDate.setFullYear({{event_details.event.endTime.year}});
+		endDate.setMonth({{event_details.event.endTime.month}});
+		endDate.setDate({{event_details.event.endTime.day}});
+		endDate.setHours({{event_details.event.endTime.hour}});
+		endDate.setMinutes({{event_details.event.endTime.minute}});
+		endDate.setHours(endDate.getHours()-5);
+		tempHash = "{{event_details.event.startTime.day}}"+"{{event_details.event.startTime.year}}"+"{{event_details.event.startTime.month}}";
+		//console.log("tempHash"+tempHash);
+		var e = new Event({{event_details.event.id}}, 
+			"{{event_details.event.name}}", 
+			"{{event_details.event.location}}", 
+			startDate, 
+			endDate,
+			"{{event_details.driver_to}}", 
+			"{{event_details.driver_from}}",
+			"{{event_details.attendees}}");
+		if(!(tempHash in eventDict)){
+			//console.log("added new key to dict");
+			eventDict[tempHash] = [e];
+		}
+		else{
+			//console.log("added to existing key");
+			eventDict[tempHash].push(e);
+		}
+		{% endfor %}
+		return eventDict;
+	}
 
 	// events[0] = new Event(0, 
 	// 	"Soccer Game vs Mockingbird", 
@@ -87,15 +158,34 @@ $(document).ready(function() {
 	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 14, 30, 0, 0), 
 	// 	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 18, 0, 0, 0), 
 	// 	"Nick", "Nick", "Nick");
+
+	
 	
 	displayEvents();
 
 	for(i=0;i<=helpFilters.length-1;i++){
-			$('#filterBtnGroup').append('<button id="allChildren" data-toggle="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
+			$('#filterBtnGroup').append('<button id="allChildren" type="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
 	}
 
 	for(j=0;j<=childrenFilters.length-1;j++){
-			$('#filterBtnGroup').append('<button id="partialChildren" data-toggle="button" class=' + '"btn pull-left btn-custom' + j + 'd" >' + childrenFilters[j] + '</button>');
+			var btnTypeNumber = j%4;
+			var btnType = "";
+			switch (btnTypeNumber)
+			{
+				case 0:
+					btnType = "default";
+				break;
+				case 1:
+					btnType = "primary";
+				break;
+				case 2:
+					btnType = "info";
+				break;
+				case 3:
+					btnType = "danger";
+				break;
+			}
+			$('#filterBtnGroup').append('<button id="partialChildren" type="button" class=' + '"btn pull-left flat btn-'+btnType+'">' + childrenFilters[j] + '</button>');
 			booleanFilters[j] = 0;
 	}
 
@@ -213,8 +303,42 @@ $(document).ready(function() {
 
 	$("#drivingTo").typeahead({source:availDrivers,items:4});
 	$("#drivingFrom").typeahead({source:availDrivers,items:4});
+
+	function removeEvent(event_id) {
+		for (var i = 0; i <= events.length-1; i++) {
+			if (events[i].id == event_id) {
+				events.splice(i, 1);
+				break;
+			}
+		}
+		displayEvents();
+	}
+
+
+	function addEvent(event) {
+		events[events.length] = event;
+		displayEvents();
+	}
+
 });
 
+function dateSelectedFunc(date){
+	currentDate = date;
+	focusEventCalendar(currentDate);
+	events = getEvents(currentDate);
+	displayEventsPostLoad();
+	//console.log(currentDate);
+}
+
+function eventDaySelected(day) {
+	var currentDay = currentDate.getDay();
+	var diff = currentDay - day;
+	if (diff != 0) {
+		currentDate.setDate(currentDate.getDate() - diff);
+		$("#datepicker").datepicker('setDate', currentDate);
+		dateSelectedFunc(currentDate);
+	}
+}
 
 /*
 Returns list of selected names
@@ -227,14 +351,6 @@ function getSelectedFilters(){
 		} 
 	}
 	return selectedFilters;
-}
-
-function dateSelectedFunc(date){
-	currentDate = date;
-	focusEventCalendar(currentDate);
-	events = getEvents(currentDate);
-	displayEvents();
-	console.log(currentDate);
 }
 
 function focusEventCalendar(currentDate) {
@@ -253,15 +369,7 @@ function focusEventCalendar(currentDate) {
 	}
 }
 
-function eventDaySelected(day) {
-	var currentDay = currentDate.getDay();
-	var diff = currentDay - day;
-	if (diff != 0) {
-		currentDate.setDate(currentDate.getDate() - diff);
-		$("#datepicker").datepicker('setDate', currentDate);
-		dateSelectedFunc(currentDate);
-	}
-}
+
 
 function prevDayFunc(date){
 	console.log("prevDay pressed");
@@ -300,27 +408,14 @@ function makeList(list){
 	return start+body+end;
 }
 
-function addEvent(event) {
-	events[events.length] = event;
-	displayEvents();
-}
 
-function displayEvents() {
-	events.sort(compareEvents);
-	var content = $(".selected-day");
-	$(".tile").detach();
-	$(".dayEvents").remove();
-	for (i=0; i<events.length; i++) {
-		var event = events[i];
-		content.append(renderEvent(event));
-	}
-}
 
 function formatMinutes(n){
     return n > 9 ? "" + n: "0" + n;
 }
 
 function renderEvent(event) {
+	//console.log(event);
 	tile = $("<div>", {
 		class: "tile row",
 	})
@@ -366,12 +461,23 @@ function editEventOpen(event_id) {
 	$("#editDrivingFrom").val(events[event_id].driverFrom);
 }
 
-function removeEvent(event_id) {
-	for (var i = 0; i <= events.length-1; i++) {
-		if (events[i].id == event_id) {
-			events.splice(i, 1);
-			break;
-		}
+function displayEventsPostLoad() {
+	// events.sort(compareEvents);
+	//console.log("current date "+currentDate.getMonth());
+	var currentDateHash = currentDate.getDate().toString()+ currentDate.getFullYear().toString()+(currentDate.getMonth()+1).toString();
+	//console.log("currentDateHash err"+currentDateHash);
+	if(!allEvents.hasOwnProperty(currentDateHash)){
+		allEvents[currentDateHash] = [];
+		//console.log("no events existed today, adding empty array");
 	}
-	displayEvents();
+	var currentDateEvents = allEvents[currentDateHash];
+	//console.log("currentDateEvents"+currentDateEvents);
+	currentDateEvents.sort(compareEvents);
+	var content = $(".selected-day");
+	$(".tile").detach();
+	$(".dayEvents").remove();
+	for (i=0; i<currentDateEvents.length; i++) {
+		var event = currentDateEvents[i];
+		content.append(renderEvent(event));
+	}
 }
