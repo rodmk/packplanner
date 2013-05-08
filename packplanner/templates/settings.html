@@ -83,18 +83,14 @@ class="active"
 
 {% block content %} 
 	<div class="container">
-		<div class="row-fluid">
-			<h4>Personal Information</h4>
-			<!-- TODO(rodmk): right-align with button inline with header -->
-			<button class="btn" id="edit_pinfo_btn">Edit</button> 
-		<div>
+		<h4>Personal Information</h4>
+		<!-- TODO(rodmk): right-align with button inline with header -->
+		<button class="btn editbtn" id="edit_pinfo_btn"><i class="icon-pencil"></i> Edit</button> 
 		<form method="post" action=""> {% csrf_token %} 
 			{% for field in pform %}
-			<div class="row-fluid">
-				<div class="input-prepend">
-					<span class="add-on" style="width: 100px;">{{ field.label_tag }}</span>
-					{{ field }}
-				</div>
+			<div class="input-prepend">
+				<span class="add-on" style="width: 120px;">{{ field.label_tag }}</span>
+				{{ field }}
 			</div>
 			{% endfor %}
 			<input type="hidden" name="form-type" value="personal-form"/>
@@ -102,17 +98,13 @@ class="active"
 			<button class="btn" id="cancel_pinfo_btn">Cancel</button>
 		</form>
 
-		<div class="row-fluid">
-			<h4>Family Information</h4>
-			<button class="btn" id="edit_finfo_btn">Edit</button>
-		<div>
+		<h4>Family Information</h4>
+		<button class="btn editbtn" id="edit_finfo_btn"><i class="icon-pencil"></i> Edit</button>
 		<form method="post" action=""> {% csrf_token %} 
 			{% for field in fform %}
-			<div class="row-fluid">
-				<div class="input-prepend">
-					<span class="add-on" style="width: 100px;">{{ field.label_tag }}</span>
-					{{ field }}
-				</div>
+			<div class="input-prepend">
+				<span class="add-on" style="width: 120px;">{{ field.label_tag }}</span>
+				{{ field }}
 			</div>
 			{% endfor %}
 			<input type="hidden" name="form-type" value="family-form"/>
