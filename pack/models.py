@@ -19,6 +19,9 @@ class Child(models.Model):
 	first_name = models.CharField(max_length=40)
 	is_driver = models.BooleanField()
 
+	def __unicode__(self):
+		return u'%s %s' % (self.first_name, self.family.last_name)
+
 class FamilyMember(models.Model):
 	user = models.OneToOneField(User, related_name="user_account", null=True)
 	first_name = models.CharField(max_length=40)

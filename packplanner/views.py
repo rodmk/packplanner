@@ -18,8 +18,10 @@ def calendar(request):
 
 @login_required
 def contacts(request):
-	# family_member = get_family_member(request.user)
-	return render(request, 'contacts.html', {})
+	family_member = get_family_member(request.user)
+	contacts = family_member.family.contacts.all()
+	print contacts
+	return render(request, 'contacts.html', {"contacts" : contacts})
 
 @login_required
 def inbox(request):
@@ -40,7 +42,6 @@ def settings(request):
 
 @login_required
 def view_contact(request, id):
-	family_member = get_family_member(request.user)
 	return render(request, 'view-contact.html', {})
 
 @login_required
