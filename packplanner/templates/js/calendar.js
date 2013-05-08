@@ -1,4 +1,4 @@
-function Event(id, title, location, startDate, endDate, driverTo, driverFrom, going) {
+function Event(id, title, location, startDate, endDate, driverTo, driverFrom, childrengoingID, adultsgoingID) {
 	this.id = id;
 	this.title = title;
 	this.location = location;
@@ -6,7 +6,8 @@ function Event(id, title, location, startDate, endDate, driverTo, driverFrom, go
 	this.endDate = endDate;
 	this.driverTo = driverTo;
 	this.driverFrom = driverFrom;
-	this.going = going;
+	this.childrengoingID = childrengoingID;
+	this.adultsgoingID = adultsgoingID;
 
 }
 
@@ -63,7 +64,7 @@ var helpFilters = ["All"];
 
 
 $(document).ready(function() {
-
+	$("#pop").popover();
 	
 	//console.log(currentDate);
 	
@@ -213,7 +214,8 @@ $(document).ready(function() {
 			booleanFilters[j] = 0;
 		}
 
-
+		
+		 
 		$("#datepicker").datepicker({
 			onSelect: function(dateText, inst) { 
 	      var dateAsString = dateText; //the first parameter of this function
@@ -285,16 +287,29 @@ $(document).ready(function() {
 			}
 			endDate.setHours(endTime.getHours())
 			endDate.setMinutes(endTime.getHours())
-			var going = $("#familyAttending").val();
-			var goingID = -1;
+			var going = $("#familyAttendingInput").val();
+			console.log(going);
+			var adultsgoingID = [];
+			var childrengoingID = [];
 			{% for family_member in family.family_members.all %}
-			if('{{family_member.first_name}}'==going){
-				goingID = {{family_member.id}}
+			{% for i in going %}
+			if('{{family_member.first_name}}'==going[{{forloop.counter0}}]){
+				adultsgoingID.push({{family_member.id}})
 			}
+			{% endfor %}
+			{% endfor %}
+			{% for child in family.children.all %}
+			{% for i in going %}
+			if('{{child.first_name}}'==going[{{forloop.counter0}}]){
+				childrengoingID.push({{child.id}})
+			}
+			{% endfor %}
 			{% endfor %}
 
 			var eventLocation = $("#locationInput").val();
-			var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, goingID);
+			console.log("c"+childrengoingID);
+			console.log("a"+adultsgoingID);
+			var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, childrengoingID, adultsgoingID);
 			$.ajax("/calendar/", {
 				type: "POST",
 				data: {event: e, csrfmiddlewaretoken: '{{ csrf_token }}' },
@@ -373,9 +388,13 @@ $('#editEndTime').datetimepicker({
 $('#editEventDate').datetimepicker({
 	pickTime: false
 });
-{% for family_member in family.family_members.all%}
+{% for family_member in family.family_members.all %}
 $("#familyAttendingInput").append("<option id='{{family_member.id}}'>{{family_member.first_name}}</option>");
 $("#editFamilyAttendingInput").append("<option id='{{family_member.id}}'>{{family_member.first_name}}</option>");
+{% endfor %}
+{% for child in family.children.all %}
+$("#familyAttendingInput").append("<option id='{{child.id}}'>{{child.first_name}}</option>");
+$("#editFamilyAttendingInput").append("<option id='{{child.id}}'>{{child.first_name}}</option>");
 {% endfor %}
 $("#drivingToInput").typeahead({
 	source: function(query, process){
@@ -591,11 +610,11 @@ function renderEvent(event) {
 		text: event.title,
 	})
 
-	editbtn = $('<a class="btn pull-right flat btn-primary edit-event" data-toggle="modal" href="#editEventModal" onClick="editEventOpen(' + event.id + '); return true;"><i class="icon-pencil"></i></a>')
-	deletebtn = $('<a class="btn pull-right flat btn-primary delete-event" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>')
-	reachoutbtn = $('<a class="btn pull-right flat btn-primary reach-out" data-toggle="modal" href="#reachOutModal"><i class="car-glyph"></i></a>')
-	drivetobtn = $('<a class="btn pull-right flat btn-primary driver-to">To</a>')
-	drivefrombtn = $('<a class="btn pull-right flat btn-primary driver-from">From</a>')
+	editbtn = $('<a class="btn pull-right flat btn-primary edit-event" data-toggle="modal" href="#editEventModal" onClick="editEventOpen(' + event.id + '); return true;"><i class="icon-pencil"></i></a>');
+	deletebtn = $('<a class="btn pull-right flat btn-primary delete-event" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>');
+	reachoutbtn = $('<a class="btn pull-right flat btn-primary reach-out" data-toggle="modal" href="#reachOutModal"><i class="car-glyph"></i></a>');
+	drivetobtn = $('<a href="#" id="pop" class="popover-b btn btn-large" data-toggle="popover" data-content="And here is content" data-original-title="A Title">button</a>');
+	drivefrombtn = $('<a class="btn pull-right flat btn-primary driver-from">From</a>');
 	
 	drivefrombtn.appendTo(date);
 	reachoutbtn.appendTo(date);

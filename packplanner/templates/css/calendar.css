@@ -125,7 +125,17 @@
   margin-top:6px;
   margin-right:2px;
 }
+
+.drivingToBtnInput{
+  width:30px;
+}
+
+.driving-to-label{
+  text-align: middle;
+}
+
 .driver-to{
+  width: 50px;
   text-align:middle;
   margin-top:9px;
   margin-right:4px;
