@@ -21,22 +21,38 @@ class Family(models.Model):
 	def familyPhone(self):
 		return u'%d' % (self.phone_number)
 
-	# def childrenList(self):
-	# 	display = ""
-	# 	for child in self.children.all:
-	# 		display += child.first_name
-	# 	return unicode(display)
+	def childrenList(self):
+		display = ""
+		first = True
+		for child in self.children.all():
+			if not first:
+				display += ", "
+			else:
+				first = False
+			display += child.first_name
+		return display
 
-	# def displayFamilyNames(self):
-	# 	display = self.last_name + ", "
-	# 	first = True
-	# 	for adult in self.family_members:
-	# 		if not first:
-	# 			display += " and "
-	# 		else:
-	# 			first = False
-	# 		display += adult.first_name
-	# 	return display
+	def parentList(self):
+		display = ""
+		first = True
+		for parent in self.family_members.all():
+			if not first:
+				display += ", "
+			else:
+				first = False
+			display += parent.first_name
+		return display
+
+	def displayFamilyNames(self):
+		display = self.last_name + ", "
+		first = True
+		for adult in self.family_members.all():
+			if not first:
+				display += " and "
+			else:
+				first = False
+			display += adult.first_name
+		return display
 
 class Child(models.Model):
 	family = models.ForeignKey(Family, related_name="children")
