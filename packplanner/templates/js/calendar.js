@@ -50,6 +50,21 @@ $(document).ready(function() {
 
 	{% for event_details in events_details %}
 
+	// var startHour = {{event_details.event.startTime.hour}}
+	// var startDay = {{event_details.event.startTime.day}}
+	// var startMonth = {{event_details.event.startTime.month}}
+	// var startYear = {{event_details.event.startTime.year}}
+	// if(startHour-5<0){
+	// 	startDay = startDay-1;
+	// 	if(startDay<1){
+	// 		startMonth = startMonth-1;
+	// 		if(startMonth<1){
+	// 			startYear = startYear -1;
+	// 			startMonth=11
+	// 		}
+	// 	}
+	// }
+
 	var startDate = new Date();
 	startDate.setFullYear({{event_details.event.startTime.year}});
 	startDate.setMonth({{event_details.event.startTime.month}});

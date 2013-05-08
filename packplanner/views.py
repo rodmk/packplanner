@@ -40,7 +40,7 @@ def calendar(request):
 		id = 0
 		return HttpResponse(simplejson.dumps(id))
 	events_details = FamilyEventDetails.objects.filter(family=family_member.family)
-	return render(request, 'index.html', {"events_details" : events_details, "family" : family})
+	return render(request, 'index.html', {"events_details" : events_details, "family" : family_member.family})
 
 @login_required
 def contacts(request):
