@@ -20,12 +20,13 @@ def calendar(request):
 def contacts(request):
 	family_member = get_family_member(request.user)
 	contacts = family_member.family.contacts.all()
-	print contacts
 	return render(request, 'contacts.html', {"contacts" : contacts})
 
 @login_required
 def inbox(request):
-	return render(request, 'inbox.html', {})
+	family_member = get_family_member(request.user)
+	messages = family_member.family.received_messages.filter(in_inbox=True)
+	return render(request, 'inbox.html', {"messages" : messages})
 
 @login_required
 def schedules(request):
@@ -46,6 +47,7 @@ def view_contact(request, id):
 
 @login_required
 def view_message(request, id):
+	message = Message.objects.get(id=id)
 	family_member = get_family_member(request.user)
 	return render(request, 'view-message.html', {})
 
