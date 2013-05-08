@@ -63,10 +63,5 @@ def view_schedule(request, id):
     return render(request, 'view-schedule.html', {"schedule" : schedule})
 
 def get_family_member(user):
-<<<<<<< HEAD
-	family_member = user.user_account
-	return family_member
-=======
     family_member = user.user_account
     return family_member
->>>>>>> 017581b4922a652d9046900e87fcfb4591148e1a
