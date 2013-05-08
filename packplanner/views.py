@@ -15,8 +15,8 @@ def calendar(request):
 	if request.method == 'POST':
 		name = request.POST['event[title]']
 		location = request.POST['event[location]']
-		start_time = request.POST['event[startDate']
-		end_time = request.POST['event[endDate']
+		start_time = request.POST['event[startDate]']
+		end_time = request.POST['event[endDate]']
 		driver_from_id = request.POST['event[driverFrom]']
 		driver_to_id = request.POST['event[driverTo]']
 		creator = request.user
@@ -40,7 +40,7 @@ def calendar(request):
 		id = 0
 		return HttpResponse(simplejson.dumps(id))
 	events_details = FamilyEventDetails.objects.filter(family=family_member.family)
-	return render(request, 'index.html', {"events_details" : events_details, "family" : family})
+	return render(request, 'index.html', {"events_details" : events_details, "family" : family_member.family})
 
 @login_required
 def contacts(request):
