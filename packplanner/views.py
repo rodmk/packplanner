@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect, Http404
 from pack.models import *
 
 @login_required
 def index(request):
-	return render(request, 'index.html', {})
+	return HttpResponseRedirect('/calendar/')
 
 @login_required
 def calendar(request):
