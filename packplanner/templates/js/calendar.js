@@ -163,7 +163,11 @@ $(document).ready(function() {
     	var driverTo = $("#driverTo").val();
     	var driverFrom = $("#driverFrom").val();
     	var eventLocation = $("#locationInput").val();
-    	var e = new Event(id,title,eventLocation,startTime,endTime,driverTo,driverFrom,"Andy");
+    	var e = new Event(id, title, eventLocation, startTime, endTime, driverTo, driverFrom, "Andy");
+		$.ajax("/calendar/", {
+			type: "POST",
+			data: {event: e, csrfmiddlewaretoken: '{{ csrf_token }}' },
+		});
     	addEvent(e);
     	$('#newEventModal').modal('hide');
     	$(':input','#newEventForm')
