@@ -29,15 +29,15 @@ def calendar(request):
 		# FamilyEventDetails events_details = new FamilyEventDetails(event=event, family=family_member.family, notes="")
 		# events_details.save()
 		# if driver_to:
-		# 	events_details.driverTo = driver_to
-		# 	events_details.save()
+		#   events_details.driverTo = driver_to
+		#   events_details.save()
 		# if driver_from:
-		# 	events_details.driverFrom = driver_from
-		# 	events_details.save()
+		#   events_details.driverFrom = driver_from
+		#   events_details.save()
 		# for child in children_going:
-		# 	events_details.child_attendees.add(child)
+		#   events_details.child_attendees.add(child)
 		# for adult in adults_going:
-		# 	events_details.attendees.add(adult)
+		#   events_details.attendees.add(adult)
 		id = 0
 		# id = events_details.id
 		return HttpResponse(simplejson.dumps(id))
@@ -75,10 +75,24 @@ def schedules(request):
 @login_required
 def settings(request):
 	family_member = get_family_member(request.user)
-	form = FamilyMemberForm(request.POST or None, instance=family_member)
-	if form.is_valid():
-		form.save()
-	return render(request, 'settings.html', {"user": get_family_member(request.user), "form": form})
+	if request.method == 'POST':
+		if request.POST['form-type'] == u"personal-form":
+		   form = FamilyMemberForm(request.POST, instance=family_member)
+		elif request.POST['form-type'] == u"family-form":
+		   form = FamilyForm(request.POST, instance=family_member.family)
+
+		if form.is_valid():
+			form.save()
+
+	return render(
+		request, 
+		'settings.html', 
+		{
+			"user": get_family_member(request.user),
+			"pform": FamilyMemberForm(instance=family_member), 
+			"fform": FamilyForm(instance=family_member.family)
+		}
+	)
 
 @login_required
 def view_contact(request, id):

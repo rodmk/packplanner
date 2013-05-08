@@ -54,6 +54,11 @@ class Family(models.Model):
 			display += adult.first_name
 		return display
 
+class FamilyForm(ModelForm):
+	class Meta:
+		model = Family
+		exclude = ("contacts",)
+
 class Child(models.Model):
 	family = models.ForeignKey(Family, related_name="children")
 	first_name = models.CharField(max_length=40)
@@ -123,11 +128,6 @@ class FamilyEventDetails(models.Model):
 
 	def __unicode__(self):
 		return u'Details for %s Event for the %s' % (self.event, self.family)
-
-# class FamilyMemberForm(ModelForm):
-# 	class Meta:
-# 		model = FamilyMember
-# 		exclude = ("user", "timestamp", "family")
 
 class Message(models.Model):
 	sender = models.ForeignKey(Family, related_name="sent_messages")
