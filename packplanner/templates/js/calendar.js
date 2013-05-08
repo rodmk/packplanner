@@ -287,25 +287,21 @@ $(document).ready(function() {
 			}
 			endDate.setHours(endTime.getHours())
 			endDate.setMinutes(endTime.getHours())
-			
-			var going = $("#familyAttendingInput").val();
-			console.log(going);
+
+			var going = $("#familyAttendingInput option:selected");
 			var adultsgoingID = [];
 			var childrengoingID = [];
-			{% for family_member in family.family_members.all %}
-			{% for i in going %}
-			if ('{{family_member.first_name }}' == {{i}} ) {
-				adultsgoingID.push({{family_member.id}});
+			var keys = [];
+			for( var i = 0; i < going.length; i++){
+				key = going[i].id;
+				if(key.slice(0,1)=='a'){
+					adultsgoingID.push(key.slice(1));
+				}
+				else if(key.slice(0,1)=='c'){
+					childrengoingID.push(key.slice(1));
+				}
 			}
-			{% endfor %}
-			{% endfor %}
-			{% for child in family.children.all %}
-			{% for i in going %}
-			if('{{child.first_name}}'==going[{{forloop.counter0}}]){
-				childrengoingID.push({{child.id}});
-			}
-			{% endfor %}
-			{% endfor %}
+
 
 			var eventLocation = $("#locationInput").val();
 			console.log("c "+childrengoingID);
@@ -390,12 +386,12 @@ $('#editEventDate').datetimepicker({
 	pickTime: false
 });
 {% for family_member in family.family_members.all %}
-$("#familyAttendingInput").append("<option id='{{family_member.id}}'>{{family_member.first_name}}</option>");
-$("#editFamilyAttendingInput").append("<option id='{{family_member.id}}'>{{family_member.first_name}}</option>");
+$("#familyAttendingInput").append("<option id='a{{family_member.id}}'>{{family_member.first_name}}</option>");
+$("#editFamilyAttendingInput").append("<option id='a{{family_member.id}}'>{{family_member.first_name}}</option>");
 {% endfor %}
 {% for child in family.children.all %}
-$("#familyAttendingInput").append("<option id='{{child.id}}'>{{child.first_name}}</option>");
-$("#editFamilyAttendingInput").append("<option id='{{child.id}}'>{{child.first_name}}</option>");
+$("#familyAttendingInput").append("<option id='c{{child.id}}'>{{child.first_name}}</option>");
+$("#editFamilyAttendingInput").append("<option id='c{{child.id}}'>{{child.first_name}}</option>");
 {% endfor %}
 $("#drivingToInput").typeahead({
 	source: function(query, process){

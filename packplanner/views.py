@@ -133,14 +133,17 @@ def edit_event(request, id):
 	if request.method == 'POST':
 		print request.POST
 		event = Event.objects.get(id=id)
-		
-		name = request.POST['event[title]']
-		location = request.POST['event[location]']
-		start_time = request.POST['event[startDate]']
-		# start_time = datetime.datetime.fromtimestamp(start_time)
-		print start_time
-		end_time = request.POST['event[endDate]']
-		print end_time
+
+		if event.creator == request.user:
+			name = request.POST['event[title]']
+			location = request.POST['event[location]']
+			start_time = request.POST['event[startDate]']
+			# start_time = datetime.datetime.fromtimestamp(start_time)
+			print start_time
+			end_time = request.POST['event[endDate]']
+			print end_time
+
+		if event in family_member.family.family_events_details:
 		driver_from_id = request.POST['event[driverFrom]']
 		driver_to_id = request.POST['event[driverTo]']
 		creator = request.user
