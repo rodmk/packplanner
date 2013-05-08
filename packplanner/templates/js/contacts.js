@@ -5,7 +5,7 @@
 	var DEFAULT_PHOTO = '../static/img/placeholder_user.png';
 
 
-    function Contact( ID, photo, displayName, familyName, parents, children, address, phoneNumber){
+    function Contact(ID, photo, displayName, familyName, parents, children, address, phoneNumber, dbID){
         this.displayName = displayName;
         this.familyName = familyName;
         this.address = address;
@@ -14,6 +14,7 @@
         this.ID = ID;
         this.parents = parents;
         this.children = children;
+        this.dbID = dbID;
     }
 
 	$(document).ready(function() {
@@ -38,8 +39,11 @@
                         "{{contact.parentList}}",
                         "{{contact.childrenList}}",
                         "{{contact.familyAddress}}", 
-                        "{{contact.familyPhone}}" 
+                        "{{contact.familyPhone}}",
+                        {{contact.id}}
                         );
+
+        console.log(ALL_MY_CONTACTS[ {{forloop.counter0}} ]);
         ALL_DISPLAY_NAMES[{{forloop.counter0}}] = "{{contact.displayFamilyNames}}"; 
 
         window.ALL_DATABASE_NAMES = ALL_DISPLAY_NAMES;
@@ -68,7 +72,7 @@
 
 		contactList.sort();
 
-		var divObject = document.getElementById("contactHeaders");
+		var divObject = $("#contactHeaders");
 		var newContent = '';
 
 		var newLetter;
@@ -79,16 +83,23 @@
 			for(k=0;k<=contactList.length-1;k++){
 
 				if (newLetter && (contactList[k][0] == ALPHABET_UPPER[i]) ){
-					newContent = newContent + '<li id="letterHead" class="nav-header" >' + ALPHABET_UPPER[i] + '</li>';
-					newLetter = false;
+                    var tile = $("<li>", {
+                        class: "nav-header",
+                        id: "letterHead",
+                        text: ALPHABET_UPPER[i]
+                    });
+                    divObject.append(tile);
+                    newLetter = false;
 				}
 
 				if (contactList[k][0] == ALPHABET_UPPER[i]){
 
                     for(c=0;c<=ALL_MY_CONTACTS.length-1;c++){
+                        
                         var famName = contactList[k].split(',')[0];
                         if (ALL_MY_CONTACTS[c].familyName == famName){
-                            newContent = newContent + '<li onclick="return changeRightPanel(' + ALL_MY_CONTACTS[c].ID + ')"><a href="#">' + ALL_MY_CONTACTS[c].displayName + '</a></li>';
+                            newContent = newContent + '<li onclick="return changeRightPanel(' + 
+                                ALL_MY_CONTACTS[c].ID + ')"><a href="#">' + ALL_MY_CONTACTS[c].displayName + '</a></li>';
                             break;
                         }
                     }

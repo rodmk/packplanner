@@ -20,7 +20,8 @@ def calendar(request):
 		driver_from_id = request.POST['event[driverFrom]']
 		driver_to_id = request.POST['event[driverTo]']
 		creator = request.user
-		going = request.POST['event[going]']
+		# children_going = request.POST['event[going]']
+		# adults_going = request.POST['event[going]']
 		# schedule_id = request.POST['schedule_id']
 		# Schedule schedule = Schedule.objects.get(id=schedule_id)
 		# Event event = new Event(name, "", location, datetime.now(), creator, start_time, end_time, schedule)
@@ -38,6 +39,7 @@ def calendar(request):
 		# for adult in adults_going:
 		# 	events_details.attendees.add(adult)
 		id = 0
+		# id = events_details.id
 		return HttpResponse(simplejson.dumps(id))
 	events_details = FamilyEventDetails.objects.filter(family=family_member.family)
 	return render(request, 'index.html', {"events_details" : events_details, "family" : family_member.family})
@@ -45,8 +47,18 @@ def calendar(request):
 @login_required
 def contacts(request):
 	family_member = get_family_member(request.user)
+	# if request.method == 'POST':
+	# 	family = family_member.family
+	# 	requested_contact_ids = request.POST['requested_contact_ids']
+	# 	requested_contact_ids = requested_contact_ids.split(" ");
+	# 	for requested_contact_id in requested_contact_ids:
+	# 		id = (int) requested_contact_id
+	# 		requested_contact = Family.objects.get(id=id)
+	# 		ContactRequest contact_request = new ContactRequest(family, requested_contact)
+	# 		contact_request.save()
 	contacts = family_member.family.contacts.all()
-	return render(request, 'contacts.html', {"contacts" : contacts})
+	contact_requests = family_member.family.contact_requests.all()
+	return render(request, 'contacts.html', {"contacts" : contacts, "contact_requests" : contact_requests})
 
 @login_required
 def inbox(request):
@@ -57,10 +69,7 @@ def inbox(request):
 @login_required
 def schedules(request):
 	family_member = get_family_member(request.user)
-	if family_member == None:
-		schedules_details = []
-	else:
-		schedules_details = FamilyScheduleDetails.objects.filter(family=family_member.family)
+	schedules_details = FamilyScheduleDetails.objects.filter(family=family_member.family)
 	return render(request, 'schedules.html', {"schedules_details" : schedules_details})
 
 @login_required
@@ -84,7 +93,6 @@ def view_message(request, id):
 @login_required
 def view_schedule(request, id):
 	family_member = get_family_member(request.user)
-
 	schedule = Schedule.objects.get(id=id)
 	return render(request, 'view-schedule.html', {"schedule" : schedule})
 

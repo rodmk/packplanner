@@ -16,14 +16,32 @@
 
         } );
 
+        $('#requestContactButton').click(function() {
+            //var requested_contact_ids = $('#contactFriendHeaders').getSelected();
+            var requested_contact_ids = "";
+            var checkboxes = $(".selectContact");
+            for (checkbox in checkboxes) {
+                if (checkbox.hasOwnProperty("checked")) {
+                    requested_contact_ids += checkbox.attr("id") + " ";
+                }
+            }
+            if (requested_contact_ids.length > 0) {
+                requested_contact_ids = requested_contact_ids.substring(0, requested_contact_ids.length-1);
+            }
+            alert(requested_contact_ids);
+            // $.ajax("/contacts/", {
+            //     type: "POST",
+            //     data: {requested_contact_ids : requested_contact_ids , csrfmiddlewaretoken: '{{ csrf_token }}' },
+            // });
+        });
+
     });
 
     function updateFriends(contactList){
 
         contactList.sort();
 
-        var divObject = document.getElementById("contactFriendHeaders");
-        var newContent = '';
+        var divObject = $("#contactFriendHeaders");
 
         var newLetter;
 
@@ -33,16 +51,42 @@
             for(k=0;k<=contactList.length-1;k++){
 
                 if (newLetter && (contactList[k][0] == ALPHABET_UPPER[i]) ){
-                    newContent = newContent + '<li id="letterHead" class="nav-header" >' + ALPHABET_UPPER[i] + '</li>';
+                    var tile = $("<li>", {
+                        class: "nav-header",
+                        id: "letterHead",
+                        text: ALPHABET_UPPER[i]
+                    });
+                    divObject.append(tile);
                     newLetter = false;
                 }
 
                 if (contactList[k][0] == ALPHABET_UPPER[i]){
-                    newContent = newContent + '<li><a href="#"><img src="../static/img/placeholder_user.png" alt="" style="margin-right: 10px; height:50px;" />' + contactList[k] + '</a></li>';
+                    var tile = $("<li>", {
+                        class: "name"
+                    });
+                    var lab = $("<label>", {
+                        class : "checkbox"
+                    });
+                    var inp = $("<input>", {
+                        name: "checkboxes",
+                        type: "checkbox",
+                        id: "" + contactList[k].dbID,
+                        value: contactList[k],
+                        style: "text-align: middle;"
+                    });
+                    var anchor = $("<a>", {
+                        text: contactList[k]
+                    });
+                    // anchor.prepend($("<img>", {
+                    //     src : "../static/img/placeholder_user.png",
+                    //     alt : "",
+                    //     style : "margin-right: 10px; height:50px; text-align: middle;"
+                    // }));
+                    lab.append(inp);
+                    lab.append(anchor);
+                    tile.append(lab);
+                    divObject.append(tile);
                 }
             }
         }
-
-        divObject.innerHTML = newContent;
-
     }
