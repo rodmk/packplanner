@@ -18,7 +18,7 @@ def calendar(request):
 
 @login_required
 def contacts(request):
-	family_member = get_family_member(request.user)
+	# family_member = get_family_member(request.user)
 	return render(request, 'contacts.html', {})
 
 @login_required
@@ -56,8 +56,5 @@ def view_schedule(request, id):
 	return render(request, 'view-schedule.html', {"schedule" : schedule})
 
 def get_family_member(user):
-	family_member_manager = user.user_account
-	family_member = None
-	if not len(family_member_manager.all()) == 0:
-		family_member = family_member_manager.all()[0]
+	family_member = user.user_account
 	return family_member
