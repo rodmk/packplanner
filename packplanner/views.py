@@ -8,15 +8,16 @@ def index(request):
 
 @login_required
 def calendar(request):
-	family_member = request.user.user_account
-	if len(family_member.all()) == 0:
+	family_member = get_family_member(request.user)
+	if family_member == None:
 		events_details = []
 	else:
-		events_details = FamilyEventDetails.objects.filter(family=family_member.all()[0].family)
+		events_details = FamilyEventDetails.objects.filter(family=family_member.family)
 	return render(request, 'index.html', {"events_details" : events_details})
 
 @login_required
 def contacts(request):
+	family_member = get_family_member(request.user)
 	return render(request, 'contacts.html', {})
 
 @login_required
@@ -25,8 +26,12 @@ def inbox(request):
 
 @login_required
 def schedules(request):
-	schedules = Schedule.objects.all()
-	return render(request, 'schedules.html', {"schedules" : schedules})
+	family_member = get_family_member(request.user)
+	if family_member == None:
+		schedules_details = []
+	else:
+		schedules_details = FamilyScheduleDetails.objects.filter(family=family_member.family)
+	return render(request, 'schedules.html', {"schedules_details" : schedules_details})
 
 @login_required
 def settings(request):
@@ -34,12 +39,24 @@ def settings(request):
 
 @login_required
 def view_contact(request, id):
+	family_member = get_family_member(request.user)
 	return render(request, 'view-contact.html', {})
 
 @login_required
 def view_message(request, id):
+	family_member = get_family_member(request.user)
 	return render(request, 'view-message.html', {})
 
 @login_required
 def view_schedule(request, id):
-	return render(request, 'view-schedule.html', {})
+	family_member = get_family_member(request.user)
+
+	schedule = Schedule.objects.get(id=id)
+	return render(request, 'view-schedule.html', {"schedule" : schedule})
+
+def get_family_member(user):
+	family_member_manager = user.user_account
+	family_member = None
+	if not len(family_member_manager.all()) == 0:
+		family_member = family_member_manager.all()[0]
+	return family_member
