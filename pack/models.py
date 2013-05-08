@@ -58,6 +58,10 @@ class FamilyForm(ModelForm):
 	class Meta:
 		model = Family
 		exclude = ("contacts",)
+	def __init__(self, *args, **kwargs):
+		super(FamilyForm, self).__init__(*args, **kwargs)
+		for field in self.fields.values():
+			field.widget.attrs['class'] = "familyFormField"
 
 class Child(models.Model):
 	family = models.ForeignKey(Family, related_name="children")
@@ -70,7 +74,8 @@ class Child(models.Model):
 class FamilyMember(models.Model):
 	user = models.OneToOneField(User, related_name="user_account", null=True)
 	first_name = models.CharField(max_length=40)
-	last_name = models.CharField(max_length=40)
+	last_name = models.CharField(max_length=40) # TODO: all family members have the same family name
+												#       nuke this field sometime
 	date_of_birth = models.DateField()
 	timestamp = models.DateTimeField() # TODO: nuke this field sometime
 	family = models.ForeignKey(Family, related_name="family_members")
@@ -83,7 +88,11 @@ class FamilyMember(models.Model):
 class FamilyMemberForm(ModelForm):
 	class Meta:
 		model = FamilyMember
-		exclude = ("user", "timestamp", "family")
+		exclude = ("user", "last_name", "timestamp", "family", "is_adult", "is_driver")
+	def __init__(self, *args, **kwargs):
+		super(FamilyMemberForm, self).__init__(*args, **kwargs)
+		for field in self.fields.values():
+			field.widget.attrs['class'] = "familyMemberFormField"
 
 class Schedule(models.Model):
 	name = models.CharField(max_length=100)

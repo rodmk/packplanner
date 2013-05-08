@@ -1,4 +1,4 @@
-function Event(id, title, location, startDate, endDate, driverTo, driverFrom, going) {
+function Event(id, title, location, startDate, endDate, driverTo, driverFrom, childrengoingID, adultsgoingID) {
 	this.id = id;
 	this.title = title;
 	this.location = location;
@@ -6,7 +6,8 @@ function Event(id, title, location, startDate, endDate, driverTo, driverFrom, go
 	this.endDate = endDate;
 	this.driverTo = driverTo;
 	this.driverFrom = driverFrom;
-	this.going = going;
+	this.childrengoingID = childrengoingID;
+	this.adultsgoingID = adultsgoingID;
 
 }
 
@@ -63,7 +64,7 @@ var helpFilters = ["All"];
 
 
 $(document).ready(function() {
-
+	$("#pop").popover();
 	
 	//console.log(currentDate);
 	
@@ -75,19 +76,19 @@ $(document).ready(function() {
 
 	var contactlist= [];
 	{% for contact in family.contacts.all %}
-		contacts.push(new Contact('{{contact.last_name}}',{{contact.id}}));
+	contacts.push(new Contact('{{contact.last_name}}',{{contact.id}}));
 		//var tempFamilyMembers = [];
 		{% for family_mem in contact.family_members.all%}
 			//tempFamilyMembers.push({{family_mem}});
 			{% if family_mem.is_driver %}
-				drivingContacts.push(new Driver("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}}));
+			drivingContacts.push(new Driver("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}}));
 			{% endif %}
-		{% endfor %}
-	{% endfor %}
-	console.log(drivingContacts);
-	family = new Family({{family.id}},"{{family.last_name}}","{{family.address_line1}}","{{family.address_line2}}", "{{family.address_city}}","{{family.address_state}}","{{family.address_zip_code}}","{{family.phone_number}}",contactlist);
+			{% endfor %}
+			{% endfor %}
+			console.log(drivingContacts);
+			family = new Family({{family.id}},"{{family.last_name}}","{{family.address_line1}}","{{family.address_line2}}", "{{family.address_city}}","{{family.address_state}}","{{family.address_zip_code}}","{{family.phone_number}}",contactlist);
 
-	{% for event_details in events_details %}
+			{% for event_details in events_details %}
 
 	// var startHour = {{event_details.event.startTime.hour}}
 	// var startDay = {{event_details.event.startTime.day}}
@@ -187,198 +188,282 @@ $(document).ready(function() {
 	displayEvents();
 
 	for(i=0;i<=helpFilters.length-1;i++){
-			$('#filterBtnGroup').append('<button id="allChildren" type="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
+		$('#filterBtnGroup').append('<button id="allChildren" type="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
 	}
 
 	for(j=0;j<=childrenFilters.length-1;j++){
-			var btnTypeNumber = j%4;
-			var btnType = "";
-			switch (btnTypeNumber)
-			{
-				case 0:
-					btnType = "default";
-				break;
-				case 1:
-					btnType = "primary";
-				break;
-				case 2:
-					btnType = "info";
-				break;
-				case 3:
-					btnType = "danger";
-				break;
-			}
+		var btnTypeNumber = j%4;
+		var btnType = "";
+		switch (btnTypeNumber)
+		{
+			case 0:
+			btnType = "default";
+			break;
+			case 1:
+			btnType = "primary";
+			break;
+			case 2:
+			btnType = "info";
+			break;
+			case 3:
+			btnType = "danger";
+			break;
+		}
 			// $('#filterBtnGroup').append('<button id="partialChildren" type="button" class=' + '"btn pull-left flat btn-'+btnType+'">' + childrenFilters[j] + '</button>');
 			$('#filterBtnGroup').append('<button id="partialChildren" type="button" class=' + '"btn pull-left btn-custom'+j+'d">' + childrenFilters[j] + '</button>');
 			booleanFilters[j] = 0;
-	}
+		}
 
-
-	$("#datepicker").datepicker({
-	    onSelect: function(dateText, inst) { 
+		
+		 
+		$("#datepicker").datepicker({
+			onSelect: function(dateText, inst) { 
 	      var dateAsString = dateText; //the first parameter of this function
 	      var dateAsObject = $(this).datepicker( 'getDate' ); //the getDate method
 	      dateSelectedFunc(dateAsObject);
 
-	   }
+	  }
 	});
 
-	/*Previous button*/
-    $("#previousDayButton").click(function() {
-    	var date = new Date($("#datepicker").datepicker('getDate'));
-    	date.setDate(date.getDate()-1);
-    	$("#datepicker").datepicker('setDate', date);
+		/*Previous button*/
+		$("#previousDayButton").click(function() {
+			var date = new Date($("#datepicker").datepicker('getDate'));
+			date.setDate(date.getDate()-1);
+			$("#datepicker").datepicker('setDate', date);
 
-    	prevDayFunc(date);
-    	dateSelectedFunc(date);
+			prevDayFunc(date);
+			dateSelectedFunc(date);
 
-    });
-
-    /*Next Day button*/
-    $("#nextDayButton").click(function() {
-    	var date = new Date($("#datepicker").datepicker('getDate'));
-    	date.setDate(date.getDate()+1);
-    	$("#datepicker").datepicker('setDate', date);
-
-    	nextDayFunc(date);
-	    dateSelectedFunc(date);
-
-    });
-
-    /*Previous Week button*/
-    $("#previousWeekButton").click(function() {
-    	var date = new Date($("#datepicker").datepicker('getDate'));
-    	date.setDate(date.getDate()-7);
-    	$("#datepicker").datepicker('setDate', date);
-
-    	prevWeekFunc(date);
-	    dateSelectedFunc(date);
-
-    });
-
-    /*Next Week button*/
-    $("#nextWeekButton").click(function() {
-    	var date = new Date($("#datepicker").datepicker('getDate'));
-    	date.setDate(date.getDate()+7);
-    	$("#datepicker").datepicker('setDate', date);
-
-    	nextWeekFunc(date);
-	    dateSelectedFunc(date);
-
-    });
-
-    /*creates the new event*/
-    $("#createEventButton").click(function(){
-    	var id = 0;
-    	var title = $("#eventName").val();
-    	var eventDate = $("#eventDate").data('datetimepicker').getDate();
-    	var startTime = $("#startTime").data('datetimepicker').getDate();
-    	var endTime = $("#endTime").data('datetimepicker').getDate();
-    	var startDate = eventDate;
-    	var endDate = eventDate;
-    	startDate.setHours(startTime.getHours());
-    	startDate.setMinutes(startTime.getMinutes());
-    	if(endTime < startTime){
-    		endDate.setDate(eventDate.getDate()+1);
-    	}
-    	endDate.setHours(endTime.getHours())
-    	endDate.setMinutes(endTime.getHours())
-    	var going = $("#familyAttending").val();
- 
-
-    	var eventLocation = $("#locationInput").val();
-    	var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, going);
-		$.ajax("/calendar/", {
-			type: "POST",
-			data: {event: e, csrfmiddlewaretoken: '{{ csrf_token }}' },
-			success: function(response) {
-				addSuccessfulEvent(e, response)
-			}
 		});
-    	
-    	$('#newEventModal').modal('hide');
-    	$(':input','#newEventForm')
-    	  .not(':button, :submit, :reset, :hidden')
-    	  .val('')
-    	  .removeAttr('checked')
-    	  .removeAttr('selected');
 
-     });
+		/*Next Day button*/
+		$("#nextDayButton").click(function() {
+			var date = new Date($("#datepicker").datepicker('getDate'));
+			date.setDate(date.getDate()+1);
+			$("#datepicker").datepicker('setDate', date);
 
-    /*New Event button*/
-    $("#newEventButton").click(function() {
-    	newEventFunc();
-    });
+			nextDayFunc(date);
+			dateSelectedFunc(date);
 
-    $('#startTime').datetimepicker({
-		pickDate: false,
-		pick12HourFormat: true,
-		pickSeconds: false,
-		format : "hh:mm PP",
-	});
-	$('#endTime').datetimepicker({
-		pickDate: false,
-		pick12HourFormat: true,
-		pickSeconds: false,
-		format : "hh:mm PP",
-	});
-	$('#eventDate').datetimepicker({
-		pickTime: false
-	});
+		});
 
-	$('#editStartTime').datetimepicker({
-		pickDate: false,
-		pick12HourFormat: true,
-		pickSeconds: false,
-		format : "hh:mm PP",
-	});
-	$('#editEndTime').datetimepicker({
-		pickDate: false,
-		pick12HourFormat: true,
-		pickSeconds: false,
-		format : "hh:mm PP",
-	});
-	$('#editEventDate').datetimepicker({
-		pickTime: false
-	});
-	{% for family_member in family.family_members.all%}
-	$("#familyAttendingInput").append("<option id='{{family_member.id}}'>{{family_member.first_name}}</option>");
+		/*Previous Week button*/
+		$("#previousWeekButton").click(function() {
+			var date = new Date($("#datepicker").datepicker('getDate'));
+			date.setDate(date.getDate()-7);
+			$("#datepicker").datepicker('setDate', date);
+
+			prevWeekFunc(date);
+			dateSelectedFunc(date);
+
+		});
+
+		/*Next Week button*/
+		$("#nextWeekButton").click(function() {
+			var date = new Date($("#datepicker").datepicker('getDate'));
+			date.setDate(date.getDate()+7);
+			$("#datepicker").datepicker('setDate', date);
+
+			nextWeekFunc(date);
+			dateSelectedFunc(date);
+
+		});
+
+
+
+		/*creates the new event*/
+		$("#createEventButton").click(function(){
+			var id = 0;
+			var title = $("#eventName").val();
+			var eventDate = $("#eventDate").data('datetimepicker').getDate();
+			var startTime = $("#startTime").data('datetimepicker').getDate();
+			var endTime = $("#endTime").data('datetimepicker').getDate();
+			var startDate = eventDate;
+			var endDate = eventDate;
+			startDate.setHours(startTime.getHours());
+			startDate.setMinutes(startTime.getMinutes());
+			if(endTime < startTime){
+				endDate.setDate(eventDate.getDate()+1);
+			}
+			endDate.setHours(endTime.getHours())
+			endDate.setMinutes(endTime.getHours())
+			var going = $("#familyAttendingInput").val();
+			console.log(going);
+			var adultsgoingID = [];
+			var childrengoingID = [];
+			{% for family_member in family.family_members.all %}
+			{% for i in going %}
+			if('{{family_member.first_name}}'==going[{{forloop.counter0}}]){
+				adultsgoingID.push({{family_member.id}})
+			}
+			{% endfor %}
+			{% endfor %}
+			{% for child in family.children.all %}
+			{% for i in going %}
+			if('{{child.first_name}}'==going[{{forloop.counter0}}]){
+				childrengoingID.push({{child.id}})
+			}
+			{% endfor %}
+			{% endfor %}
+
+			var eventLocation = $("#locationInput").val();
+			console.log("c"+childrengoingID);
+			console.log("a"+adultsgoingID);
+			var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, childrengoingID, adultsgoingID);
+			$.ajax("/calendar/", {
+				type: "POST",
+				data: {event: e, csrfmiddlewaretoken: '{{ csrf_token }}' },
+				success: function(response) {
+					addSuccessfulEvent(e, response)
+				}
+			});
+
+			$('#newEventModal').modal('hide');
+			$(':input','#newEventForm')
+			.not(':button, :submit, :reset, :hidden')
+			.val('')
+			.removeAttr('checked')
+			.removeAttr('selected');
+
+		});
+
+
+$("#editEventButtonSave").click(function(){
+	var id = 0;
+	var title = $("#editEventName").val();
+	var eventDate = $("#editEventDate").data('datetimepicker').getDate();
+	var startTime = $("#editStartTime").data('datetimepicker').getDate();
+	var endTime = $("#editEndTime").data('datetimepicker').getDate();
+	var startDate = eventDate;
+	var endDate = eventDate;
+	startDate.setHours(startTime.getHours());
+	startDate.setMinutes(startTime.getMinutes());
+	if(endTime < startTime){
+		endDate.setDate(eventDate.getDate()+1);
+	}
+	endDate.setHours(endTime.getHours())
+	endDate.setMinutes(endTime.getHours())
+	var going = $("#editFamilyAttending").val();
+	var goingID = -1;
+	{% for family_member in family.family_members.all %}
+	if('{{family_member.first_name}}'==going){
+		goingID = {{family_member.id}};
+		console.log(goingID);
+	}
 	{% endfor %}
 
-	$("#drivingToInput").typeahead({
-		source: function(query, process){
-			tempdrivers=[];
-			map={};
-			$.each(drivingContacts,function(i,driver) {
-				map[Driver.first_name+" "+Driver.last_name] = driver;
-				tempdrivers.push(driver.first_name+" "+driver.last_name); 
-			});
 
-			process(tempdrivers)
-		},
-		updater: function(item){
-			driverToID = map[Driver.first_name+" "+Driver.last_name].id;
-			return item;
-		},
-		items:4
-	});
-	$("#drivingFromInput").typeahead({
-		source: function(query, process){
-			tempdrivers=[];
-			map={};
-			$.each(drivingContacts,function(i,driver) {
-				map[Driver.first_name+" "+Driver.last_name] = driver;
-				tempdrivers.push(driver.first_name+" "+driver.last_name); 
-			});
+	var eventLocation = $("#locationInput").val();
+	var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, goingID);
+})
 
-			process(tempdrivers)
-		},
-		updater: function(item){
-			driverFromID = map[Driver.first_name+" "+Driver.last_name].id;
-			return item;
-		},
-		items:4
-	});
+$('#startTime').datetimepicker({
+	pickDate: false,
+	pick12HourFormat: true,
+	pickSeconds: false,
+	format : "hh:mm PP",
+});
+$('#endTime').datetimepicker({
+	pickDate: false,
+	pick12HourFormat: true,
+	pickSeconds: false,
+	format : "hh:mm PP",
+});
+$('#eventDate').datetimepicker({
+	pickTime: false
+});
+
+$('#editStartTime').datetimepicker({
+	pickDate: false,
+	pick12HourFormat: true,
+	pickSeconds: false,
+	format : "hh:mm PP",
+});
+$('#editEndTime').datetimepicker({
+	pickDate: false,
+	pick12HourFormat: true,
+	pickSeconds: false,
+	format : "hh:mm PP",
+});
+$('#editEventDate').datetimepicker({
+	pickTime: false
+});
+{% for family_member in family.family_members.all %}
+$("#familyAttendingInput").append("<option id='{{family_member.id}}'>{{family_member.first_name}}</option>");
+$("#editFamilyAttendingInput").append("<option id='{{family_member.id}}'>{{family_member.first_name}}</option>");
+{% endfor %}
+{% for child in family.children.all %}
+$("#familyAttendingInput").append("<option id='{{child.id}}'>{{child.first_name}}</option>");
+$("#editFamilyAttendingInput").append("<option id='{{child.id}}'>{{child.first_name}}</option>");
+{% endfor %}
+$("#drivingToInput").typeahead({
+	source: function(query, process){
+		tempdrivers = [];
+		map = {};
+		$.each(drivingContacts,function(i,driver) {
+			map[Driver.first_name+" "+Driver.last_name] = driver;
+			tempdrivers.push(driver.first_name+" "+driver.last_name); 
+		});
+		process(tempdrivers)
+	},
+	updater: function(item){
+		driverToID = map[Driver.first_name+" "+Driver.last_name].id;
+		return item;
+	},
+	items:4
+});
+
+$("#editDrivingToInput").typeahead({
+	source: function(query, process){
+		map = {};
+		tempdrivers = [];
+		$.each(drivingContacts,function(i,driver) {
+			map[Driver.first_name+" "+Driver.last_name] = driver;
+			tempdrivers.push(driver.first_name+" "+driver.last_name); 
+		});
+		process(tempdrivers)
+	},
+	updater: function(item){
+		editDriverToID = map[Driver.first_name+" "+Driver.last_name].id;
+		return item;
+	},
+	items:4
+});
+
+
+$("#drivingFromInput").typeahead({
+	source: function(query, process){
+		map = {};
+		tempdrivers = [];
+		$.each(drivingContacts,function(i,driver) {
+			map[Driver.first_name+" "+Driver.last_name] = driver;
+			tempdrivers.push(driver.first_name+" "+driver.last_name); 
+		});
+		process(tempdrivers)
+	},
+	updater: function(item){
+		driverFromID = map[Driver.first_name+" "+Driver.last_name].id;
+		return item;
+	},
+	items:4
+});
+
+$("#editDrivingFromInput").typeahead({
+	source: function(query, process){
+		map = {};
+		tempdrivers = [];
+		$.each(drivingContacts,function(i,driver) {
+			map[Driver.first_name+" "+Driver.last_name] = driver;
+			tempdrivers.push(driver.first_name+" "+driver.last_name); 
+		});
+		process(tempdrivers)
+	},
+	updater: function(item){
+		editdriverFromID = map[Driver.first_name+" "+Driver.last_name].id;
+		return item;
+	},
+	items:4
+});
 });
 
 function getEventById(event_id){
@@ -491,13 +576,7 @@ function nextWeekFunc(date){
 
 }
 
-function newEventFunc(){
-	console.log("newEvent pressed");
-	console.log(booleanFilters);
-}
 
-//javascript code for selecting drivers
-var availDrivers = ["Me","Nick","Bob","Cheryl","Mindy","George","Ari","Alessandro","Alexandra","Alex"];
 
 function makeList(list){
 	var start = "<ul>"
@@ -512,7 +591,7 @@ function makeList(list){
 
 
 function formatMinutes(n){
-    return n > 9 ? "" + n: "0" + n;
+	return n > 9 ? "" + n: "0" + n;
 }
 
 function renderEvent(event) {
@@ -531,11 +610,11 @@ function renderEvent(event) {
 		text: event.title,
 	})
 
-	editbtn = $('<a class="btn pull-right flat btn-primary edit-event" data-toggle="modal" href="#editEventModal" onClick="editEventOpen(' + event.id + '); return true;"><i class="icon-pencil"></i></a>')
-	deletebtn = $('<a class="btn pull-right flat btn-primary delete-event" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>')
-	reachoutbtn = $('<a class="btn pull-right flat btn-primary reach-out" data-toggle="modal" href="#reachOutModal"><i class="car-glyph"></i></a>')
-	drivetobtn = $('<a class="btn pull-right flat btn-primary driver-to">To</a>')
-	drivefrombtn = $('<a class="btn pull-right flat btn-primary driver-from">From</a>')
+	editbtn = $('<a class="btn pull-right flat btn-primary edit-event" data-toggle="modal" href="#editEventModal" onClick="editEventOpen(' + event.id + '); return true;"><i class="icon-pencil"></i></a>');
+	deletebtn = $('<a class="btn pull-right flat btn-primary delete-event" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>');
+	reachoutbtn = $('<a class="btn pull-right flat btn-primary reach-out" data-toggle="modal" href="#reachOutModal"><i class="car-glyph"></i></a>');
+	drivetobtn = $('<a href="#" id="pop" class="popover-b btn btn-large" data-toggle="popover" data-content="And here is content" data-original-title="A Title">button</a>');
+	drivefrombtn = $('<a class="btn pull-right flat btn-primary driver-from">From</a>');
 	
 	drivefrombtn.appendTo(date);
 	reachoutbtn.appendTo(date);
