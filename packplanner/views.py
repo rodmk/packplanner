@@ -10,6 +10,7 @@ def index(request):
 
 @login_required
 def calendar(request):
+
     family_member = get_family_member(request.user)
     if family_member == None:
         events_details = []

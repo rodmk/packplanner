@@ -28,6 +28,7 @@ var events = new Array();
 /*
 Filters
 */
+var booleanFilters = [];
 var childrenFilters = ["Mary", "Nick", "Andy", "Barry", "Christine"];
 var helpFilters = ["All"];
 
@@ -90,12 +91,14 @@ $(document).ready(function() {
 	displayEvents();
 
 	for(i=0;i<=helpFilters.length-1;i++){
-			$('#filterBtnGroup').append('<button id="allChildren" type="button" data-toggle="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
+			$('#filterBtnGroup').append('<button id="allChildren" data-toggle="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
 	}
 
 	for(j=0;j<=childrenFilters.length-1;j++){
-			$('#filterBtnGroup').append('<button id="partialChildren" type="button" data-toggle="button" class=' + '"btn pull-left btn-custom' + j + '" >' + childrenFilters[j] + '</button>');
+			$('#filterBtnGroup').append('<button id="partialChildren" data-toggle="button" class=' + '"btn pull-left btn-custom' + j + 'd" >' + childrenFilters[j] + '</button>');
+			booleanFilters[j] = 0;
 	}
+
 
 	$("#datepicker").datepicker({
 	    onSelect: function(dateText, inst) { 
@@ -213,6 +216,19 @@ $(document).ready(function() {
 });
 
 
+/*
+Returns list of selected names
+*/
+function getSelectedFilters(){
+	var selectedFilters = [];
+	for( k=0; k<=booleanFilters.length-1; k++){
+		if (booleanFilters[k] == true){
+			selectedFilters.push(childrenFilters[k]);
+		} 
+	}
+	return selectedFilters;
+}
+
 function dateSelectedFunc(date){
 	currentDate = date;
 	focusEventCalendar(currentDate);
@@ -310,7 +326,7 @@ function renderEvent(event) {
 	})
 
 	date = $("<span>", {
-		class: "eventTime span5",
+		class: "eventTime span6",
 		text: event.startDate.getHours()+":"+formatMinutes(event.startDate.getMinutes()) + " - " + event.endDate.getHours()+":"+formatMinutes(event.endDate.getMinutes()),
 	})
 
@@ -319,11 +335,15 @@ function renderEvent(event) {
 		text: event.title,
 	})
 
-	editbtn = $('<a class="btn pull-right flat btn-primary " style="margin-top:6px;margin-right:2px" data-toggle="modal" href="#editEventModal" onClick="editEventOpen(' + event.id + '); return true;"><i class="icon-pencil"></i></a>')
-	deletebtn = $('<a class="btn pull-right flat btn-primary " style="margin-top:6px;margin-left:6px" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>')
-	reachoutbtn = $('<a class="btn pull-right flat btn-primary " style="margin-top:6px;margin-right:2px" data-toggle="modal" href="#reachOutModal"><i class="car-glyph"></i></a>')
-
+	editbtn = $('<a class="btn pull-right flat btn-primary edit-event" data-toggle="modal" href="#editEventModal" onClick="editEventOpen(' + event.id + '); return true;"><i class="icon-pencil"></i></a>')
+	deletebtn = $('<a class="btn pull-right flat btn-primary delete-event" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>')
+	reachoutbtn = $('<a class="btn pull-right flat btn-primary reach-out" data-toggle="modal" href="#reachOutModal"><i class="car-glyph"></i></a>')
+	drivetobtn = $('<a class="btn pull-right flat btn-primary driver-to">To</a>')
+	drivefrombtn = $('<a class="btn pull-right flat btn-primary driver-from">From</a>')
+	
+	drivefrombtn.appendTo(date);
 	reachoutbtn.appendTo(date);
+	drivetobtn.appendTo(date);
 	deletebtn.appendTo(tile);
 	editbtn.appendTo(tile);
 	date.appendTo(tile);
