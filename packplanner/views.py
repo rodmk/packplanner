@@ -126,3 +126,50 @@ def view_schedule(request, id):
 def get_family_member(user):
 	family_member = user.user_account
 	return family_member
+
+@login_required
+def edit_event(request, id):
+	family_member = get_family_member(request.user)
+	if request.method == 'POST':
+		print request.POST
+		event = Event.objects.get(id=id)
+		
+		name = request.POST['event[title]']
+		location = request.POST['event[location]']
+		start_time = request.POST['event[startDate]']
+		# start_time = datetime.datetime.fromtimestamp(start_time)
+		print start_time
+		end_time = request.POST['event[endDate]']
+		print end_time
+		driver_from_id = request.POST['event[driverFrom]']
+		driver_to_id = request.POST['event[driverTo]']
+		creator = request.user
+		# children_going = request.POST['event[childrengoingID]']
+		# print childrengoingID
+		# adults_going = request.POST['event[adultsdoingID]']
+		# print adults_going
+
+		# Schedule schedule = Schedule.objects.all()[0]
+		# Event event = new Event(name, "", location, datetime.now(), creator, start_time, end_time, schedule)
+		# event.save()
+		# FamilyEventDetails events_details = new FamilyEventDetails(event=event, family=family_member.family, notes="")
+		# events_details.save()
+
+		# if not driver_to_id == -1 :
+		#   	events_details.driverTo = User.objects.get(id=driver_to_id)
+		#   	events_details.save()
+
+		# if not driver_from_id == -1:
+		#   	events_details.driverFrom = driver_from
+		#   	events_details.save()
+
+		# for child_id in children_going:
+		# 	child = Child.objects.get(id=child_id)
+		#   	events_details.child_attendees.add(child)
+
+		# for adult_id in adults_going:
+		# 	adult = Adult.objects.get(adult_id)
+		#   	events_details.attendees.add(adult)
+		# id = events_details.id
+		id=0
+		return HttpResponse(simplejson.dumps(id))

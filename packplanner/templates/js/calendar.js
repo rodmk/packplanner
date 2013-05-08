@@ -287,6 +287,7 @@ $(document).ready(function() {
 			}
 			endDate.setHours(endTime.getHours())
 			endDate.setMinutes(endTime.getHours())
+			
 			var going = $("#familyAttendingInput").val();
 			console.log(going);
 			var adultsgoingID = [];
