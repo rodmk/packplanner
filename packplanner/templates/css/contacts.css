@@ -14,4 +14,26 @@
 #selectUserText {
 	text-align: center;
 	font-size: 20px;
+
+	color: #808080; 
+}
+
+#findContactsHelpText {
+	text-align: center;
+	margin-top: 16px;
+	font-size: 20px;
+
+	color: #808080; 
+}
+
+.uneditable-input {
+	cursor: not-allowed;
+    background-color: #FFFFFF;
+    color: #000000; 
+}
+
+.uneditableTextArea {
+	cursor: not-allowed;
+    background-color: #FFFFFF;
+    color: #000000; 
 }

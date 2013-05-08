@@ -1,14 +1,15 @@
 
-var ALPHABET_UPPER = ["A","B","C","D","E","F","G","H","I","J","K","L",
+    var ALPHABET_UPPER = ["A","B","C","D","E","F","G","H","I","J","K","L",
 						  "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
-	var DEFAULT_ADDRESS = '<strong>Twitter, Inc.</strong><br>795 Folsom Ave, Suite 600<br>San Francisco, CA 94107<br>';
+	var DEFAULT_ADDRESS = 'Twitter, Inc.\n795 Folsom Ave, Suite 600\nSan Francisco, CA 94107';
 	var DEFAULT_PHONE = '(123) 456-7890';
 	var DEFAULT_EMAIL = 'first.last@example.com'; 
-	var DEFAULT_PHOTO = '../static/img/placeholder_user.png'
+	var DEFAULT_PHOTO = '../static/img/placeholder_user.png';
+    var DEFAULT_CHILDREN = ["Mary", "Susie", "Bobby"];
 	var DEFAULT_ID = 0;
 
-	var LIST_OF_CONTACTS =
+	var ALL_CONTACTS =
 	[
     "Lawanda Devens",
     "Norberto Kautz",
@@ -60,57 +61,42 @@ var ALPHABET_UPPER = ["A","B","C","D","E","F","G","H","I","J","K","L",
     "Brittny Dudas",
     "Nell Arbogast",
     "Darrel Marceau"
-    ]
+    ];
 
-    var contacts = getContacts(LIST_OF_CONTACTS);
+    var contacts = getContactsFromList(ALL_CONTACTS);
 
-    $(document).ready(function() {
-
-        updateContacts(LIST_OF_CONTACTS);
-        console.log(contacts);
-
-    });
-
-    function Contact( fullName, address, phoneNumber, email, photo){
+    function Contact( fullName, address, phoneNumber, email, photo, children, ID){
         this.fullName = fullName;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.photo = photo;
+        this.children = children;
+        this.ID = ID;
+
     }
 
-    function getContacts(contactList){
+    function getContactsFromList(contactList){
 
         contactList.sort();
 
         var contacts = new Array();
         for(c=0;c<=contactList.length-1;c++){
-            contacts[c] = new Contact( contactList[c], DEFAULT_ADDRESS, DEFAULT_PHONE, DEFAULT_EMAIL, DEFAULT_PHOTO );
+            contacts[c] = new Contact( contactList[c], DEFAULT_ADDRESS, DEFAULT_PHONE, DEFAULT_EMAIL, DEFAULT_PHOTO, DEFAULT_CHILDREN, c );
         }
         return contacts;
     }
 
-    function updateContacts(contactList){
-
-        contactList.sort();
-
-        for(i=0;i<=ALPHABET_UPPER.length-1;i++){
-            $('#contactHeaders').append('<li id="letterHead" class="nav-header" >' + ALPHABET_UPPER[i] + '</li>');
-            
-            for(k=0;k<=contactList.length-1;k++){
-                if (contactList[k][0] == ALPHABET_UPPER[i]){
-                    $('#contactHeaders').append('<li><a href="#' + contactList[k] + "-info" + '">' + contactList[k] + '</a></li>');
-                }
-            }
-        }
-    }
 	$(document).ready(function() {
 
-		updateContacts(LIST_OF_CONTACTS);
+        $('#contactOptions').hide();
+        $("#addressContact").val('');
+
+		updateContacts(ALL_CONTACTS);
 
 		$('#contactSearch').typeahead( { 
 			source: function (query, process) {
-				process( LIST_OF_CONTACTS );
+				process( ALL_CONTACTS );
 			},
 			menu: '',
 			sorter: function(items) {
@@ -122,26 +108,6 @@ var ALPHABET_UPPER = ["A","B","C","D","E","F","G","H","I","J","K","L",
 		} );
 
 	});
-
-	function Contact( fullName, address, phoneNumber, email, photo, ID){
-		this.fullName = fullName;
-		this.address = address;
-		this.phoneNumber = phoneNumber;
-		this.email = email;
-		this.photo = photo;
-		this.ID = ID;
-	}
-
-	function getContacts(contactList){
-
-		contactList.sort();
-
-		var contacts = new Array();
-	    for(c=0;c<=contactList.length-1;c++){
-	    	contacts[c] = new Contact( contactList[c], DEFAULT_ADDRESS, DEFAULT_PHONE, DEFAULT_EMAIL, DEFAULT_PHOTO, c );
-	    }
-	    return contacts;
-	}
 
 	function updateContacts(contactList){
 
@@ -163,7 +129,13 @@ var ALPHABET_UPPER = ["A","B","C","D","E","F","G","H","I","J","K","L",
 				}
 
 				if (contactList[k][0] == ALPHABET_UPPER[i]){
-					newContent = newContent + '<li onclick="return changeRightPanel(' + k + ')"><a href="#">' + contactList[k] + '</a></li>';
+
+                    for(c=0;c<=contacts.length-1;c++){
+                        if (contacts[c].fullName == contactList[k]){
+                            newContent = newContent + '<li onclick="return changeRightPanel(' + contacts[c].ID + ')"><a href="#">' + contactList[k] + '</a></li>';
+                            break;
+                        }
+                    }
 				}
 			}
 		}
@@ -174,12 +146,14 @@ var ALPHABET_UPPER = ["A","B","C","D","E","F","G","H","I","J","K","L",
 
 	function changeRightPanel(IDnum){
 
-		var contacts = getContacts(LIST_OF_CONTACTS);
-		var divObject = document.getElementById("selectUserText");
-		var newContent = '<p>Name: ' + contacts[IDnum].fullName +'</p><br>' +
-						 '<address>Address: ' + contacts[IDnum].address +'</address><br>' +
-						 '<p>Phone: ' + contacts[IDnum].phone +'</p><br>' +
-						 '<p>Email: ' + contacts[IDnum].email +'</p><br>' +
-						 '<p>ID: ' + contacts[IDnum].ID +'</p><br>';
-		divObject.innerHTML = newContent;
+        $('#contactSelectText').hide();
+
+        document.getElementById("fullNameContact").innerHTML = contacts[IDnum].fullName;
+        document.getElementById("childrenContact").innerHTML = contacts[IDnum].children;
+        $("#addressContact").val(contacts[IDnum].address);
+        document.getElementById("phoneContact").innerHTML = contacts[IDnum].phoneNumber;
+        document.getElementById("emailContact").innerHTML = contacts[IDnum].email;
+
+        $('#contactOptions').show();
+
 	}
