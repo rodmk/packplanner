@@ -61,13 +61,12 @@ Filters
 var booleanFilters = [];
 var childrenFilters = [];
 var helpFilters = ["All"];
+var userColorMap = {};
 
 
 $(document).ready(function() {
 	$("#pop").popover();
 	
-	//console.log(currentDate);
-
 	childrenFilters = [];
 	{% for family_mem in family.family_members.all %}
 		childrenFilters.push("{{family_mem.first_name}}");
@@ -78,7 +77,6 @@ $(document).ready(function() {
 	
 
 	allEvents = buildDict();
-	//console.log("all events"+allEvents);
 
 	dateSelectedFunc(currentDate);
 
@@ -91,7 +89,6 @@ $(document).ready(function() {
 			{% endif %}
 		{% endfor %}
 	{% endfor %}
-	console.log(drivingContacts);
 	family = new Family({{family.id}},"{{family.last_name}}","{{family.address_line1}}","{{family.address_line2}}", "{{family.address_city}}","{{family.address_state}}","{{family.address_zip_code}}","{{family.phone_number}}",contactlist);
 	{% for family_mem in family.family_members.all %}
 		{% if family_mem.is_driver %}
@@ -122,6 +119,8 @@ $(document).ready(function() {
 	function buildDict(){
 		var eventDict = new Array();
 		var tempHash = ""
+		var adultsAttendingIDs = [];
+		var childrenAttendingIDs = [];
 		{% for event_details in events_details %}
 
 		var startDate = new Date();
@@ -140,6 +139,17 @@ $(document).ready(function() {
 		endDate.setMinutes({{event_details.event.endTime.minute}});
 		endDate.setHours(endDate.getHours()-5);
 		tempHash = hash(startDate);
+
+		{% for attendee in event_details.attendees.all %}
+		console.log("I pushed a dude");
+		adultsAttendingIDs.push({{attendee.id}});
+		{% endfor %}
+		{% for childAttendee in event_details.child_attendees.all %}
+		console.log("I pushed a kid")
+		childrenAttendingIDs.push({{childAttendee.id}});
+		{% endfor %}
+
+
 		var e = new Event({{event_details.id}}, 
 			"{{event_details.event.name}}", 
 			"{{event_details.event.location}}", 
@@ -147,7 +157,7 @@ $(document).ready(function() {
 			endDate,
 			"{{event_details.driver_to}}", 
 			"{{event_details.driver_from}}",
-			"{{event_details.attendees}}");
+			childrenAttendingIDs,adultsAttendingIDs);
 		if(!(tempHash in eventDict)){
 			eventDict[tempHash] = [e];
 		}
@@ -166,7 +176,7 @@ $(document).ready(function() {
 	}
 
 	for(j=0;j<=childrenFilters.length-1;j++){
-		var btnTypeNumber = j%4;
+		var btnTypeNumber = j%5;
 		var btnType = "";
 		switch (btnTypeNumber)
 		{
@@ -182,9 +192,13 @@ $(document).ready(function() {
 			case 3:
 			btnType = "danger";
 			break;
+			case 4:
+			btnType = "warning";
+			break;
 		}
-			// $('#filterBtnGroup').append('<button id="partialChildren" type="button" class=' + '"btn pull-left flat btn-'+btnType+'">' + childrenFilters[j] + '</button>');
-			$('#filterBtnGroup').append('<button id="partialChildren" type="button" class=' + '"btn pull-left btn-custom'+j+'d">' + childrenFilters[j] + '</button>');
+			$('#filterBtnGroup').append('<button id="partialChildren" type="button" class=' + '"btn pull-left flat btn-'+btnType+'">' + childrenFilters[j] + '</button>');
+			userColorMap[childrenFilters[j]] = btnType;
+			//$('#filterBtnGroup').append('<button id="partialChildren" type="button" class=' + '"btn pull-left btn-custom'+j+'d">' + childrenFilters[j] + '</button>');
 			booleanFilters[j] = 0;
 		}
 
@@ -250,11 +264,11 @@ $(document).ready(function() {
 			var id = 0;
 			var title = $("#eventName").val();
 			var eventDate = $("#eventDate").data('datetimepicker').getDate();
-			console.log("eventDate " + eventDate);
+			// console.log("eventDate " + eventDate);
 			var startTime = $("#startTime").data('datetimepicker').getDate();
-			console.log("startTime " + startTime);
+			// console.log("startTime " + startTime);
 			var endTime = $("#endTime").data('datetimepicker').getDate();
-			console.log("endTime " + endTime);
+			// console.log("endTime " + endTime);
 			var startDate = eventDate;
 			var endDate = eventDate;
 			startDate.setHours(startTime.getHours());
@@ -280,10 +294,11 @@ $(document).ready(function() {
 			}
 
 
-			console.log(childrengoingID);
-			console.log(adultsgoingID);
+			// console.log(childrengoingID);
+			// console.log(adultsgoingID);
 			var eventLocation = $("#locationInput").val();
 			var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, childrengoingID, adultsgoingID);
+			// console.log(e);
 			
 			$.ajax("/calendar/", {
 				type: "POST",
@@ -326,7 +341,7 @@ $("#editEventButtonSave").click(function(){
 	{% for family_member in family.family_members.all %}
 	if('{{family_member.first_name}}'==going){
 		goingID = {{family_member.id}};
-		console.log(goingID);
+		// console.log(goingID);
 	}
 	{% endfor %}
 
@@ -496,7 +511,7 @@ function addEvent(event) {
 }
 
 function hash(date){
-	console.log("hashing " + date.getDate().toString()+date.getFullYear().toString()+(date.getMonth()+1).toString());
+	// console.log("hashing " + date.getDate().toString()+date.getFullYear().toString()+(date.getMonth()+1).toString());
 	return date.getDate().toString()+date.getFullYear().toString()+(date.getMonth()+1).toString();
 }
 
@@ -590,7 +605,7 @@ function formatMinutes(n){
 }
 
 function renderEvent(event) {
-	//console.log(event);
+	console.log(event);
 	tile = $("<div>", {
 		class: "tile row",
 	})
@@ -660,14 +675,6 @@ function renderEvent(event) {
 
 	date.appendTo(tile);
 	
-	console.log("driver to "+driverTo+"driver from "+driverFrom);
-	if(driverTo == "None"){
-		//$(".drivingTo").removeClass('btn-primary').addClass('btn-danger');
-	}
-
-	if(driverFrom == "None"){
-		//$(".drivingFrom").removeClass('btn-primary').addClass('btn-danger');
-	}
 
 	handleMissingDrivers();
 	return tile;
@@ -692,18 +699,19 @@ function editEventOpen(event_id) {
 function displayEvents() {
 
 	var currentDateHash = hash(currentDate);
-	
+	console.log(allEvents);
 	if(!allEvents.hasOwnProperty(currentDateHash)){
 		allEvents[currentDateHash] = [];
 	}
 	var currentDateEvents = allEvents[currentDateHash];
+	console.log("today's events "+ currentDateEvents);
 	currentDateEvents.sort(compareEvents);
 	var content = $(".selected-day");
 	$(".tile").detach();
 	$(".dayEvents").remove();
 	for (i=0; i<currentDateEvents.length; i++) {
 		var e = currentDateEvents[i];
-		console.log(event);
+		console.log("Displaying events " + e);
 		content.append(renderEvent(e));
 		handleMissingDrivers();
 	}
