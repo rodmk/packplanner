@@ -6,6 +6,7 @@ from django.shortcuts import *
 from django.utils import simplejson
 import datetime
 from dateutil import tz
+from forms import EventForm, FamilyMemberForm, FamilyForm
 
 @login_required
 def index(request):
@@ -15,58 +16,63 @@ def index(request):
 def calendar(request):
 	family_member = get_family_member(request.user)
 	if request.method == 'POST':
-		name = request.POST['event[title]']
-		location = request.POST['event[location]']
-		start_time = request.POST['start_time']
-		start_time = datetime.datetime.fromtimestamp(float(start_time)/1000.0, tz.gettz('America/New_York'))
-		end_time = request.POST['end_time']
-		end_time = datetime.datetime.fromtimestamp(float(end_time)/1000.0, tz.gettz('America/New_York'))
-		driver_from_id = request.POST['event[driverFrom]']
-		driver_to_id = request.POST['event[driverTo]']
-		creator = request.user
-		children_going = request.POST.getlist('event[childrengoingID][]')
-		adults_going = request.POST.getlist('event[adultsgoingID][]')
+		event = None
+		event_form = EventForm(request.POST, request.user)
+		if event_form.is_valid():
+			cd = event_form.cleaned_data
+			event = Event(name=cd["name"], 
+				description=cd["description"], 
+				location=cd["location"],
+				timestamp=datetime.datetime.now(tz.gettz('America/New_York')), 
+				creator=request.user, 
+				startTime=cd["startTime"], 
+				endTime=cd["endTime"])
+			event.save()
 
-		schedule = Schedule.objects.all()[0]
-		event = Event(name=name, description=" ", location=location, timestamp=datetime.datetime.now(tz.gettz('America/New_York')), 
-			creator=creator, startTime=start_time, endTime=end_time, schedule=schedule)
-		event.save()
+			driver_from_id = request.POST['event[driverFrom]']
+			driver_to_id = request.POST['event[driverTo]']
+			creator = request.user
+			children_going = request.POST.getlist('event[childrengoingID][]')
+			adults_going = request.POST.getlist('event[adultsgoingID][]')
 
-		event_details = FamilyEventDetails(event=event, family=family_member.family, notes=" ")
-		event_details.save()
+			
 
-		try:
-			driverTo = User.objects.get(id=driver_to_id)
-			event_details.driverTo = driverTo
+			event_details = FamilyEventDetails(event=event, family=family_member.family, notes=" ")
 			event_details.save()
-		except Exception, e:
-			pass
 
-		try:
-			driverFrom = User.objects.get(id=driver_from_id)
-			event_details.driverFrom = driverFrom
-			event_details.save()
-		except Exception, e:
-			pass
-
-		for child_id in children_going:
 			try:
-				child = Child.objects.get(id=child_id)
-			  	event_details.child_attendees.add(child)
+				driverTo = User.objects.get(id=driver_to_id)
+				event_details.driverTo = driverTo
+				event_details.save()
 			except Exception, e:
 				pass
 
-		for adult_id in adults_going:
-		  	try:
-				adult = FamilyMember.objects.get(id=adult_id)
-		  		event_details.attendees.add(adult)
+			try:
+				driverFrom = User.objects.get(id=driver_from_id)
+				event_details.driverFrom = driverFrom
+				event_details.save()
 			except Exception, e:
 				pass
-		  	
-		  	
-		id = event_details.id
 
-		return HttpResponse(simplejson.dumps(id))
+			for child_id in children_going:
+				try:
+					child = Child.objects.get(id=child_id)
+				  	event_details.child_attendees.add(child)
+				except Exception, e:
+					pass
+
+			for adult_id in adults_going:
+			  	try:
+					adult = FamilyMember.objects.get(id=adult_id)
+			  		event_details.attendees.add(adult)
+				except Exception, e:
+					pass
+			  	
+			  	
+			id = event_details.id
+
+			return HttpResponse(simplejson.dumps(id))
+		return HttpResponse(simplejson.dumps(-1))
 
 	events_details = FamilyEventDetails.objects.filter(family=family_member.family)
 	return render(request, 'index.html', {"events_details" : events_details, "family" : family_member.family})
@@ -128,12 +134,10 @@ def view_contact(request, id):
 @login_required
 def view_message(request, id):
 	message = Message.objects.get(id=id)
-	family_member = get_family_member(request.user)
 	return render(request, 'view-message.html', {"message" : message})
 
 @login_required
 def view_schedule(request, id):
-	family_member = get_family_member(request.user)
 	schedule = Schedule.objects.get(id=id)
 	return render(request, 'view-schedule.html', {"schedule" : schedule})
 

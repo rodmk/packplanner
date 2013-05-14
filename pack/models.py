@@ -1,5 +1,4 @@
 from django.db import models
-from django.forms import ModelForm
 from django.contrib.auth.models import User
 
 class Family(models.Model):
@@ -10,7 +9,7 @@ class Family(models.Model):
 	address_state = models.CharField(max_length=50)
 	address_zip_code = models.IntegerField(null=True)
 	phone_number = models.FloatField(null=True)
-	contacts = models.ManyToManyField("self", blank=True)
+	contacts = models.ManyToManyField("self", null=True, blank=True)
 
 	def __unicode__(self):
 		return u'%s Family' % (self.last_name)
@@ -54,15 +53,6 @@ class Family(models.Model):
 			display += adult.first_name
 		return display
 
-class FamilyForm(ModelForm):
-	class Meta:
-		model = Family
-		exclude = ("contacts",)
-	def __init__(self, *args, **kwargs):
-		super(FamilyForm, self).__init__(*args, **kwargs)
-		for field in self.fields.values():
-			field.widget.attrs['class'] = "familyFormField"
-
 class Child(models.Model):
 	family = models.ForeignKey(Family, related_name="children")
 	first_name = models.CharField(max_length=40)
@@ -72,7 +62,7 @@ class Child(models.Model):
 		return u'%s %s' % (self.first_name, self.family.last_name)
 
 class FamilyMember(models.Model):
-	user = models.OneToOneField(User, related_name="user_account", null=True)
+	user = models.OneToOneField(User, related_name="user_account", null=True, blank=True)
 	first_name = models.CharField(max_length=40)
 	last_name = models.CharField(max_length=40) # TODO: all family members have the same family name
 												#       nuke this field sometime
@@ -84,15 +74,6 @@ class FamilyMember(models.Model):
 
 	def __unicode__(self):
 		return u'%s %s' % (self.first_name, self.last_name)
-
-class FamilyMemberForm(ModelForm):
-	class Meta:
-		model = FamilyMember
-		exclude = ("user", "last_name", "timestamp", "family", "is_adult", "is_driver")
-	def __init__(self, *args, **kwargs):
-		super(FamilyMemberForm, self).__init__(*args, **kwargs)
-		for field in self.fields.values():
-			field.widget.attrs['class'] = "familyMemberFormField"
 
 class Schedule(models.Model):
 	name = models.CharField(max_length=100)
@@ -132,8 +113,8 @@ class FamilyEventDetails(models.Model):
 	notes = models.CharField(max_length=1000)
 	attendees = models.ManyToManyField(FamilyMember, related_name="attending_events_details")
 	child_attendees = models.ManyToManyField(Child, related_name="attending_event_details")
-	driverTo = models.ForeignKey(User, related_name="driving_responsibilites_to")
-	driverFrom = models.ForeignKey(User, related_name="driving_responsibilites_from")
+	driverTo = models.ForeignKey(User, related_name="driving_responsibilites_to", null=True, blank=True)
+	driverFrom = models.ForeignKey(User, related_name="driving_responsibilites_from", null=True, blank=True)
 
 	def __unicode__(self):
 		return u'Details for %s Event for the %s' % (self.event, self.family)
