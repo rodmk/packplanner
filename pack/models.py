@@ -10,7 +10,7 @@ class Family(models.Model):
 	address_state = models.CharField(max_length=50)
 	address_zip_code = models.IntegerField(null=True)
 	phone_number = models.FloatField(null=True)
-	contacts = models.ManyToManyField("self", blank=True)
+	contacts = models.ManyToManyField("self", null=True, blank=True)
 
 	def __unicode__(self):
 		return u'%s Family' % (self.last_name)
@@ -72,7 +72,7 @@ class Child(models.Model):
 		return u'%s %s' % (self.first_name, self.family.last_name)
 
 class FamilyMember(models.Model):
-	user = models.OneToOneField(User, related_name="user_account", null=True)
+	user = models.OneToOneField(User, related_name="user_account", null=True, blank=True)
 	first_name = models.CharField(max_length=40)
 	last_name = models.CharField(max_length=40) # TODO: all family members have the same family name
 												#       nuke this field sometime
@@ -132,8 +132,8 @@ class FamilyEventDetails(models.Model):
 	notes = models.CharField(max_length=1000)
 	attendees = models.ManyToManyField(FamilyMember, related_name="attending_events_details")
 	child_attendees = models.ManyToManyField(Child, related_name="attending_event_details")
-	driverTo = models.ForeignKey(User, related_name="driving_responsibilites_to")
-	driverFrom = models.ForeignKey(User, related_name="driving_responsibilites_from")
+	driverTo = models.ForeignKey(User, related_name="driving_responsibilites_to", null=True, blank=True)
+	driverFrom = models.ForeignKey(User, related_name="driving_responsibilites_from", null=True, blank=True)
 
 	def __unicode__(self):
 		return u'Details for %s Event for the %s' % (self.event, self.family)
