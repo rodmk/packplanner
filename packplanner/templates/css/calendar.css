@@ -99,6 +99,39 @@
   margin: 5px;
 }
 
+.tile.default{
+  background-color: #34495E;
+}
+
+.tile.primary{
+  background-color: #1ABC9C;
+
+}
+.tile.primary .btn-primary{
+  background-color: #ecf0f1;
+  color:#DDDDDD;
+
+}
+.tile.info{
+  background-color: #3498DB;
+}
+
+.tile.danger{
+  background-color: #E74C3C;
+}
+
+.tile.warning{
+  background-color: #F1C40F;
+}
+
+.tile.warning .eventTime{
+  color: #333333;
+}
+
+.tile.warning .dayEvents{
+  color: #333333;
+}
+
 .tile .dayEvents {
   text-align: left;
   font-weight: bold;

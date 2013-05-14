@@ -3276,6 +3276,12 @@ button.close {
       background-color: #f4d03f; color: #333333;}
     .btn.flat.btn-warning:active, .btn.flat.btn-warning.active {
       background-color: #cea70c; color: #333333;}
+  .btn.flat.btn-purple {
+    background-color: #9B59B6; }
+    .btn.flat.btn-purple:hover, .btn.flat.btn-purple:focus {
+      background-color: #A07DDD; }
+    .btn.flat.btn-purple:active, .btn.flat.btn-purple.active {
+      background-color: #8e44ad; }
   .btn-toolbar .btn.flat {
     font-size: 18px;
     padding: 10px 14px 9px; }
