@@ -303,13 +303,17 @@ $(document).ready(function() {
 			$.ajax("/calendar/", {
 				type: "POST",
 				data: {event: e,
+					name: e.title,
+					location : e.location,
+					startTime : toDateString(e.startDate),
+					endTime : toDateString(e.endDate),
 					start_time : e.startDate.getTime(),
 					end_time : e.endDate.getTime(),
 					csrfmiddlewaretoken: '{{ csrf_token }}' },
 					success: function(response) {
 						addSuccessfulEvent(e, response)
 					}
-				});
+			});
 
 			$('#newEventModal').modal('hide');
 			$(':input','#newEventForm')
@@ -466,6 +470,14 @@ $("#editDrivingFromInput").typeahead({
 	items:4
 });
 });
+
+function toDateString(date) {
+	return "" + date.getFullYear() + "-" + 
+		(date.getMonth() + 1) + "-" + 
+		date.getDate() + " " + 
+		date.getHours() + ":"
+		 + date.getMinutes();
+}
 
 function getEventById(event_id){
 	for(key in allEvents){

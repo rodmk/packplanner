@@ -1,5 +1,4 @@
 from django.db import models
-from django.forms import ModelForm
 from django.contrib.auth.models import User
 
 class Family(models.Model):
@@ -54,15 +53,6 @@ class Family(models.Model):
 			display += adult.first_name
 		return display
 
-class FamilyForm(ModelForm):
-	class Meta:
-		model = Family
-		exclude = ("contacts",)
-	def __init__(self, *args, **kwargs):
-		super(FamilyForm, self).__init__(*args, **kwargs)
-		for field in self.fields.values():
-			field.widget.attrs['class'] = "familyFormField"
-
 class Child(models.Model):
 	family = models.ForeignKey(Family, related_name="children")
 	first_name = models.CharField(max_length=40)
@@ -84,15 +74,6 @@ class FamilyMember(models.Model):
 
 	def __unicode__(self):
 		return u'%s %s' % (self.first_name, self.last_name)
-
-class FamilyMemberForm(ModelForm):
-	class Meta:
-		model = FamilyMember
-		exclude = ("user", "last_name", "timestamp", "family", "is_adult", "is_driver")
-	def __init__(self, *args, **kwargs):
-		super(FamilyMemberForm, self).__init__(*args, **kwargs)
-		for field in self.fields.values():
-			field.widget.attrs['class'] = "familyMemberFormField"
 
 class Schedule(models.Model):
 	name = models.CharField(max_length=100)
