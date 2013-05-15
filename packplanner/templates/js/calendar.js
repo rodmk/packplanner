@@ -385,6 +385,7 @@ function formatMinutes(n){
 }
 
 function renderEvent(event) {
+	console.log(event);
 	var userIDGoing;
 	var btnType = "no-participant";
 	console.log("event "+event.title+ " childrenGoing "+event.childrengoingID)
@@ -557,6 +558,9 @@ function renderEvent(event) {
 function setDriverTo(details_id, driver_id) {
 	var driver;
 	var tileID = "drivingTo"+details_id;
+	var caret = $("<span></span>",{
+		class : "caret",
+	})
 	$.ajax("/setDriver/to/" + details_id + "/" + driver_id + "/", {
 		type: "POST",
 		data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
@@ -568,6 +572,8 @@ function setDriverTo(details_id, driver_id) {
 				driver = familyAdultsMap[driver_id];
 				console.log(tileID);
 				$("#"+tileID).text("To: "+driver.first_name);
+				caret.appendTo($("#"+tileID))
+				$("#"+tileID).removeClass("btn-danger").addClass("btn");
 			}
 		}
 	});
@@ -576,6 +582,9 @@ function setDriverTo(details_id, driver_id) {
 function setDriverFrom(details_id, driver_id) {
 	var driver;
 	var tileID = "drivingFrom"+details_id;
+	var caret = $("<span></span>",{
+		class : "caret",
+	})
 	$.ajax("/setDriver/from/" + details_id + "/" + driver_id + "/", {
 		type: "POST",
 		data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
@@ -589,6 +598,10 @@ function setDriverFrom(details_id, driver_id) {
 				driver = familyAdultsMap[driver_id];
 				console.log(tileID);
 				$("#"+tileID).text("From: "+driver.first_name);
+				caret.appendTo($("#"+tileID));
+				$("#"+tileID).removeClass("btn-danger").addClass("btn");
+
+
 			}
 		}
 	});
