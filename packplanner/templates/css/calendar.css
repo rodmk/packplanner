@@ -33,7 +33,11 @@
   background-color: #F12041;
 }
 .btn.btn-4:hover{
-  background-color: #F12041;
+  background-color: #EE213D;
+}
+
+.btn.btn-grey{
+  background-color: #7F8C8D;
 }
 
 .first-day {
@@ -134,15 +138,11 @@
   background-color: #34495E;
 }
 
-.tile.primary{
-  background-color: #1ABC9C;
+.tile.grey{
+  background-color: #7F8C8D;
 
 }
-.tile.primary .btn-primary{
-  background-color: #ecf0f1;
-  color:#DDDDDD;
 
-}
 .tile.info{
   background-color: #3498DB;
 }

@@ -71,7 +71,7 @@ $(document).ready(function() {
 			btnType = "default";
 			break;
 			case 1:
-			btnType = "primary";
+			btnType = "grey";
 			break;
 			case 2:
 			btnType = "info";
@@ -83,7 +83,7 @@ $(document).ready(function() {
 			btnType = "warning";
 			break;
 		}
-		$('#filterBtnGroup').append('<button id="partialChildren" type="button" class="btn pull-left flat btn-'+btnTypeNumber+'">' + childrenFilters[j] + '</button>');
+		$('#filterBtnGroup').append('<button id="partialChildren" type="button" class="btn pull-left flat btn-'+btnType+'">' + childrenFilters[j] + '</button>');
 		console.log(familyAsList[j]);
 		if (familyAsList[j].is_child){
 			userColorMap["c"+familyAsList[j].id] = btnType;
@@ -203,9 +203,13 @@ $(document).ready(function() {
 			}
 		}
 
+		var driverTo = $("#drivingToInput").val();
+		console.log("got driverTo as "+driverTo);
+		var driverFrom = $("#drivingFromInput").val();
+
 
 		var eventLocation = $("#locationInput").val();
-		var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, childrengoingID, adultsgoingID);
+		var e = new Event(id, title, eventLocation, startDate, endDate, driverTo, driverFrom, childrengoingID, adultsgoingID);
 		
 		$.ajax("/calendar/", {
 			type: "POST",
@@ -474,12 +478,19 @@ function renderEvent(event) {
 	reachoutbtn.append(reachoutIcon);
 	reachoutbtn.attr("data-toggle","modal");
 
-	
+	var driverToNoneCheck = "";
+	if(driverTo == "None"){
+		driverToNoneCheck = "btn-danger";
+	}
+	else{
+		driverToNoneCheck = "btn-primary";
+	}
+
 	driveToA = $('<a></a>',{
 		href : '#',
-		class : "drivingTo btn btn-primary flat pull-right dropdown-toggle",
+		class : "drivingTo btn btn-primary flat pull-right dropdown-toggle "+driverToNoneCheck,
 		id : "drivingTo"+event.id,
-		text: 'To: '+driverTo
+		text: 'To: '+capitaliseFirstLetter(driverTo)
 
 	});
 	driveToA.attr("data-toggle","dropdown");
@@ -494,11 +505,20 @@ function renderEvent(event) {
 	driveToA.append(driveToSpan);
 	drivetobtn.append(driveToA);
 
+
+	var driverFromNoneCheck = "";
+	if(driverFrom == "None"){
+		driverFromNoneCheck = "btn-danger";
+	}
+	else{
+		driverFromNoneCheck = "btn-primary";
+	}
+
 	driveFromA = $('<a></a>',{
 		href : '#',
-		class : "drivingFrom btn btn-primary flat pull-right dropdown-toggle",
+		class : "drivingFrom btn flat pull-right dropdown-toggle "+driverFromNoneCheck,
 		id : "drivingFrom"+event.id,
-		text: 'From: '+driverFrom
+		text: 'From: '+ capitaliseFirstLetter(driverFrom)
 	});
 	driveFromA.attr("data-toggle","dropdown");
 
@@ -551,8 +571,20 @@ function renderEvent(event) {
 	date.appendTo(tile);
 	
 
-	handleMissingDrivers();
+	//handleMissingDrivers();
 	return tile;
+}
+
+function capitaliseFirstLetter(string)
+{
+	if(string == ""){
+		return string;
+	}
+	if(string == undefined){
+		console.log("undefined" + string);
+		return "None";
+	}
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function setDriverTo(details_id, driver_id) {
@@ -573,7 +605,7 @@ function setDriverTo(details_id, driver_id) {
 				console.log(tileID);
 				$("#"+tileID).text("To: "+driver.first_name);
 				caret.appendTo($("#"+tileID))
-				$("#"+tileID).removeClass("btn-danger").addClass("btn");
+				$("#"+tileID).removeClass("btn-danger").addClass("btn-primary");
 			}
 		}
 	});
@@ -599,7 +631,7 @@ function setDriverFrom(details_id, driver_id) {
 				console.log(tileID);
 				$("#"+tileID).text("From: "+driver.first_name);
 				caret.appendTo($("#"+tileID));
-				$("#"+tileID).removeClass("btn-danger").addClass("btn");
+				$("#"+tileID).removeClass("btn-danger").addClass("btn-primary");
 
 
 			}
@@ -640,21 +672,22 @@ function displayEvents() {
 		var e = currentDateEvents[i];
 		//console.log("Displaying events " + e);
 		content.append(renderEvent(e));
-		handleMissingDrivers();
+		//handleMissingDrivers();
 	}
 }
 
-function handleMissingDrivers(){
-	var allDrivingTo = $(".drivingTo");
-	var allDrivingFrom = $(".drivingFrom");
-	$(allDrivingTo).each(function(i){
-		if(i.text == "To: None"){
-			$(this).removeClass("btn-primary").addClass("btn-danger");
-		}
-	})
-	$(allDrivingFrom).each(function(i){
-		if(i.text == "To: None"){
-			$(this).removeClass("btn-primary").addClass("btn-danger");
-		}
-	})
-}
+// function handleMissingDrivers(){
+// 	var allDrivingTo = $(".drivingTo");
+// 	var allDrivingFrom = $(".drivingFrom");
+// 	$(allDrivingTo).each(function(i){
+// 		if(i.text() == "To: None"){
+// 			$(this).removeClass("btn-primary").addClass("btn-danger");
+// 		}
+
+// 	})
+// 	$(allDrivingFrom).each(function(i){
+// 		if(i.text() == "To: None"){
+// 			$(this).removeClass("btn-primary").addClass("btn-danger");
+// 		}
+// 	})
+// }
