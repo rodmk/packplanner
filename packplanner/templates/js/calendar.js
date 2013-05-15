@@ -82,7 +82,7 @@ $(document).ready(function() {
 			btnType = "warning";
 			break;
 		}
-		$('#filterBtnGroup').append('<button id="partialChildren" type="button" class="btn pull-left flat btn-'+btnType+'">' + childrenFilters[j] + '</button>');
+		$('#filterBtnGroup').append('<button id="partialChildren" type="button" class="btn pull-left flat btn-'+btnTypeNumber+'">' + childrenFilters[j] + '</button>');
 		console.log(familyAsList[j]);
 		if (familyAsList[j].is_child){
 			userColorMap["c"+familyAsList[j].id] = btnType;
@@ -92,9 +92,9 @@ $(document).ready(function() {
 
 		}
 	}
-	for(i=0;i<=helpFilters.length-1;i++){
-		$('#filterBtnGroup').append('<button id="allChildren" type="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
-	}
+	// for(i=0;i<=helpFilters.length-1;i++){
+	// 	$('#filterBtnGroup').append('<button id="allChildren" type="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
+	// }
 
 
 	function buildEventMap(){

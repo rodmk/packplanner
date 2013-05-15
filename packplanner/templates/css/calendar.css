@@ -4,6 +4,22 @@
   width: 1200px;
 }
 
+.btn.btn-0{
+ background-color: #d39bcb;
+}
+.btn.btn-1{
+  background-color: #6495ed;
+}
+.btn.btn-2{
+  background-color: #e18e96;
+}
+.btn.btn-3{
+  background-color: #ffdb58;
+}
+.btn.btn-4{
+  background-color: #996515;
+}
+
 .first-day {
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
