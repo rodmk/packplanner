@@ -221,7 +221,7 @@ $(document).ready(function() {
 	}
 	
 	
-	displayEvents();
+	//displayEvents();
 
 	for(i=0;i<=helpFilters.length-1;i++){
 		$('#filterBtnGroup').append('<button id="allChildren" type="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
@@ -313,11 +313,11 @@ $(document).ready(function() {
 			for( var i = 0; i < going.length; i++){
 				key = going[i].id;
 				if(key.slice(0,1)=='a'){
-					//console.log("adult "+key.slice(1) +"is going");
+					console.log("adult "+key.slice(1) +"is going");
 					adultsgoingID.push(key.slice(1));
 				}
 				else if(key.slice(0,1)=='c'){
-					//console.log("child "+key.slice(1) +"is going");
+					console.log("child "+key.slice(1) +"is going");
 					childrengoingID.push(key.slice(1));
 				}
 			}
@@ -657,6 +657,8 @@ function renderEvent(event) {
 	//var userType;
 	var userID;
 	var userFirstName;
+	console.log("event "+event.title+ " childrenGoing "+event.childrengoingID)
+	console.log("event "+event.title+ " adultsGoingID "+event.adultsGoingID)
 	if(event.childrengoingID.length>0){
 		//userType = "child";
 		userID = event.childrengoingID[0];
@@ -671,8 +673,8 @@ function renderEvent(event) {
 	}
 	//console.log("userFirstName "+ userFirstName)
 	var btnType = userColorMap[userFirstName];
-	//console.log(userColorMap)
-	//console.log("btnType: "+btnType)
+	console.log(userColorMap)
+	console.log("btnType: "+btnType)
 	tile = $("<div>", {
 		class: "tile row " + btnType,
 	})
