@@ -138,8 +138,8 @@ $(document).ready(function() {
 				"{{event_details.event.location}}", 
 				startDate, 
 				endDate,
-				"{{event_details.driver_to}}", 
-				"{{event_details.driver_from}}",
+				"{{event_details.driverTo}}", 
+				"{{event_details.driverFrom}}",
 				childrenAttendingIDs,adultsAttendingIDs);
 			if(!(tempHash in eventDict)){
 				eventDict[tempHash] = [e];
@@ -648,9 +648,13 @@ function handleMissingDrivers(){
 	var allDrivingTo = $(".drivingTo");
 	var allDrivingFrom = $(".drivingFrom");
 	$(allDrivingTo).each(function(i){
-		$(this).removeClass("btn-primary").addClass("btn-danger");
+		if(i.text == "To: None"){
+			$(this).removeClass("btn-primary").addClass("btn-danger");
+		}
 	})
 	$(allDrivingFrom).each(function(i){
-		$(this).removeClass("btn-primary").addClass("btn-danger");
+		if(i.text == "To: None"){
+			$(this).removeClass("btn-primary").addClass("btn-danger");
+		}
 	})
 }
