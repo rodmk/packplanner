@@ -22,17 +22,18 @@ $(document).ready(function() {
 	var newAdult;
 	childrenFilters = [];
 	{% for family_mem in family.family_members.all %}
-	childrenFilters.push("{{family_mem.first_name}}");
-	newAdult = new Adult("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}});
-	//console.log("added family member" + newAdult.first_name)
-	familyAdultsMap[newAdult.id] = newAdult;
-	familyAsList.push(newAdult);
+		childrenFilters.push("{{family_mem.first_name}}");
+		newAdult = new Adult("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}});
+		//console.log("added family member" + newAdult.first_name)
+		familyAdultsMap[newAdult.id] = newAdult;
+		familyAsList.push(newAdult);
 	{% endfor %}
+
 	{% for child in family.children.all %}
-	childrenFilters.push("{{child.first_name}}");
-	var newChild = new Child("{{child.first_name}}","{{child.last_name}}",{{child.id}}); 
-	familyChildrenMap[newChild.id] = newChild;
-	familyAsList.push(newChild);
+		childrenFilters.push("{{child.first_name}}");
+		var newChild = new Child("{{child.first_name}}","{{child.last_name}}",{{child.id}}); 
+		familyChildrenMap[newChild.id] = newChild;
+		familyAsList.push(newChild);
 	{% endfor %}
 	
 
@@ -100,52 +101,52 @@ $(document).ready(function() {
 	function buildEventMap(){
 		var eventDict = new Array();
 		var tempHash = ""
-		var adultsAttendingIDs = [];
-		var childrenAttendingIDs = [];
 		{% for event_details in events_details %}
+			var adultsAttendingIDs = [];
+			var childrenAttendingIDs = [];
 
-		var startDate = new Date();
-		startDate.setFullYear({{event_details.event.startTime.year}});
-		startDate.setMonth({{event_details.event.startTime.month}}-1);
-		startDate.setDate({{event_details.event.startTime.day}});
-		startDate.setHours({{event_details.event.startTime.hour}});
-		startDate.setMinutes({{event_details.event.startTime.minute}});
-		startDate.setHours(startDate.getHours()-5);
+			var startDate = new Date();
+			startDate.setFullYear({{event_details.event.startTime.year}});
+			startDate.setMonth({{event_details.event.startTime.month}}-1);
+			startDate.setDate({{event_details.event.startTime.day}});
+			startDate.setHours({{event_details.event.startTime.hour}});
+			startDate.setMinutes({{event_details.event.startTime.minute}});
+			startDate.setHours(startDate.getHours()-5);
 
-		var endDate = new Date();
-		endDate.setFullYear({{event_details.event.endTime.year}});
-		endDate.setMonth({{event_details.event.endTime.month}}-1);
-		endDate.setDate({{event_details.event.endTime.day}});
-		endDate.setHours({{event_details.event.endTime.hour}});
-		endDate.setMinutes({{event_details.event.endTime.minute}});
-		endDate.setHours(endDate.getHours()-5);
-		tempHash = hash(startDate);
+			var endDate = new Date();
+			endDate.setFullYear({{event_details.event.endTime.year}});
+			endDate.setMonth({{event_details.event.endTime.month}}-1);
+			endDate.setDate({{event_details.event.endTime.day}});
+			endDate.setHours({{event_details.event.endTime.hour}});
+			endDate.setMinutes({{event_details.event.endTime.minute}});
+			endDate.setHours(endDate.getHours()-5);
+			tempHash = hash(startDate);
 
-		//console.log("attendees ");
-		//console.log({{event_details.attendees.all}});
+			//console.log("attendees ");
+			//console.log({{event_details.attendees.all}});
 
-		{% for attendee in event_details.attendees.all %}
-		adultsAttendingIDs.push({{attendee.id}});
-		{% endfor %}
-		{% for childAttendee in event_details.child_attendees.all %}
-		childrenAttendingIDs.push({{childAttendee.id}});
-		{% endfor %}
+			{% for attendee in event_details.attendees.all %}
+				adultsAttendingIDs.push({{attendee.id}});
+			{% endfor %}
+			{% for childAttendee in event_details.child_attendees.all %}
+				childrenAttendingIDs.push({{childAttendee.id}});
+			{% endfor %}
 
 
-		var e = new Event({{event_details.id}}, 
-			"{{event_details.event.name}}", 
-			"{{event_details.event.location}}", 
-			startDate, 
-			endDate,
-			"{{event_details.driver_to}}", 
-			"{{event_details.driver_from}}",
-			childrenAttendingIDs,adultsAttendingIDs);
-		if(!(tempHash in eventDict)){
-			eventDict[tempHash] = [e];
-		}
-		else{
-			eventDict[tempHash].push(e);
-		}
+			var e = new Event({{event_details.id}}, 
+				"{{event_details.event.name}}", 
+				"{{event_details.event.location}}", 
+				startDate, 
+				endDate,
+				"{{event_details.driver_to}}", 
+				"{{event_details.driver_from}}",
+				childrenAttendingIDs,adultsAttendingIDs);
+			if(!(tempHash in eventDict)){
+				eventDict[tempHash] = [e];
+			}
+			else{
+				eventDict[tempHash].push(e);
+			}
 		{% endfor %}
 		return eventDict;
 	}
@@ -548,6 +549,34 @@ function renderEvent(event) {
 
 	handleMissingDrivers();
 	return tile;
+}
+
+function setDriverTo(details_id, driver_id) {
+	$.ajax("/setDriver/to/" + details_id + "/" + driver_id + "/", {
+		type: "POST",
+		data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+		success: function(response) {
+			if (response == -1) {
+				//tell user it didn't work
+			} else {
+				//TODO: update driver text
+			}
+		}
+	});
+}
+
+function setDriverFrom(details_id, driver_id) {
+	$.ajax("/setDriver/from/" + details_id + "/" + driver_id + "/", {
+		type: "POST",
+		data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+		success: function(response) {
+			if (response == -1) {
+				//tell user it didn't work
+			} else {
+				//TODO: update driver text
+			}
+		}
+	});
 }
 
 function getEvents(date) {

@@ -41,14 +41,14 @@ def calendar(request):
 			event_details.save()
 
 			try:
-				driverTo = User.objects.get(id=driver_to_id)
+				driverTo = FamilyMember.objects.get(id=driver_to_id).user
 				event_details.driverTo = driverTo
 				event_details.save()
 			except Exception, e:
 				pass
 
 			try:
-				driverFrom = User.objects.get(id=driver_from_id)
+				driverFrom = FamilyMember.objects.get(id=driver_from_id).user
 				event_details.driverFrom = driverFrom
 				event_details.save()
 			except Exception, e:
@@ -170,14 +170,14 @@ def edit_event(request, id):
 		event.save()
 
 		try:
-			driverTo = User.objects.get(id=driver_to_id)
+			driverTo = FamilyMember.objects.get(id=driver_to_id).user
 			event_details.driverTo = driverTo
 			event_details.save()
 		except Exception, e:
 			pass
 
 		try:
-			driverFrom = User.objects.get(id=driver_from_id)
+			driverFrom = FamilyMember.objects.get(id=driver_from_id).user
 			event_details.driverFrom = driverFrom
 			event_details.save()
 		except Exception, e:
@@ -205,10 +205,39 @@ def edit_event(request, id):
 def remove_event(request, id):
 	family_member = get_family_member(request.user)
 	if request.method == 'POST':
-		print request.POST
 		event_details = FamilyEventDetails.objects.get(id=id)
 		if family_member.family == event_details.family:
 			event_details.delete()
+			return HttpResponse(simplejson.dumps(1))
+		else:
+			return HttpResponse(simplejson.dumps(-1))
+	else:
+		return HttpResponseRedirect("/home/")
+
+@login_required
+def set_driver_to(request, details_id, driver_id):
+	family_member = get_family_member(request.user)
+	if request.method == 'POST':
+		event_details = FamilyEventDetails.objects.get(id=details_id)
+		if family_member.family == event_details.family:
+			driver_to = FamilyMember.objects.get(id=driver_id).user
+			event_details.driverTo = driver_to
+			event_details.save()
+			return HttpResponse(simplejson.dumps(1))
+		else:
+			return HttpResponse(simplejson.dumps(-1))
+	else:
+		return HttpResponseRedirect("/home/")
+
+@login_required
+def set_driver_from(request, details_id, driver_id):
+	family_member = get_family_member(request.user)
+	if request.method == 'POST':
+		event_details = FamilyEventDetails.objects.get(id=details_id)
+		if family_member.family == event_details.family:
+			driver_from = FamilyMember.objects.get(id=driver_id).user
+			event_details.driverFrom = driver_from
+			event_details.save()
 			return HttpResponse(simplejson.dumps(1))
 		else:
 			return HttpResponse(simplejson.dumps(-1))
