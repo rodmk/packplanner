@@ -1,65 +1,3 @@
-function Event(id, title, location, startDate, endDate, driverTo, driverFrom, childrengoingID, adultsgoingID) {
-	this.id = id;
-	this.title = title;
-	this.location = location;
-	this.startDate = startDate;
-	this.endDate = endDate;
-	this.driverTo = driverTo;
-	this.driverFrom = driverFrom;
-	this.childrengoingID = childrengoingID;
-	this.adultsgoingID = adultsgoingID;
-
-}
-
-function Family(id, last_name,address_line1, address_line2,address_city,address_state, address_zip_code, phone_number, contacts){
-	this.id = id;
-	this.last_name = last_name;
-	this.address_line1 = address_line1;
-	this.address_line2 = address_line2;
-	this.address_city = address_city;
-	this.address_zip_code = address_zip_code;
-	this.phone_number = phone_number;
-	this.contacts = contacts;
-}
-
-function Contact(last_name, id, first_name){
-	this.last_name = last_name;
-	this.id = id;
-}
-
-function Driver(first_name,last_name,id){
-	this.id = id;
-	this.first_name = first_name;
-	this.last_name = last_name;
-}
-
-function Child(first_name,last_name,id){
-	this.id = id;
-	this.first_name = first_name;
-	this.last_name = last_name;
-}
-
-
-function Adult(first_name,last_name,id){
-	this.id = id;
-	this.first_name = first_name;
-	this.last_name = last_name;
-}
-
-function compareEvents(event1, event2) {
-	if (event1.startDate > event2.startDate) {
-		return 1;
-	} else if (event1.startDate < event2.startDate) {
-		return -1;
-	} else if (event1.endDate > event2.endDate) {
-		return 1;
-	} else if (event1.endDate < event2.endDate) {
-		return -1
-	} else {
-		return 0;
-	}
-}
-
 var allEvents = new Array();
 var currentDate = new Date();
 var family;
@@ -74,14 +12,14 @@ var familyAsList = [];
 /*
 Filters
 */
-var booleanFilters = [];
 var childrenFilters = [];
 var helpFilters = ["All"];
 var userColorMap = {};
 
 
 $(document).ready(function() {
-	var newAdult
+	//creates familyAdultsMap and familyChildrenMap and familyAsList
+	var newAdult;
 	childrenFilters = [];
 	{% for family_mem in family.family_members.all %}
 	childrenFilters.push("{{family_mem.first_name}}");
@@ -98,10 +36,11 @@ $(document).ready(function() {
 	{% endfor %}
 	
 
-	allEvents = buildDict();
+	allEvents = buildEventMap();
 
 	dateSelectedFunc(currentDate);
 
+	//builds contact list
 	var contactlist= [];
 	{% for contact in family.contacts.all %}
 	contacts.push(new Contact('{{contact.last_name}}',{{contact.id}}));
@@ -118,6 +57,7 @@ $(document).ready(function() {
 	{% endif %}
 	{% endfor %}
 
+	//creates mapping between family member and tile color
 	for(j=0;j<=childrenFilters.length-1;j++){
 		var btnTypeNumber = j%5;
 		var btnType = "";
@@ -140,34 +80,14 @@ $(document).ready(function() {
 			break;
 		}
 		$('#filterBtnGroup').append('<button id="partialChildren" type="button" class="btn pull-left flat btn-'+btnType+'">' + childrenFilters[j] + '</button>');
-			//console.log("childrenFilters[j]"+childrenFilters[j]);
-			userColorMap[familyAsList[j].first_name] = btnType;
-			//console.log("name "+familyAsList[j].first_name + " is now associated with "+btnType);
-			//$('#filterBtnGroup').append('<button id="partialChildren" type="button" class=' + '"btn pull-left btn-custom'+j+'d">' + childrenFilters[j] + '</button>');
-			booleanFilters[j] = 0;
-		}
+		userColorMap[familyAsList[j].first_name] = btnType;
+	}
+	for(i=0;i<=helpFilters.length-1;i++){
+		$('#filterBtnGroup').append('<button id="allChildren" type="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
+	}
 
-	// function displayEvents() {
-	// 	// events.sort(compareEvents);
-	// 	var currentDateHash = hash(currentDate);
-	// 	//console.log("currentDateHash"+currentDateHash);
-	// 	if(!allEvents.hasOwnProperty(currentDateHash)){
-	// 		allEvents[currentDateHash] = [];
-	// 		console.log("no events existed today, adding empty array");
-	// 	}
-	// 	var currentDateEvents = allEvents[currentDateHash];
-	// 	//console.log("currentDateEvents"+currentDateEvents);
-	// 	currentDateEvents.sort(compareEvents);
-	// 	var content = $(".selected-day");
-	// 	$(".tile").detach();
-	// 	$(".dayEvents").remove();
-	// 	for (i=0; i<currentDateEvents.length; i++) {
-	// 		var event = currentDateEvents[i];
-	// 		content.append(renderEvent(event));
-	// 	}
-	// }
 
-	function buildDict(){
+	function buildEventMap(){
 		var eventDict = new Array();
 		var tempHash = ""
 		var adultsAttendingIDs = [];
@@ -223,66 +143,8 @@ $(document).ready(function() {
 	
 	//displayEvents();
 
-	for(i=0;i<=helpFilters.length-1;i++){
-		$('#filterBtnGroup').append('<button id="allChildren" type="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
-	}
 
 
-
-
-
-	$("#datepicker").datepicker({
-		onSelect: function(dateText, inst) { 
-	      var dateAsString = dateText; //the first parameter of this function
-	      var dateAsObject = $(this).datepicker( 'getDate' ); //the getDate method
-	      dateSelectedFunc(dateAsObject);
-
-	  }
-	});
-
-	/*Previous button*/
-	$("#previousDayButton").click(function() {
-		var date = new Date($("#datepicker").datepicker('getDate'));
-		date.setDate(date.getDate()-1);
-		$("#datepicker").datepicker('setDate', date);
-
-		prevDayFunc(date);
-		dateSelectedFunc(date);
-
-	});
-
-	/*Next Day button*/
-	$("#nextDayButton").click(function() {
-		var date = new Date($("#datepicker").datepicker('getDate'));
-		date.setDate(date.getDate()+1);
-		$("#datepicker").datepicker('setDate', date);
-
-		nextDayFunc(date);
-		dateSelectedFunc(date);
-
-	});
-
-	/*Previous Week button*/
-	$("#previousWeekButton").click(function() {
-		var date = new Date($("#datepicker").datepicker('getDate'));
-		date.setDate(date.getDate()-7);
-		$("#datepicker").datepicker('setDate', date);
-
-		prevWeekFunc(date);
-		dateSelectedFunc(date);
-
-	});
-
-	/*Next Week button*/
-	$("#nextWeekButton").click(function() {
-		var date = new Date($("#datepicker").datepicker('getDate'));
-		date.setDate(date.getDate()+7);
-		$("#datepicker").datepicker('setDate', date);
-
-		nextWeekFunc(date);
-		dateSelectedFunc(date);
-
-	});
 
 
 
@@ -291,17 +153,26 @@ $(document).ready(function() {
 		var id = 0;
 		var title = $("#eventName").val();
 		var eventDate = $("#eventDate").data('datetimepicker').getDate();
-			// console.log("eventDate " + eventDate);
-			var startTime = $("#startTime").data('datetimepicker').getDate();
-			// console.log("startTime " + startTime);
-			var endTime = $("#endTime").data('datetimepicker').getDate();
-			// console.log("endTime " + endTime);
-			var startDate = eventDate;
-			var endDate = eventDate;
-			startDate.setHours(startTime.getHours());
-			startDate.setMinutes(startTime.getMinutes());
-			if(endTime < startTime){
-				endDate.setDate(eventDate.getDate()+1);
+		var startTime = $("#startTime").data('datetimepicker').getDate();
+		var endTime = $("#endTime").data('datetimepicker').getDate();
+		var startDate = eventDate;
+		var endDate = eventDate;
+		startDate.setHours(startTime.getHours());
+		startDate.setMinutes(startTime.getMinutes());
+		if(endTime < startTime){
+			endDate.setDate(eventDate.getDate()+1);
+		}
+		endDate.setHours(endTime.getHours())
+		endDate.setMinutes(endTime.getMinutes())
+
+		var going = $("#familyAttendingInput option:selected");
+		var adultsgoingID = [];
+		var childrengoingID = [];
+		var keys = [];
+		for( var i = 0; i < going.length; i++){
+			key = going[i].id;
+			if(key.slice(0,1)=='a'){
+				adultsgoingID.push(key.slice(1));
 			}
 			endDate.setHours(endTime.getHours())
 			endDate.setMinutes(endTime.getMinutes())
@@ -313,194 +184,84 @@ $(document).ready(function() {
 			for( var i = 0; i < going.length; i++){
 				key = going[i].id;
 				if(key.slice(0,1)=='a'){
-					console.log("adult "+key.slice(1) +"is going");
 					adultsgoingID.push(key.slice(1));
 				}
 				else if(key.slice(0,1)=='c'){
-					console.log("child "+key.slice(1) +"is going");
 					childrengoingID.push(key.slice(1));
 				}
 			}
+		}
 
 
-			// console.log(childrengoingID);
-			// console.log(adultsgoingID);
-			var eventLocation = $("#locationInput").val();
-			var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, childrengoingID, adultsgoingID);
-			// console.log(e);
-			
-			$.ajax("/calendar/", {
-				type: "POST",
-				data: {event: e,
-					name: e.title,
-					location : e.location,
-					startTime : toDateString(e.startDate),
-					endTime : toDateString(e.endDate),
-					start_time : e.startDate.getTime(),
-					end_time : e.endDate.getTime(),
-					csrfmiddlewaretoken: '{{ csrf_token }}' },
-					success: function(response) {
-						addSuccessfulEvent(e, response)
-					}
-			});
+		var eventLocation = $("#locationInput").val();
+		var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, childrengoingID, adultsgoingID);
+		
+		$.ajax("/calendar/", {
+			type: "POST",
+			data: {event: e,
+				name: e.title,
+				location : e.location,
+				startTime : toDateString(e.startDate),
+				endTime : toDateString(e.endDate),
+				start_time : e.startDate.getTime(),
+				end_time : e.endDate.getTime(),
+				csrfmiddlewaretoken: '{{ csrf_token }}' },
+			success: function(response) {
+				addSuccessfulEvent(e, response)
+			}
+		});
 
-			$('#newEventModal').modal('hide');
-			$(':input','#newEventForm')
+		$('#newEventModal').modal('hide');
+		$(':input','#newEventForm')
 			.not(':button, :submit, :reset, :hidden')
 			.val('')
 			.removeAttr('checked')
 			.removeAttr('selected');
 			driverToID = -1;
 			driverFromID = -1;
-
-		});
-
-
-$("#editEventButtonSave").click(function(){
-	var id = 0;
-	var title = $("#editEventName").val();
-	var eventDate = $("#editEventDate").data('datetimepicker').getDate();
-	var startTime = $("#editStartTime").data('datetimepicker').getDate();
-	var endTime = $("#editEndTime").data('datetimepicker').getDate();
-	var startDate = eventDate;
-	var endDate = eventDate;
-	startDate.setHours(startTime.getHours());
-	startDate.setMinutes(startTime.getMinutes());
-	if(endTime < startTime){
-		endDate.setDate(eventDate.getDate()+1);
-	}
-	endDate.setHours(endTime.getHours())
-	endDate.setMinutes(endTime.getHours())
-	var going = $("#editFamilyAttending").val();
-	var goingID = -1;
-	{% for family_member in family.family_members.all %}
-	if('{{family_member.first_name}}'==going){
-		goingID = {{family_member.id}};
-		// console.log(goingID);
-	}
-	{% endfor %}
+	});
 
 
-	var eventLocation = $("#locationInput").val();
-	var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, goingID);
-})
-
-$('#startTime').datetimepicker({
-	pickDate: false,
-	pick12HourFormat: true,
-	pickSeconds: false,
-	format : "hh:mm PP",
-});
-$('#endTime').datetimepicker({
-	pickDate: false,
-	pick12HourFormat: true,
-	pickSeconds: false,
-	format : "hh:mm PP",
-});
-$('#eventDate').datetimepicker({
-	pickTime: false
-});
-
-$('#editStartTime').datetimepicker({
-	pickDate: false,
-	pick12HourFormat: true,
-	pickSeconds: false,
-	format : "hh:mm PP",
-});
-$('#editEndTime').datetimepicker({
-	pickDate: false,
-	pick12HourFormat: true,
-	pickSeconds: false,
-	format : "hh:mm PP",
-});
-$('#editEventDate').datetimepicker({
-	pickTime: false
-});
-
-// $('#startTime').datetimepicker.data('datetimepicker').setDate(currentDate);
-// $('#endTime').datetimepicker.data('datetimepicker').setDate(currentDate);
-// $('#eventDate').datetimepicker.data('datetimepicker').setDate(currentDate);
-// $('#editStartTime').datetimepicker.data('datetimepicker').setDate(currentDate);
-// $('#editEndTime').datetimepicker.data('datetimepicker').setDate(currentDate);
-// $('#editEventDate').datetimepicker.data('datetimepicker').setDate(currentDate);
-
-{% for family_member in family.family_members.all %}
-$("#familyAttendingInput").append("<option id='a{{family_member.id}}'>{{family_member.first_name}}</option>");
-$("#editFamilyAttendingInput").append("<option id='a{{family_member.id}}'>{{family_member.first_name}}</option>");
-{% endfor %}
-{% for child in family.children.all %}
-$("#familyAttendingInput").append("<option id='c{{child.id}}'>{{child.first_name}}</option>");
-$("#editFamilyAttendingInput").append("<option id='c{{child.id}}'>{{child.first_name}}</option>");
-{% endfor %}
-$("#drivingToInput").typeahead({
-	source: function(query, process){
-		tempdrivers = [];
-		map = {};
-		$.each(drivingContacts,function(i,driver) {
-			map[driver.first_name+" "+driver.last_name] = driver;
-			tempdrivers.push(driver.first_name+" "+driver.last_name); 
-		});
-		process(tempdrivers)
-	},
-	updater: function(item){
-		driverToID = map[item].id;
-		return item;
-	},
-	items:4
-});
-
-$("#editDrivingToInput").typeahead({
-	source: function(query, process){
-		map = {};
-		tempdrivers = [];
-		$.each(drivingContacts,function(i,driver) {
-			map[driver.first_name+" "+driver.last_name] = driver;
-			tempdrivers.push(driver.first_name+" "+driver.last_name); 
-		});
-		process(tempdrivers)
-	},
-	updater: function(item){
-		editDriverToID = map[item].id;
-		return item;
-	},
-	items:4
-});
+	$("#editEventButtonSave").click(function(){
+		var id = 0;
+		var title = $("#editEventName").val();
+		var eventDate = $("#editEventDate").data('datetimepicker').getDate();
+		var startTime = $("#editStartTime").data('datetimepicker').getDate();
+		var endTime = $("#editEndTime").data('datetimepicker').getDate();
+		var startDate = eventDate;
+		var endDate = eventDate;
+		startDate.setHours(startTime.getHours());
+		startDate.setMinutes(startTime.getMinutes());
+		if(endTime < startTime){
+			endDate.setDate(eventDate.getDate()+1);
+		}
+		endDate.setHours(endTime.getHours())
+		endDate.setMinutes(endTime.getHours())
+		var going = $("#editFamilyAttending").val();
+		var goingID = -1;
+		{% for family_member in family.family_members.all %}
+		if('{{family_member.first_name}}'==going){
+			goingID = {{family_member.id}};
+			// console.log(goingID);
+		}
+		{% endfor %}
 
 
-$("#drivingFromInput").typeahead({
-	source: function(query, process){
-		map = {};
-		tempdrivers = [];
-		$.each(drivingContacts,function(i,driver) {
-			map[driver.first_name+" "+driver.last_name] = driver;
-			tempdrivers.push(driver.first_name+" "+driver.last_name); 
-		});
-		process(tempdrivers)
-	},
-	updater: function(item){
-		driverFromID = map[item].id;
-		return item;
-	},
-	items:4
-});
+		var eventLocation = $("#locationInput").val();
+		var e = new Event(id, title, eventLocation, startDate, endDate, driverToID, driverFromID, goingID);
+	});
+	initNewEventModalUI();
+	initEditEventModalUI();
+	addDateNavFunctionality();
 
-$("#editDrivingFromInput").typeahead({
-	source: function(query, process){
-		map = {};
-		tempdrivers = [];
-		$.each(drivingContacts,function(i,driver) {
-			map[driver.first_name+" "+driver.last_name] = driver;
-			tempdrivers.push(driver.first_name+" "+driver.last_name); 
-		});
-		process(tempdrivers)
-	},
-	updater: function(item){
-		editdriverFromID = map[item].id;
-		return item;
-	},
-	items:4
-});
-});
+
+});//end document.ready
+
+{% include "js/calendar/edit-event-modal.js" %}
+
+{% include "js/calendar/new-event-modal.js" %}
+
+{% include "js/calendar/datenav.js" %}
 
 function toDateString(date) {
 	return "" + date.getFullYear() + "-" + 
@@ -585,18 +346,6 @@ function eventDaySelected(day) {
 	}
 }
 
-/*
-Returns list of selected names
-*/
-function getSelectedFilters(){
-	var selectedFilters = [];
-	for( k=0; k<=booleanFilters.length-1; k++){
-		if (booleanFilters[k] == true){
-			selectedFilters.push(childrenFilters[k]);
-		} 
-	}
-	return selectedFilters;
-}
 
 function focusEventCalendar(currentDate) {
 	var day = currentDate.getDay();
