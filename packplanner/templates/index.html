@@ -18,11 +18,6 @@ class="active"
 {% endblock %}
 
 {% block content %}
-	{% include "new-event-modal.html" %}
-	{% include "edit-event-modal.html" %}
-	{% include "reach-out-modal.html" %}
-	
-
 	<div class="container body-container">
 		<!-- Middle -->
 		<div class="row-fluid week-buttons-row">
@@ -59,4 +54,8 @@ class="active"
 			<div id="datepicker"></div>
 		</div>
 	</div>
+
+	{% include "new-event-modal.html" %}
+	{% include "edit-event-modal.html" %}
+	{% include "reach-out-modal.html" %}
 {% endblock %}

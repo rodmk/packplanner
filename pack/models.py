@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 class Family(models.Model):
 	last_name = models.CharField(max_length=40)
@@ -129,6 +130,11 @@ class Message(models.Model):
 
 	def __unicode__(self):
 		return u'"%s" from %s to %s' % (self.subject, self.sender, self.receiver)
+
+	def time_display(self):
+		# now = datetime.datetime.now()
+		# today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+		return self.time_sent.strftime("%I:%M %p - %a, %b %d, %Y")
 
 class ContactRequest(models.Model):
 	family = models.ForeignKey(Family, related_name="pending_requests")

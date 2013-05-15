@@ -86,7 +86,7 @@ $(document).ready(function() {
 	{% for family_mem in family.family_members.all %}
 	childrenFilters.push("{{family_mem.first_name}}");
 	newAdult = new Adult("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}});
-	console.log("added family member" + newAdult.first_name)
+	//console.log("added family member" + newAdult.first_name)
 	familyAdultsMap[newAdult.id] = newAdult;
 	familyAsList.push(newAdult);
 	{% endfor %}
@@ -142,7 +142,7 @@ $(document).ready(function() {
 		$('#filterBtnGroup').append('<button id="partialChildren" type="button" class="btn pull-left flat btn-'+btnType+'">' + childrenFilters[j] + '</button>');
 			//console.log("childrenFilters[j]"+childrenFilters[j]);
 			userColorMap[familyAsList[j].first_name] = btnType;
-			console.log("name "+familyAsList[j].first_name + " is now associated with "+btnType);
+			//console.log("name "+familyAsList[j].first_name + " is now associated with "+btnType);
 			//$('#filterBtnGroup').append('<button id="partialChildren" type="button" class=' + '"btn pull-left btn-custom'+j+'d">' + childrenFilters[j] + '</button>');
 			booleanFilters[j] = 0;
 		}
@@ -313,11 +313,11 @@ $(document).ready(function() {
 			for( var i = 0; i < going.length; i++){
 				key = going[i].id;
 				if(key.slice(0,1)=='a'){
-					console.log("adult "+key.slice(1) +"is going");
+					//console.log("adult "+key.slice(1) +"is going");
 					adultsgoingID.push(key.slice(1));
 				}
 				else if(key.slice(0,1)=='c'){
-					console.log("child "+key.slice(1) +"is going");
+					//console.log("child "+key.slice(1) +"is going");
 					childrengoingID.push(key.slice(1));
 				}
 			}
@@ -350,6 +350,8 @@ $(document).ready(function() {
 			.val('')
 			.removeAttr('checked')
 			.removeAttr('selected');
+			driverToID = -1;
+			driverFromID = -1;
 
 		});
 
@@ -524,6 +526,7 @@ function removeEvent(event_id) {
 		for(var i =0; i<allEvents[key].length;i++){
 			if(allEvents[key][i].id == event_id){
 				var ev = allEvents[key].pop(i);
+				console.log("removing: " + ev);
 				$.ajax("/removeEvent/" + event_id + "/", {
 					type: "POST",
 					data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
@@ -557,8 +560,13 @@ function hash(date){
 }
 
 function addSuccessfulEvent(event, json) {
-	event.id=json;
-	addEvent(event);
+	if (json != -1) {
+		event.id=json;
+		addEvent(event);
+	} else {
+		alert("bad event");
+		//do something to tell user event not correct
+	}
 }
 
 function dateSelectedFunc(date){
@@ -609,21 +617,21 @@ function focusEventCalendar(currentDate) {
 
 
 function prevDayFunc(date){
-	console.log("prevDay pressed");
+	//console.log("prevDay pressed");
 }
 
 function nextDayFunc(date){
-	console.log("nextDay pressed");
+	//console.log("nextDay pressed");
 
 }
 
 function prevWeekFunc(date){
-	console.log("prevWeek pressed");
+	//console.log("prevWeek pressed");
 
 }
 
 function nextWeekFunc(date){
-	console.log("nextWeek pressed");
+	//console.log("nextWeek pressed");
 
 }
 
@@ -652,19 +660,19 @@ function renderEvent(event) {
 	if(event.childrengoingID.length>0){
 		//userType = "child";
 		userID = event.childrengoingID[0];
-		console.log(familyChildrenMap[userID]);
+		//console.log(familyChildrenMap[userID]);
 		userFirstName = familyChildrenMap[userID].first_name;
 	}
 	else if(event.adultsgoingID.length>0){
 		//userType = "adult";
 		userID = event.adultsgoingID[0];
-		console.log(familyAdultsMap);
+		//console.log(familyAdultsMap);
 		userFirstName = familyAdultsMap[userID].first_name;
 	}
-	console.log("userFirstName "+ userFirstName)
+	//console.log("userFirstName "+ userFirstName)
 	var btnType = userColorMap[userFirstName];
-	console.log(userColorMap)
-	console.log("btnType: "+btnType)
+	//console.log(userColorMap)
+	//console.log("btnType: "+btnType)
 	tile = $("<div>", {
 		class: "tile row " + btnType,
 	})

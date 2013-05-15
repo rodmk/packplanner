@@ -20,6 +20,9 @@ urlpatterns = patterns('',
     url(r'^schedules/$', 'packplanner.views.schedules'),
     url(r'^schedule/(\d+)/$', 'packplanner.views.view_schedule'),
     url(r'^settings/$', 'packplanner.views.settings'),
+    url(r'^setDriver/to/(\d+)/(\d+)/$', 'packplanner.views.set_driver_to'),
+
+    url(r'^setDriver/from/(\d+)/(\d+)/$', 'packplanner.views.set_driver_from'),
     (r'^accounts/login/$',  login),
     (r'^accounts/logout/$', logout, {"next_page" : "/home/"}),
 
