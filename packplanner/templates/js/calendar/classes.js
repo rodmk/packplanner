@@ -37,6 +37,7 @@ function Child(first_name,last_name,id){
 	this.id = id;
 	this.first_name = first_name;
 	this.last_name = last_name;
+	this.is_child = true;
 }
 
 
@@ -44,6 +45,7 @@ function Adult(first_name,last_name,id){
 	this.id = id;
 	this.first_name = first_name;
 	this.last_name = last_name;
+	this.is_child = false;
 }
 
 function compareEvents(event1, event2) {

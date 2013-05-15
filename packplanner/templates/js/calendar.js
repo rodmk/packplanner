@@ -38,23 +38,26 @@ $(document).ready(function() {
 
 	allEvents = buildEventMap();
 
-	dateSelectedFunc(currentDate);
 
 	//builds contact list
 	var contactlist= [];
 	{% for contact in family.contacts.all %}
-	contacts.push(new Contact('{{contact.last_name}}',{{contact.id}}));
-	{% for family_mem in contact.family_members.all%}
-	{% if family_mem.is_driver %}
-	drivingContacts.push(new Driver("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}}));
-	{% endif %}
+		contacts.push(new Contact('{{contact.last_name}}',{{contact.id}}));
+		{% for family_mem in contact.family_members.all%}
+			{% if family_mem.is_driver %}
+				drivingContacts.push(new Driver("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}}));
+			{% endif %}
+		{% endfor %}
 	{% endfor %}
-	{% endfor %}
+
+	//create family once contact list exists
 	family = new Family({{family.id}},"{{family.last_name}}","{{family.address_line1}}","{{family.address_line2}}", "{{family.address_city}}","{{family.address_state}}","{{family.address_zip_code}}","{{family.phone_number}}",contactlist);
+	
+	//adds family members to contacts
 	{% for family_mem in family.family_members.all %}
-	{% if family_mem.is_driver %}
-	drivingContacts.push(new Driver("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}}));
-	{% endif %}
+		{% if family_mem.is_driver %}
+			drivingContacts.push(new Driver("{{family_mem.first_name}}","{{family_mem.last_name}}",{{family_mem.id}}));
+		{% endif %}
 	{% endfor %}
 
 	//creates mapping between family member and tile color
@@ -80,7 +83,14 @@ $(document).ready(function() {
 			break;
 		}
 		$('#filterBtnGroup').append('<button id="partialChildren" type="button" class="btn pull-left flat btn-'+btnType+'">' + childrenFilters[j] + '</button>');
-		userColorMap[familyAsList[j].first_name] = btnType;
+		console.log(familyAsList[j]);
+		if (familyAsList[j].is_child){
+			userColorMap["c"+familyAsList[j].id] = btnType;
+		}
+		else{
+			userColorMap["a"+familyAsList[j].id] = btnType;
+
+		}
 	}
 	for(i=0;i<=helpFilters.length-1;i++){
 		$('#filterBtnGroup').append('<button id="allChildren" type="button" class="btn pull-left" >' + helpFilters[i] + '</button>');
@@ -254,6 +264,9 @@ $(document).ready(function() {
 	initEditEventModalUI();
 	addDateNavFunctionality();
 
+	dateSelectedFunc(currentDate);
+
+
 
 });//end document.ready
 
@@ -262,6 +275,8 @@ $(document).ready(function() {
 {% include "js/calendar/new-event-modal.js" %}
 
 {% include "js/calendar/datenav.js" %}
+
+{% include "js/calendar/classes.js" %}
 
 function toDateString(date) {
 	return "" + date.getFullYear() + "-" + 
@@ -364,66 +379,25 @@ function focusEventCalendar(currentDate) {
 }
 
 
-
-function prevDayFunc(date){
-	//console.log("prevDay pressed");
-}
-
-function nextDayFunc(date){
-	//console.log("nextDay pressed");
-
-}
-
-function prevWeekFunc(date){
-	//console.log("prevWeek pressed");
-
-}
-
-function nextWeekFunc(date){
-	//console.log("nextWeek pressed");
-
-}
-
-
-
-function makeList(list){
-	var start = "<ul>"
-	var body = ""
-	var end = "</ul>"
-	for(x in list){
-		body = body + "<li>"+ list[x] +"</li>"
-	}
-	return start+body+end;
-}
-
-
-
 function formatMinutes(n){
 	return n > 9 ? "" + n: "0" + n;
 }
 
 function renderEvent(event) {
-	//var userType;
-	var userID;
-	var userFirstName;
+	var userIDGoing;
+	var btnType = "no-participant";
 	console.log("event "+event.title+ " childrenGoing "+event.childrengoingID)
 	console.log("event "+event.title+ " adultsGoingID "+event.adultsGoingID)
+	console.log(userColorMap);
 	if(event.childrengoingID.length>0){
-		//userType = "child";
-		userID = event.childrengoingID[0];
-		//console.log(familyChildrenMap[userID]);
-		userFirstName = familyChildrenMap[userID].first_name;
+		userIDGoing = event.childrengoingID[0];
+		btnType = userColorMap['c'+userIDGoing];
 	}
 	else if(event.adultsgoingID.length>0){
-		//userType = "adult";
-		userID = event.adultsgoingID[0];
-		//console.log(familyAdultsMap);
-		userFirstName = familyAdultsMap[userID].first_name;
+		userIDGoing = event.adultsgoingID[0];
+		btnType = userColorMap['a'+userIDGoing];
 	}
-	//console.log("userFirstName "+ userFirstName)
-	var btnType = userColorMap[userFirstName];
-	console.log(userColorMap)
-	console.log("btnType: "+btnType)
+	
 	tile = $("<div>", {
 		class: "tile row " + btnType,
 	})
@@ -438,22 +412,28 @@ function renderEvent(event) {
 		text: event.title,
 	})
 
-	var family_drivers = []
+	//var family_drivers = []
 	var drivermap = {}
-	{% for family_member in family.family_members.all%}
-	{% if family_member.is_driver %}
-	family_drivers.push("{{family_member.first_name}}");
-	drivermap["{{family_member.first_name}}"] = new Driver("{{family_member.first_name}}","{{family_member.last_name}}", {{family_member.id}})
-	{% endif%}
-	{% endfor %}
-	{% for child in family.children.all%}
-	{% if child.is_driver %}
-	family_drivers.push("{{child.first_name}}");
-	drivermap["{{child.first_name}}"] = new Driver("{{child.first_name}}","{{child.last_name}}", {{child.id}})
-	{% endif%}
-	{% endfor %}
+
+	//creating list of all family members that can drive for quick driver assignnment
+	// {% for family_member in family.family_members.all%}
+	// 	{% if family_member.is_driver %}
+	// 		var 
+	// 		family_drivers.push("{{family_member.first_name}}");
+	// 		drivermap["{{family_member.first_name}}"] = new Driver("{{family_member.first_name}}","{{family_member.last_name}}", {{family_member.id}})
+	// 	{% endif%}
+	// {% endfor %}
+	
+	// {% for child in family.children.all%}
+	// 	{% if child.is_driver %}
+	// 		family_drivers.push("{{child.first_name}}");
+	// 		drivermap["{{child.first_name}}"] = new Driver("{{child.first_name}}","{{child.last_name}}", {{child.id}})
+	// 	{% endif%}
+	// {% endfor %}
+	
 	var driverTo = event.driverTo;
 	var driverFrom = event.driverFrom;
+
 	if(driverTo == ""){
 		driverTo = "None";
 	}
@@ -461,36 +441,108 @@ function renderEvent(event) {
 		driverFrom = "None";
 	}
 
-	editbtn = $('<a class="btn pull-right flat btn-primary edit-event" data-toggle="modal" href="#editEventModal" onClick="editEventOpen(' + event.id + '); return true;"><i class="icon-pencil"></i></a>');
-	deletebtn = $('<a class="btn pull-right flat btn-primary delete-event" onClick="removeEvent(' + event.id + '); return true;""><i class="icon-remove"></i></a>');
-	reachoutbtn = $('<a class="btn pull-right flat btn-primary reach-out" data-toggle="modal" href="#reachOutModal"><i class="car-glyph"></i></a>');
-	drivetobtn = $('<div class="btn-group pull-right"><a href="#" class="drivingTo btn btn-primary flat pull-right dropdown-toggle" data-toggle="dropdown">To: '+driverTo+'<span class="caret"></span></a>');
+	editIcon = $("<i></i>", {
+		class : "icon-pencil"
+	});
+	editbtn = $("<a></a>", {
+		class : "btn pull-right flat btn-primary edit-event",
+		href : "#editEventModal", 
+		onClick : "editEventOpen(" + event.id + "); return true;"
+	});
+	editbtn.attr("data-toggle","modal");
+	editbtn.append(editIcon);
+
+	deleteIcon = $('<i></i>', {
+		class : "icon-remove"
+	});
+	deletebtn = $('<a></a>',{
+		class : "btn pull-right flat btn-primary delete-event",
+		onClick : "removeEvent(" + event.id + "); return true;"
+	});
+	deletebtn.append(deleteIcon);
+
+	reachoutIcon = $('<i></i>', {
+		class : "car-glyph"
+	});
+	reachoutbtn = $('<a></a>',{
+		class : "btn pull-right flat btn-primary reach-out",
+		href : "#reachOutModal"
+	});
+	reachoutbtn.append(reachoutIcon);
+	reachoutbtn.attr("data-toggle","modal");
+
+	
+	driveToA = $('<a></a>',{
+		href : '#',
+		class : "drivingTo btn btn-primary flat pull-right dropdown-toggle",
+		text: 'To: '+driverTo
+
+	});
+	driveToA.attr("data-toggle","dropdown");
+
+	driveToSpan = $('<span></span>',{
+		class : "caret"
+	});
+	drivetobtn = $('<div></div>',{
+		class : "btn-group pull-right",
+	});
+
+	driveToA.append(driveToSpan);
+	drivetobtn.append(driveToA);
+
+	driveFromA = $('<a></a>',{
+		href : '#',
+		class : "drivingFrom btn btn-primary flat pull-right dropdown-toggle",
+		text: 'From: '+driverFrom
+	});
+	driveFromA.attr("data-toggle","dropdown");
+
+	driveFromSpan = $('<span></span>',{
+		class : "caret"
+	});
+	driveFrombtn = $('<div></div>',{
+		class : "btn-group pull-right",
+		
+	});
+
+	driveFromA.append(driveFromSpan);
+	driveFrombtn.append(driveFromA);
+	
 	var tempulto= $('<ul class="dropdown-menu">');
 	var tempulfrom= $('<ul class="dropdown-menu">');
 	var label = $('<h4 class="pull-right" style="margin-top:14px;margin-right:5px;">Drivers: </h4>');
-	drivefrombtn = $('<div class="btn-group pull-right"><a href="#" id="drivingFrom" class="drivingFrom btn btn-primary flat pull-right dropdown-toggle" data-toggle="dropdown">From: '+driverFrom+'<span class="caret"></span></a>');
 	var temp = "";
-	for(var i = 0; i < family_drivers.length;i++){
-		temp = '<li><a>'+family_drivers[i]+'</a></li>';
-		tempulto.append(temp);
-		tempulfrom.append(temp);
+
+	for(id in familyAdultsMap){
+		var tempTo = '<li><a onClick="setDriverTo(' + event.id + ', ' + id + '); return false;">'+familyAdultsMap[id].first_name+'</a></li>';
+		var tempFrom = '<li><a onClick="setDriverFrom(' + event.id + ', ' + id + '); return false;">'+familyAdultsMap[id].first_name+'</a></li>';
+
+		tempulto.append(tempTo);
+		tempulfrom.append(tempFrom);
 	}
 	temp = '<li><a href="#reachOutModal" data-toggle="modal">Reach Out</li></a>';
+	
+	//finishes creating dropdowns
 	tempulto.append(temp);
 	tempulfrom.append(temp);
 	temp = '</ul>';
 	tempulto.append(temp);
 	tempulfrom.append(temp);
-	drivefrombtn.append(tempulfrom);
+
+	//adding dropdowns to driver assignment buttons
+	driveFrombtn.append(tempulfrom);
 	drivetobtn.append(tempulto);
-	drivefrombtn.appendTo(content);
+
+	//adding shit to content
+	driveFrombtn.appendTo(content);
 	reachoutbtn.appendTo(content);
 	drivetobtn.appendTo(content);
 	label.appendTo(content);
+	
+	//adding deletebtn, editbtn, content, date to tile
 	deletebtn.appendTo(tile);
 	editbtn.appendTo(tile);
 	content.appendTo(tile);
-
 	date.appendTo(tile);
 	
 
