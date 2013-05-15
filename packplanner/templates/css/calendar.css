@@ -5,19 +5,35 @@
 }
 
 .btn.btn-0{
- background-color: #d39bcb;
+ background-color: #2358A5;
+}
+.btn.btn-0:hover{
+  background-color: #2358A5;
 }
 .btn.btn-1{
-  background-color: #6495ed;
+  background-color: #FAAA22;
+}
+
+.btn.btn-1:hover{
+  background-color: #FAAA22;
 }
 .btn.btn-2{
-  background-color: #e18e96;
+  background-color: #FF7722;
+}
+.btn.btn-2:hover{
+  background-color: #FF7722;
 }
 .btn.btn-3{
-  background-color: #ffdb58;
+  background-color: #FAAB22;
+}
+.btn.btn-3:hover{
+  background-color: #FAAB22;
 }
 .btn.btn-4{
-  background-color: #996515;
+  background-color: #F12041;
+}
+.btn.btn-4:hover{
+  background-color: #F12041;
 }
 
 .first-day {

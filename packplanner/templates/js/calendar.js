@@ -400,7 +400,8 @@ function renderEvent(event) {
 	}
 	
 	tile = $("<div>", {
-		class: "tile row " + btnType,
+		class : "tile row " + btnType,
+		id : "eventTile"+event.id,
 	})
 
 	date = $("<span>", {
@@ -476,6 +477,7 @@ function renderEvent(event) {
 	driveToA = $('<a></a>',{
 		href : '#',
 		class : "drivingTo btn btn-primary flat pull-right dropdown-toggle",
+		id : "drivingTo"+event.id,
 		text: 'To: '+driverTo
 
 	});
@@ -494,6 +496,7 @@ function renderEvent(event) {
 	driveFromA = $('<a></a>',{
 		href : '#',
 		class : "drivingFrom btn btn-primary flat pull-right dropdown-toggle",
+		id : "drivingFrom"+event.id,
 		text: 'From: '+driverFrom
 	});
 	driveFromA.attr("data-toggle","dropdown");
@@ -552,28 +555,40 @@ function renderEvent(event) {
 }
 
 function setDriverTo(details_id, driver_id) {
+	var driver;
+	var tileID = "drivingTo"+details_id;
 	$.ajax("/setDriver/to/" + details_id + "/" + driver_id + "/", {
 		type: "POST",
 		data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 		success: function(response) {
 			if (response == -1) {
-				//tell user it didn't work
+				$("#"+tileID).text("BROKEN")
 			} else {
 				//TODO: update driver text
+				driver = familyAdultsMap[driver_id];
+				console.log(tileID);
+				$("#"+tileID).text("To: "+driver.first_name);
 			}
 		}
 	});
 }
 
 function setDriverFrom(details_id, driver_id) {
+	var driver;
+	var tileID = "drivingFrom"+details_id;
 	$.ajax("/setDriver/from/" + details_id + "/" + driver_id + "/", {
 		type: "POST",
 		data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 		success: function(response) {
 			if (response == -1) {
 				//tell user it didn't work
+				$("#"+tileID).text("BROKEN")
+
 			} else {
 				//TODO: update driver text
+				driver = familyAdultsMap[driver_id];
+				console.log(tileID);
+				$("#"+tileID).text("From: "+driver.first_name);
 			}
 		}
 	});
