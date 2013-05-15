@@ -41,7 +41,8 @@ function initEditEventModalUI(){
 			editDriverToID = map[item].id;
 			return item;
 		},
-		items:4
+		items:4,
+		minLength:0
 	});
 
 	$("#editDrivingFromInput").typeahead({

@@ -4,36 +4,68 @@
   width: 1200px;
 }
 
-.btn.btn-0{
- background-color: #2358A5;
+.btn.legend.btn-default{
+  background-color: #34495e;
+  cursor: default;
 }
-.btn.btn-0:hover{
-  background-color: #2358A5;
+.btn.legend.btn-default.active{
+  background-color: #34495e;
+  cursor: default;
 }
-.btn.btn-1{
-  background-color: #FAAA22;
+.btn.legend.btn-default:hover{
+  background-color: #34495e;
+  cursor: default;
+}
+.btn.legend.btn-grey{
+  background-color: #7F8C8D;
+  cursor: default;
+}
+.btn.legend.btn-grey:hover  {
+  background-color: #7F8C8D;
+  cursor: default;
+}
+.btn.legend.btn-grey.active{
+  background-color: #7F8C8D;
+  cursor: default;
+}
+.btn.legend.btn-info{
+  background-color: #3498db;
+  cursor: default;
+}
+.btn.legend.btn-info:hover{
+  background-color: #3498db;
+  cursor: default;
+}
+.btn.legend.btn-info.active{
+  background-color: #3498db;
+  cursor: default;
+}
+.btn.legend.btn-purple{
+  background-color: #9B59B6;
+  cursor: default;
+
+}
+.btn.legend.btn-purple:hover{
+  background-color: #9B59B6;
+  cursor: default;
 }
 
-.btn.btn-1:hover{
-  background-color: #FAAA22;
+.btn.legend.btn-purple.active{
+  background-color: #9B59B6;
+  cursor: default;
+
 }
-.btn.btn-2{
-  background-color: #FF7722;
+.btn.legend.btn-warning{
+  background-color: #F1C40F;
+  cursor: default;
 }
-.btn.btn-2:hover{
-  background-color: #FF7722;
+.btn.legend.btn-warning:hover{
+  background-color: #F1C40F;
+  cursor: default;
 }
-.btn.btn-3{
-  background-color: #FAAB22;
-}
-.btn.btn-3:hover{
-  background-color: #FAAB22;
-}
-.btn.btn-4{
-  background-color: #F12041;
-}
-.btn.btn-4:hover{
-  background-color: #EE213D;
+.btn.legend.btn-warning.active{
+  background-color: #F1C40F;
+  cursor: default;
 }
 
 .btn.btn-grey{
